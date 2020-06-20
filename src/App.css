@@ -1,38 +1,42 @@
-.App {
-  text-align: center;
+/* fonts settings */
+@font-face{
+  font-family: airbnb-cerial;
+  src: url(./assets/fonts/AirbnbCerealBook.ttf);
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face{
+  font-family: airbnb-cerial;
+  src: url(./assets/fonts/AirbnbCerealMedium.ttf);
+  font-style: normal;
+  font-weight:500;
+}
+@font-face{
+  font-family: airbnb-cerial;
+  src: url(./assets/fonts/AirbnbCerealLight.ttf);
+  font-style: normal;
+  font-weight:300;
+}
+@font-face{
+  font-family: airbnb-cerial;
+  src: url(./assets/fonts/AirbnbCerealBold.ttf);
+  font-style:bold;
+  font-weight:600;
+}
+@font-face{
+  font-family: airbnb-cerial;
+  src: url(./assets/fonts/AirbnbCerealExtraBold.ttf);
+  font-style: bold;
+  font-weight:700;
+}
+@font-face{
+  font-family: airbnb-cerial;
+  src: url(./assets/fonts/AirbnbCerealBlack.ttf);
+  font-style: bold;
+  font-weight:800;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body{
+  font-family: airbnb-cerial;
+  background-color: #F3F4F8;
 }
