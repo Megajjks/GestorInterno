@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Sidebar from '../../Sidebar'
+import Navbar from '../../Navbar'
 // import images
 import M1 from '../../../assets/img/dashboard1.png';
 import M2 from '../../../assets/img/gestion1.png';
@@ -15,11 +16,12 @@ const items = [
     {name:'Gestion', label:'Gestion', url:'/management_admin',img:M5}
 ]
 
-const Dasboard = () =>{
-    const [showSideBar, setShowSidebar] = useState(false); 
+const Dasboard = () =>{ 
     return(
-        <div>
-            <Sidebar items={items} showSideBar={showSideBar} setShowSidebar={setShowSidebar}/>
+        <div>    
+            <Navbar/>
+            <Sidebar items={items}/>
+            
         </div>
     )
 }

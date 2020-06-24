@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from '../assets/img/ashoka_logo.png';
@@ -12,6 +12,10 @@ const Wrapper = styled.div`
     padding: 1em 0;
     color: ${({ theme: { colors } }) => colors.white};
     transition: all .2s ease-out;
+    position:fixed;
+    overflow:auto;
+    top:0;
+    left:0;
 `;
 const HeaderSidebar = styled.div`
     display: flex;
@@ -51,7 +55,8 @@ const ImgMenu =styled.img`
     margin:${props => props.showSideBar? "0 5% 2% 80%": "5px auto 20px auto"};
 `;
 
-const Sidebar = ({items, showSideBar, setShowSidebar}) => {
+const Sidebar = ({ items }) => {
+    const [showSideBar, setShowSidebar] = useState(false);
 
     return (
         <Wrapper showSideBar={showSideBar}>
