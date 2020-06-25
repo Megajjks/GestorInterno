@@ -7,10 +7,9 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const Nav = styled.nav`
     display: flex;
-    justify-content: space-between;
+    justify-content: ${props => props.goback? "space-between" : "flex-end"};
     align-items: center;
-    padding: 1em 10em ;
-    margin-left: 98px;
+    padding: 1em 10em 1em 3em ;
 `;
 const MenuNav = styled.div`
     display: flex;
@@ -18,10 +17,10 @@ const MenuNav = styled.div`
     align-items:center;
 `;
 
-const Navbar = () => {
+const Navbar = ( {goback} ) => {
     return(
-        <Nav>
-            <ArrowBackIcon style={{ color:"#000000" }}/>
+        <Nav goback={goback}>
+            {goback ? <ArrowBackIcon style={{ color:"#000000" }}/> : null}
             <MenuNav>
                 <Badge badgeContent={4} color="primary" style={{marginRight:"2em"}}>
                     <NotificationsIcon />

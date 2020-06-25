@@ -2,24 +2,35 @@ import React from 'react';
 import {
     BrowserRouter as Router,
     Route,
+    Switch
   } from "react-router-dom";
 
+import Navegation from './component/Navegation';
 import Login from './component/pages/GenericLogin';
 import AdminDasboard from './component/pages/admin/Dasboard';
 import AdminUsers from './component/pages/admin/Users';
 import AdminPool from './component/pages/admin/Pool';
 import AdminTracing from './component/pages/admin/Tracing';
 import AdminManagement from './component/pages/admin/Management';
+import Commitment from './component/pages/agent/Commitment';
+import Community from './component/pages/agent/Community';
 
 const router = () =>{
     return(
         <Router>
-            <Route exact path="/" component={Login}/>
-            <Route exact path="/dasboard_admin" component={AdminDasboard}/>
-            <Route exact path="/users_admin" component={AdminUsers}/>
-            <Route exact path="/pool_admin" component={AdminPool}/>
-            <Route exact path="/tracing_admin" component={AdminTracing}/>
-            <Route exact path="/management_admin" component={AdminManagement}/>
+                <Switch>
+                    <Route exact path="/" component={Login}/>
+                    <Navegation>
+                        <Route exact path="/dasboard" component={AdminDasboard}/>
+                        <Route exact path="/users" component={AdminUsers}/>
+                        <Route exact path="/pool" component={AdminPool}/>
+                        <Route exact path="/tracing" component={AdminTracing}/>
+                        <Route exact path="/management" component={AdminManagement}/>
+                        <Route exact path="/commitment" component={Commitment}/>
+                        <Route exact path="/community" component={Community}/>
+                    </Navegation>
+                </Switch>
+            
         </Router>
     )
 }
