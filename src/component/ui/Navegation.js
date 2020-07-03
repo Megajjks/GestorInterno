@@ -2,16 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
-import roles from '../helpers/roles'
+import roles from '../../helpers/roles'
 
 // import images
-import M1 from '../assets/img/dashboard1.png';
-import M2 from '../assets/img/gestion1.png';
-import M3 from '../assets/img/gps1.png';
-import M4 from '../assets/img/team1.png';
-import M5 from '../assets/img/paper1.png';
-import M6 from '../assets/img/agreement1.png';
-import M7 from '../assets/img/bullhorn1.png';
+import M1 from '../../assets/img/dashboard1.png';
+import M2 from '../../assets/img/gestion1.png';
+import M3 from '../../assets/img/gps1.png';
+import M4 from '../../assets/img/team1.png';
+import M5 from '../../assets/img/paper1.png';
+import M6 from '../../assets/img/agreement1.png';
+import M7 from '../../assets/img/bullhorn1.png';
 
 const rol = {
     ADM_USR:[

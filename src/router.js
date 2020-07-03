@@ -5,7 +5,7 @@ import {
     Switch
   } from "react-router-dom";
 
-import Navegation from './component/Navegation';
+import Navegation from './component/ui/Navegation';
 import Login from './component/pages/GenericLogin';
 import AdminDasboard from './component/pages/admin/Dasboard';
 import AdminUsers from './component/pages/admin/Users';

@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Logo from '../assets/img/ashoka_logo.png';
-import MenuImg from '../assets/img/menu.png';
-import ImgCommitment from '../assets/img/meeting1.png';
+import Logo from '../../assets/img/ashoka_logo.png';
+import MenuImg from '../../assets/img/menu.png';
+import ImgCommitment from '../../assets/img/meeting1.png';
 
 const Wrapper = styled.div`
     width: ${props => props.showSideBar ? '18em' : '5em'};
