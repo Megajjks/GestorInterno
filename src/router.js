@@ -28,6 +28,7 @@ const router = () =>{
                         <Route exact path="/management" component={AdminManagement}/>
                         <Route exact path="/commitment" component={Commitment}/>
                         <Route exact path="/community" component={Community}/>
+                        <Route exact path="/details_commitment/:id"/>
                     </Navegation>
                 </Switch>
             
