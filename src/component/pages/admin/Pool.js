@@ -1,8 +1,12 @@
 import React from 'react';
+import PoolTable from '../../ui/tables/PoolTable'
 
 const Pool = () => {
     return(
-        <h1>Pool</h1>
+        <div>
+            <h1>Pool de compromisos</h1>
+            <PoolTable/>
+        </div>
     )
 }
 
