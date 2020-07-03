@@ -15,6 +15,7 @@ import AdminManagement from './component/pages/admin/Management';
 import Commitment from './component/pages/agent/Commitment';
 import Community from './component/pages/agent/Community';
 import NewCommitment from './component/pages/agent/NewCommitment';
+import TracingCommitmentDetails from './component/ui/TracingCommitmentDetails';
 
 const router = () =>{
     return(
@@ -31,6 +32,7 @@ const router = () =>{
                         <Route exact path="/community" component={Community}/>
                         <Route exact path="/details_commitment/:id"/>
                         <Route exact path="/new_commitment" component={NewCommitment}/>
+                        <Route exact path="/traicing_commitment/:id" component={TracingCommitmentDetails}/>
                     </Navegation>
                 </Switch>
             
