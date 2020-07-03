@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="34.5" height="23" viewBox="0 0 34.5 23">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ff5023"/>
+      <stop offset="1" stop-color="#ff4e00"/>
+    </linearGradient>
+  </defs>
+  <path id="eye-solid" d="M34.293,74.626A19.211,19.211,0,0,0,17.251,64,19.214,19.214,0,0,0,.209,74.626a1.938,1.938,0,0,0,0,1.748A19.211,19.211,0,0,0,17.251,87,19.214,19.214,0,0,0,34.293,76.374,1.938,1.938,0,0,0,34.293,74.626Zm-17.042,9.5A8.625,8.625,0,1,1,25.876,75.5,8.625,8.625,0,0,1,17.251,84.125Zm0-14.375a5.709,5.709,0,0,0-1.516.227,2.866,2.866,0,0,1-4.007,4.007,5.737,5.737,0,1,0,5.523-4.234Z" transform="translate(-0.001 -64)" fill="url(#linear-gradient)"/>
+</svg>
