@@ -7,7 +7,10 @@ const theme =  {
         primary:"#FF5023",
         grey:"#828282",
         black:"#000000",
-        white:"#FFFFFF"
+        white:"#FFFFFF",
+        greylight:"#707070", 
+        greyTitle:"#707070",
+        orange:"#FA653F"
     }
 }
 
