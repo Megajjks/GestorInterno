@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import DeletedIco from '../../assets/img/delete.svg';
+import AddIco from '../../assets/img/add.svg';
 
 const Wrapper = styled.div`
     display:grid;
@@ -10,12 +13,10 @@ const Wrapper = styled.div`
 
 const WrapperTask = styled.div`
     place-self:start stretch;
-    border:2px solid black;
 `;
 
 const WrapperOpc = styled.div`
     place-self:start stretch;
-    border:2px solid black;
 `;
 
 const WrapperColaborators = styled.div`
@@ -31,6 +32,31 @@ const Colaborator = styled.div`
     align-items: center;
 `;
 
+const NameColaborator = styled.p`
+    width: 10em;
+    margin: 0;
+    padding: 0 .5em;
+`;
+
+const BtnDeleteColaborator = styled.img`
+    width: 1em;
+    &:hover{
+        cursor:pointer;
+    }
+`;
+
+const BtnAddColaborator = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5em;
+    color: ${({ theme: { colors } }) => colors.primary};
+    font-weight: 600;
+    &:hover{
+        cursor:pointer;
+    }
+`;
+
 const TracingCommitmentDetails = (props) =>{
     const history = useHistory()
     const [commitment, setCommitment] = useState(history.location.state)
@@ -44,8 +70,14 @@ const TracingCommitmentDetails = (props) =>{
                     <WrapperColaborators>
                         <h2>Colaboradores</h2>
                         <Colaborator>
-                            <img alt='perfil'/>
+                            <AccountCircleIcon style={{ fontSize: 50 }}/>
+                            <NameColaborator> {commitment.colaborators} </NameColaborator>
+                            <BtnDeleteColaborator src={DeletedIco} alt='ico_deleted'/>
                         </Colaborator>
+                        <BtnAddColaborator>
+                            <img src={AddIco} alt='add-ico' style={{width:'18px'}}/>
+                            <p style={{margin:'0', padding:'0 .5em'}}> Agregar colaborador </p>
+                        </BtnAddColaborator>
                     </WrapperColaborators>
                 </WrapperOpc> 
             </Wrapper>
