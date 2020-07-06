@@ -10,7 +10,7 @@ const theme =  {
         white:"#FFFFFF",
         greylight:"#707070", 
         greyTitle:"#707070",
-        orange:"#FA653F"
+        orange:"#F6503E"
     }
 }
 
