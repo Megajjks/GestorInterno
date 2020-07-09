@@ -93,13 +93,11 @@ const TracingCommitmentDetails = (props) => {
   };
 
   const deleteCollaborator = (id) => {
-    console.log("delete colaborator");
     setDelColModal(false);
   };
 
   const postColaborator = () => {
     //function to add colaborator
-    console.log("add colaborator");
     setAddColaborator(false);
   };
 
