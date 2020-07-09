@@ -1,8 +1,12 @@
 import React from 'react';
+import TracingTable from '../../ui/tables/TracingTable';
 
 const Tracing = () => {
     return(
-        <h1>Tracing</h1>
+        <div>
+            <h1>Seguimiento de los compromisos</h1>
+            <TracingTable/>
+        </div>
     )
 }
 
