@@ -15,22 +15,32 @@ import Map from "../../../assets/img/mapcard.svg";
 const status = {
   validando: {
     value: "Por validar",
-    background: "#FFE110",
-    color: "#000000",
+    background: "#0038BA",
+    color: "#FFFFFF",
   },
   proceso: {
     value: "En proceso",
     background: "#FF4F13",
     color: "#FFFFFF",
   },
-  finalizado: {
-    value: "Finalizado",
-    background: "#C0392B",
+  cumplido: {
+    value: "Cumplido",
+    background: "#4DAD38",
     color: "#FFFFFF",
   },
   oculto: {
     value: "Oculto",
     background: "#707070",
+    color: "#FFFFFF",
+  },
+  correcion: {
+    value: "En corrección",
+    background: "#FFE110",
+    color: "#000000",
+  },
+  declinado: {
+    value: "Rechazado",
+    background: "#C0392B",
     color: "#FFFFFF",
   },
 };
