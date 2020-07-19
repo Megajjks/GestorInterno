@@ -9,7 +9,6 @@ import {
   Icon,
   IconPointSvg,
   TxtTitleOrganization,
-  TxtTitleCommitment,
   TxtIcon,
   TitleQuestion,
   TxtQuestion,
@@ -25,6 +24,8 @@ import {
   WrapperButtons,
   ButtonAccept,
   ButtonDecline,
+  StyledMenu,
+  StyledMenuItem
 } from "./styled";
 import Logo from "../../../assets/img/logcom.png";
 import IconEdit from "../../../assets/img/editar.svg";
@@ -41,6 +42,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import ListItemText from '@material-ui/core/ListItemText';
 
 const CommitmentReport = () => {
   const [dataForm, setDataForm] = useState({
@@ -56,7 +58,6 @@ const CommitmentReport = () => {
     phone: "5514789545",
     logo: "path",
     img: "path",
-    title: "Hacemos la lucha",
     question_1:
       "La Universidad Anáhuac Quéretaro se compromete a capacitar a docentes provenientes del 40% de las carreras, abrir un grupo estudiantil que cree emprendimientos sociales, generar un bootcamp de emprendimiento social y promover conferencias sobre innovación social generando al menos 153 Agentes de Cambio durante el ciclo escolar 2019-2020 para contribuir a la Comunidad de Agentes de Cambio a través de la difusión y sensibilización acerca del  emprendimiento e innovación social así como formación de los estudiantes desde la empatía y la corresponsabilidad.",
     question_2: "",
@@ -90,6 +91,18 @@ const CommitmentReport = () => {
     setOpen(false);
   };
 
+  //Dropdown menu
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const openModalAcceptFeedback = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const closeModalAcceptFeedback = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Wrapper>
       <Img src={Logo} />
@@ -101,8 +114,7 @@ const CommitmentReport = () => {
             {dataForm.first_name} {dataForm.last_name}
           </TxtIcon>
         </WrapperImgTxt>
-        <TxtTitleCommitment>{dataForm.title}</TxtTitleCommitment>
-        <TxtQuestion>{dataForm.question_1}</TxtQuestion>
+        <TxtQuestion style={{ marginTop: "12px" }}>{dataForm.question_1}</TxtQuestion>
         <Sector>
           <TxtSector>Sector: </TxtSector>
           <TypeSector>{dataForm.sector}</TypeSector>
@@ -175,7 +187,25 @@ const CommitmentReport = () => {
         </WrapperContact>
         <WrapperButtons>
           <ButtonDecline onClick={() => feedback()}>Declinar</ButtonDecline>
-          <ButtonAccept>Aceptar Compromiso</ButtonAccept>
+
+
+          <ButtonAccept onClick={openModalAcceptFeedback}>Aceptar Compromiso</ButtonAccept>
+          <StyledMenu
+            id="customized-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={closeModalAcceptFeedback}
+          >
+            <StyledMenuItem>
+              <ListItemText primary="Aceptar" />
+            </StyledMenuItem>
+            <StyledMenuItem onClick={() => feedback()}>
+              <ListItemText primary="Aceptar con corrección"/>
+            </StyledMenuItem>
+          </StyledMenu>
+
+
         </WrapperButtons>
       </WrapperFormData>
       <WrapperIconEdit>
@@ -189,7 +219,7 @@ const CommitmentReport = () => {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            {"Declinar Compromiso"}
+            {"Respuesta para Compromiso"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">

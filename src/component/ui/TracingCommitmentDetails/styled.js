@@ -41,6 +41,7 @@ export const NameColaborator = styled.p`
 
 export const BtnDeleteColaborator = styled.img`
   width: 1em;
+  z-index: 99999;
   &:hover {
     cursor: pointer;
   }

@@ -32,7 +32,7 @@ const data = [
     brief:
       "La Universidad Anáhuac Querétaro se compromete a capacitar a docentes provenientes del 40% de las carreras, abrir un grupo estudiantil que cree emprendimientos sociales...",
     location: "Querétaro",
-    status: "finalizado",
+    status: "cumplido",
   },
   {
     id: "4",
@@ -43,6 +43,26 @@ const data = [
       "La Universidad Anáhuac Querétaro se compromete a capacitar a docentes provenientes del 40% de las carreras, abrir un grupo estudiantil que cree emprendimientos sociales...",
     location: "Querétaro",
     status: "oculto",
+  },
+  {
+    id: "5",
+    logo: Logo,
+    title: "La universidad Anáhuac Querétaro.",
+    organization: "Anáhuac Queretaro",
+    brief:
+      "La Universidad Anáhuac Querétaro se compromete a capacitar a docentes provenientes del 40% de las carreras, abrir un grupo estudiantil que cree emprendimientos sociales...",
+    location: "Querétaro",
+    status: "correcion",
+  },
+  {
+    id: "6",
+    logo: Logo,
+    title: "La universidad Anáhuac Querétaro.",
+    organization: "Anáhuac Queretaro",
+    brief:
+      "La Universidad Anáhuac Querétaro se compromete a capacitar a docentes provenientes del 40% de las carreras, abrir un grupo estudiantil que cree emprendimientos sociales...",
+    location: "Querétaro",
+    status: "declinado",
   },
 ];
 

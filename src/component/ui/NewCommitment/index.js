@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import {
   Wrapper,
   WrapperContainer,
@@ -18,22 +18,12 @@ import {
   Btn,
   TxtRequired,
 } from "./styled";
-import CommitmentCard from "../../../ui/CommitmentCard";
+import Paper from "@material-ui/core/Paper";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
 
 const NewCommitment = () => {
-  const [previewCommitment, setPreviewCommitment] = useState({
-    id: "1",
-    logo: "",
-    title: "",
-    organization: "",
-    brief: "",
-    location: "",
-    status: "validando",
-  });
-
   const [commitment, setCommitment] = useState({
     first_name: "",
     last_name: "",
@@ -46,7 +36,6 @@ const NewCommitment = () => {
     phone: "",
     logo: "",
     img: "",
-    title: "",
     question_1: "",
     question_2: "",
     question_3: "",
@@ -84,13 +73,6 @@ const NewCommitment = () => {
       ...commitment,
       [e.target.name]: e.target.value,
     });
-    setPreviewCommitment({
-      ...previewCommitment,
-      title: commitment.title,
-      organization: commitment.organization,
-      brief: commitment.question_1,
-      location: commitment.city,
-    });
   };
 
   function Alert(props) {
@@ -108,7 +90,6 @@ const NewCommitment = () => {
       commitment.position === "" ||
       commitment.email === "" ||
       commitment.phone === "" ||
-      commitment.title === "" ||
       commitment.logo === "" ||
       commitment.img === "" ||
       commitment.question_1 === "" ||
@@ -161,31 +142,15 @@ const NewCommitment = () => {
   };
 
   return (
-    <Wrapper>
-      <WrapperContainer style={{ width: "300px" }}>
-        <Title>Vista previa</Title>
-        <CommitmentCard data={previewCommitment} />
-        <Information style={{ padding: ".5em 1em" }}>
-          ¿Tienes dudas? Para analizar a profundidad las actividades y recursos
-          involucrados en la construcción de tu compromiso, puedes hacer el
-          ejercicios de{" "}
-          <Url
-            href="http://millonesdeagentesdecambio.org/wp-content/uploads/2019/08/guiadecompromisos.pdf"
-            target="_blank"
-          >
-            {" "}
-            Canvas de Compromisos.{" "}
-          </Url>
-        </Information>
-      </WrapperContainer>
+    <Fragment>
       <WrapperContainer>
-        <Title>Estas a unos pasos de cambiar tu entorno</Title>
-        <Information>
-          ¡Estás un paso más cerca de contribuir a un México de
-          #MillonesdeAgentesdeCambio! Con tu impacto y proyecciones a futuro
-          puedes impulsar a más personas a cambiar su realidad.
-        </Information>
         <Form>
+          <Title>Estas a unos pasos de cambiar tu entorno</Title>
+          <Information>
+            ¡Estás un paso más cerca de contribuir a un México de
+            #MillonesdeAgentesdeCambio! Con tu impacto y proyecciones a futuro
+            puedes impulsar a más personas a cambiar su realidad.
+          </Information>
           <h3>Datos generales</h3>
           <WrapperField>
             <Field>
@@ -210,8 +175,6 @@ const NewCommitment = () => {
                 onChange={handleOnChange}
               />
             </Field>
-          </WrapperField>
-          <WrapperField>
             <Field>
               <Label>
                 Organización <TxtRequired>*</TxtRequired>
@@ -242,8 +205,6 @@ const NewCommitment = () => {
                 <option value="ciudadania">Ciudadanía</option>
               </Select>
             </Field>
-          </WrapperField>
-          <WrapperField>
             <Field>
               <Label>
                 Ciudad <TxtRequired>*</TxtRequired>
@@ -299,8 +260,6 @@ const NewCommitment = () => {
                 <option value="zacatecas">Zacatecas</option>
               </Select>
             </Field>
-          </WrapperField>
-          <WrapperField>
             <Field>
               <Label>
                 Cargo <TxtRequired>*</TxtRequired>
@@ -323,29 +282,18 @@ const NewCommitment = () => {
                 onChange={handleOnChange}
               />
             </Field>
+            <Field>
+              <Label>
+                Telefono <TxtRequired>*</TxtRequired>
+              </Label>
+              <Input
+                type="text"
+                name="phone"
+                value={commitment.phone}
+                onChange={handleOnChange}
+              />
+            </Field>
           </WrapperField>
-          <Field>
-            <Label style={{ width: "30em" }}>
-              Telefono <TxtRequired>*</TxtRequired>
-            </Label>
-            <Input
-              type="text"
-              name="phone"
-              value={commitment.phone}
-              onChange={handleOnChange}
-            />
-          </Field>
-          <Field>
-            <Label>
-              Ponle un titulo a tu compromiso <TxtRequired>*</TxtRequired>
-            </Label>
-            <Input
-              name="title"
-              value={commitment.title}
-              onChange={handleOnChange}
-              style={{ width: "37em" }}
-            />
-          </Field>
           <Field>
             <Label>
               Breve descripción de tu proyecto/iniciativa/emprendimiento{" "}
@@ -413,18 +361,42 @@ const NewCommitment = () => {
             estén tomando para apoyar la activación o el equipamiento de más
             agentes de cambio.
           </Information>
-
-          <Field>
-            <Label>
-              ¿Qué organizaciones o personas se comprometen?{" "}
-              <TxtRequired>*</TxtRequired>
-            </Label>
-            <TextArea
+          <Information style={{ lineHeight: "3em" }}>
+            <Input
+              type="text"
+              placeholder="La organización A,(junto a la B)"
               name="question_3"
               value={commitment.question_3}
               onChange={handleOnChange}
+              style={{ textAlign: "center" }}
+            />{" "}
+            se compromete a impactar a{" "}
+            <Input
+              type="text"
+              placeholder="# de agentes "
+              name="question_7"
+              value={commitment.question_7}
+              onChange={handleOnChange}
+              style={{ width: "130px", textAlign: "center" }}
+            />{" "}
+            con su programa, durante{" "}
+            <Input
+              type="text"
+              placeholder="periodo de tiempo"
+              name="question_5"
+              value={commitment.question_5}
+              onChange={handleOnChange}
+              style={{ width: "150px", textAlign: "center" }}
+            />{" "}
+            para contribuir a la comunidad de Agentes de cambio, a través de{" "}
+            <TextArea
+              placeholder="¿cómo el impacto esperado contribuye a los demás actores?"
+              name="question_6"
+              value={commitment.question_6}
+              onChange={handleOnChange}
+              style={{ width: "100%", height: "40px", textAlign: "center" }}
             />
-          </Field>
+          </Information>
           <Field>
             <Label>
               ¿Qué acción se va a implementar? <TxtRequired>*</TxtRequired>
@@ -432,39 +404,6 @@ const NewCommitment = () => {
             <TextArea
               name="question_4"
               value={commitment.question_4}
-              onChange={handleOnChange}
-            />
-          </Field>
-          <Field>
-            <Label>
-              ¿En qué periodo de tiempo se va a realizar el compromiso?{" "}
-              <TxtRequired>*</TxtRequired>
-            </Label>
-            <TextArea
-              name="question_5"
-              value={commitment.question_5}
-              onChange={handleOnChange}
-            />
-          </Field>
-          <Field>
-            <Label>
-              ¿Tu compromiso cómo contribuye a generar más Agentes de Cambio?{" "}
-              <TxtRequired>*</TxtRequired>
-            </Label>
-            <TextArea
-              name="question_6"
-              value={commitment.question_6}
-              onChange={handleOnChange}
-            />
-          </Field>
-          <Field>
-            <Label>
-              ¿Cuántos Agentes de Cambio impactarás con este compromiso?{" "}
-              <TxtRequired>*</TxtRequired>
-            </Label>
-            <TextArea
-              name="question_7"
-              value={commitment.question_7}
               onChange={handleOnChange}
             />
           </Field>
@@ -608,7 +547,7 @@ const NewCommitment = () => {
             Me gustaría recibir actualizaciones y noticias por correo
             electrónico sobre Ashoka.
           </WrapperInputRadio>
-          <WrapperInputRadio style={{ marginBottom: "1rem" }}>
+          <WrapperInputRadio>
             <InputRadio
               type="checkbox"
               name="agree"
@@ -663,7 +602,7 @@ const NewCommitment = () => {
           {error.message}
         </Alert>
       </Snackbar>
-    </Wrapper>
+    </Fragment>
   );
 };
 

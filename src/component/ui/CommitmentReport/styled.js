@@ -1,4 +1,39 @@
+import React from "react";
 import styled from "styled-components";
+import { withStyles } from '@material-ui/core/styles';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+
+export const StyledMenu = withStyles({
+  paper: {
+    border: "1px solid #d3d4d5"
+  }
+})(props => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "center"
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "center"
+    }}
+    {...props}
+  />
+));
+
+export const StyledMenuItem = withStyles(theme => ({
+  root: {
+    "&:focus": {
+      backgroundColor: "#F6503E",
+      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+        color: theme.palette.common.white
+      }
+    }
+  }
+}))(MenuItem);
 
 export const Wrapper = styled.div`
   background-color: ${({ theme: { colors } }) => colors.white};
@@ -58,18 +93,13 @@ export const TxtTitleOrganization = styled.h1`
   font-weight: 900;
   font-size: 2em;
   margin-top: 4.5rem;
-`;
-
-export const TxtTitleCommitment = styled.h1`
-  color: ${(props) => props.theme.colors.black};
-  font-weight: 800;
-  font-size: 1.5em;
+  margin-bottom: 8px;
 `;
 
 export const TxtIcon = styled.h1`
   color: ${(props) => props.theme.colors.greyTitle};
   font-weight: 200;
-  font-size: 12px;
+  font-size: 14px;
   margin-top: 0;
   margin-left: 7px;
 `;
@@ -81,10 +111,10 @@ export const TitleQuestion = styled.h1`
 `;
 
 export const TxtQuestion = styled.h1`
-  width: 78%;
+  width: 80%;
   color: ${(props) => props.theme.colors.greyTitle};
   font-weight: 200;
-  font-size: 12px;
+  font-size: 15px;
   margin-top: 0;
 `;
 
@@ -103,9 +133,9 @@ export const TxtSector = styled.h1`
 export const TypeSector = styled.h1`
   color: ${(props) => props.theme.colors.black};
   font-weight: 500;
-  font-size: 0.8em;
+  font-size: 0.9em;
   margin-left: 7px;
-  margin-top: 1em;
+  margin-top: 0.8em;
 `;
 
 export const Position = styled.div`
@@ -124,9 +154,9 @@ export const TxtPosition = styled.h1`
 export const TypePosition = styled.h1`
   color: ${(props) => props.theme.colors.black};
   font-weight: 500;
-  font-size: 0.8em;
+  font-size: 0.9em;
   margin-left: 7px;
-  margin-top: 1em;
+  margin-top: 0.8em;
 `;
 
 export const WrapperLocation = styled.div`

@@ -10,7 +10,7 @@ import AdminTracing from "./component/pages/admin/Tracing";
 import AdminManagement from "./component/pages/admin/Management";
 import Commitment from "./component/pages/agent/Commitment";
 import Community from "./component/pages/agent/Community";
-import NewCommitment from "./component/pages/agent/NewCommitment";
+import NewCommitment from "./component/ui/NewCommitment";
 import TracingCommitmentDetails from "./component/ui/TracingCommitmentDetails";
 import CommitmentReport from "./component/ui/CommitmentReport";
 
@@ -19,6 +19,7 @@ const router = () => {
     <Router>
       <Switch>
         <Route exact path="/" component={Login} />
+        <Route exact path="/new_commitment" component={NewCommitment} />
         <Navegation>
           <Route exact path="/dasboard" component={AdminDasboard} />
           <Route exact path="/users" component={AdminUsers} />
@@ -28,7 +29,6 @@ const router = () => {
           <Route exact path="/commitment" component={Commitment} />
           <Route exact path="/community" component={Community} />
           <Route exact path="/details_commitment/:id" />
-          <Route exact path="/new_commitment" component={NewCommitment} />
           <Route exact path="/commitment_report" component={CommitmentReport} />
           <Route
             exact
