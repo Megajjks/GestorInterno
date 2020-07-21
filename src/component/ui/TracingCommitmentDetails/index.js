@@ -1,11 +1,17 @@
 import React, { useState, Fragment } from "react";
 import { useHistory } from "react-router-dom";
 import AlertModal from "../modals/AlertModal";
+import { colorStatus } from "../../../helpers";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import DeletedIco from "../../../assets/img/delete.svg";
-import AddIco from "../../../assets/img/add.svg";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
+import Menu from "@material-ui/core/Menu";
+import DeletedIco from "../../../assets/img/delete.svg";
+import AddIco from "../../../assets/img/add.svg";
+import Button from "../GeneralButton";
+import TaskIco from "../../../assets/img/gestion.svg";
+import EyeIco from "../../../assets/img/eye.svg";
+import StatusIco from "../../../assets/img/point.svg";
 import {
   Wrapper,
   WrapperTask,
@@ -17,6 +23,9 @@ import {
   BtnAddColaborator,
   BtnGroup,
   BtnSecundary,
+  Options,
+  MenuItems,
+  CircleStatus,
 } from "./styled";
 
 const TracingCommitmentDetails = (props) => {
@@ -24,8 +33,7 @@ const TracingCommitmentDetails = (props) => {
   const [commitment, setCommitment] = useState(history.location.state);
   const [delColModal, setDelColModal] = useState(false);
   const [addColaborator, setAddColaborator] = useState(false);
-
-  console.log(delColModal);
+  const [dropdownStatus, setDropdownStatus] = useState(null);
 
   const handleDelColModal = () => {
     setDelColModal(true);
@@ -48,12 +56,83 @@ const TracingCommitmentDetails = (props) => {
     setAddColaborator(false);
   };
 
+  const addTask = () => {
+    //function to create Task
+    console.log("add task");
+  };
+
+  const showDetailCommitment = () => {
+    history.push("/commitment_report");
+  };
+  const handleDropdownStatus = (event) => {
+    setDropdownStatus(event.currentTarget);
+  };
+
+  const handleCloseDropdownStatus = () => {
+    setDropdownStatus(null);
+  };
+
+  const changeStatus = () => {
+    //Put request that change the status of commitment
+    setDropdownStatus(null);
+  };
+
   return (
     <Fragment>
       <h1> {commitment.title} </h1>
       <Wrapper>
         <WrapperTask>Lista de tareas de seguimiento</WrapperTask>
         <WrapperOpc>
+          <Options>
+            <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
+            <Button
+              title="Detalles"
+              type="secundary"
+              ico={EyeIco}
+              onClick={showDetailCommitment}
+            />
+            <Button
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              title="En proceso"
+              type="status"
+              color={colorStatus("en proceso")}
+              ico={StatusIco}
+              onClick={handleDropdownStatus}
+            />
+            <Menu
+              id="simple-menu"
+              anchorEl={dropdownStatus}
+              keepMounted
+              open={Boolean(dropdownStatus)}
+              onClose={handleCloseDropdownStatus}
+            >
+              <MenuItems onClick={changeStatus}>
+                <CircleStatus color={colorStatus("por validar")} />
+                Por validar
+              </MenuItems>
+              <MenuItems onClick={changeStatus}>
+                <CircleStatus color={colorStatus("en proceso")} />
+                En proceso
+              </MenuItems>
+              <MenuItems onClick={changeStatus}>
+                <CircleStatus color={colorStatus("cumplido")} />
+                Cumplido
+              </MenuItems>
+              <MenuItems onClick={changeStatus}>
+                <CircleStatus color={colorStatus("oculto")} />
+                Oculto
+              </MenuItems>
+              <MenuItems onClick={changeStatus}>
+                <CircleStatus color={colorStatus("en correcion")} />
+                En correcion
+              </MenuItems>
+              <MenuItems onClick={changeStatus}>
+                <CircleStatus color={colorStatus("rechazado")} />
+                Rechazado
+              </MenuItems>
+            </Menu>
+          </Options>
           <WrapperColaborators>
             <h2>Colaboradores</h2>
             <Colaborator>
