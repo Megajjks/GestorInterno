@@ -1,6 +1,5 @@
 import React, { useState, Fragment } from "react";
 import {
-  Wrapper,
   WrapperContainer,
   Title,
   Information,
@@ -18,14 +17,12 @@ import {
   Btn,
   TxtRequired,
 } from "./styled";
-import Paper from "@material-ui/core/Paper";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
 
 const NewCommitment = () => {
   const [commitment, setCommitment] = useState({
-    userId: "",
     first_name: "",
     last_name: "",
     organization: "",
@@ -35,7 +32,6 @@ const NewCommitment = () => {
     position: "",
     email: "",
     phone: "",
-    description: "",
     logo: "",
     img: "",
     q1: "",
@@ -91,6 +87,7 @@ const NewCommitment = () => {
       commitment.state === "" ||
       commitment.position === "" ||
       commitment.email === "" ||
+      !(/^\w+([\.\+\-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(commitment.email)) ||
       commitment.phone === "" ||
       commitment.logo === "" ||
       commitment.img === "" ||
