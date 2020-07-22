@@ -1,11 +1,10 @@
 import styled from "styled-components";
 
-export const Button = styled.button`
-  background-color: ${(props) => props.theme.colors.orange};
+export const ButtonPrimary = styled.button`
+  background-color: ${(props) => props.theme.colors.primary};
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.5rem 1.5rem;
   color: #fff;
-  text-transform: uppercase;
   border: none;
   transition: background-color 0.3s ease;
   margin-top: 1rem;
@@ -16,11 +15,13 @@ export const Button = styled.button`
   font-size: 1.2em;
 
   box-shadow: 2px 5px 10px rgb(200, 191, 190);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     cursor: pointer;
-    transform: translateY(-0.125rem);
-    box-shadow: 0 0.25rem 0.5rem 0.25rem rgba(0, 0, 0, 0.16);
+    background-color: #bf360c;
   }
   &:active {
     transform: translateY(-0-125rem);
@@ -29,4 +30,36 @@ export const Button = styled.button`
   &:focus {
     outline: none;
   }
+`;
+
+export const ButtonSecundary = styled(ButtonPrimary)`
+  background-color: #f3f4f8;
+  color: ${(props) => props.theme.colors.primary};
+  border: 2px solid ${(props) => props.theme.colors.primary};
+  &:hover {
+    background-color: transparent;
+  }
+`;
+
+export const ButtonWarning = styled(ButtonPrimary)`
+  background-color: #b71c1c;
+  &:hover {
+    background-color: #7f0000;
+  }
+`;
+
+export const Title = styled.span`
+  flex: 1 1 0%;
+`;
+
+export const Ico = styled.img`
+  width: 24px;
+  flex: 0 1 auto;
+`;
+
+export const CircleStatus = styled.div`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: ${(props) => props.color};
 `;
