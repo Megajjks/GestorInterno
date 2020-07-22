@@ -13,6 +13,7 @@ import Community from "./component/pages/agent/Community";
 import NewCommitment from "./component/ui/NewCommitment";
 import TracingCommitmentDetails from "./component/ui/TracingCommitmentDetails";
 import CommitmentReport from "./component/ui/CommitmentReport";
+import CollaboratorManagement from './component/pages/collaborator/Management';
 
 const router = () => {
   return (
@@ -30,6 +31,7 @@ const router = () => {
           <Route exact path="/community" component={Community} />
           <Route exact path="/details_commitment/:id" />
           <Route exact path="/commitment_report" component={CommitmentReport} />
+          <Route exact path="/collaborator_management" component={CollaboratorManagement} />
           <Route
             exact
             path="/traicing_commitment/:id"
