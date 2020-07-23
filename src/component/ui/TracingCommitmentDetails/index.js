@@ -28,7 +28,7 @@ import {
   CircleStatus,
 } from "./styled";
 
-const TracingCommitmentDetails = (props) => {
+const TracingCommitmentDetails = ({ rol }) => {
   const history = useHistory();
   const [commitment, setCommitment] = useState(history.location.state);
   const [delColModal, setDelColModal] = useState(false);
@@ -84,6 +84,7 @@ const TracingCommitmentDetails = (props) => {
         <WrapperTask>Lista de tareas de seguimiento</WrapperTask>
         <WrapperOpc>
           <Options>
+            {/*this button (add task) will be hidden if  user_id not match with id collaborator*/}
             <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
             <Button
               title="Detalles"
@@ -108,10 +109,6 @@ const TracingCommitmentDetails = (props) => {
               onClose={handleCloseDropdownStatus}
             >
               <MenuItems onClick={changeStatus}>
-                <CircleStatus color={colorStatus("por validar")} />
-                Por validar
-              </MenuItems>
-              <MenuItems onClick={changeStatus}>
                 <CircleStatus color={colorStatus("en proceso")} />
                 En proceso
               </MenuItems>
@@ -119,18 +116,26 @@ const TracingCommitmentDetails = (props) => {
                 <CircleStatus color={colorStatus("cumplido")} />
                 Cumplido
               </MenuItems>
-              <MenuItems onClick={changeStatus}>
-                <CircleStatus color={colorStatus("oculto")} />
-                Oculto
-              </MenuItems>
-              <MenuItems onClick={changeStatus}>
-                <CircleStatus color={colorStatus("en correcion")} />
-                En correcion
-              </MenuItems>
-              <MenuItems onClick={changeStatus}>
-                <CircleStatus color={colorStatus("rechazado")} />
-                Rechazado
-              </MenuItems>
+              {rol === "collaborator" ? null : (
+                <span>
+                  <MenuItems onClick={changeStatus}>
+                    <CircleStatus color={colorStatus("por validar")} />
+                    Por validar
+                  </MenuItems>
+                  <MenuItems onClick={changeStatus}>
+                    <CircleStatus color={colorStatus("oculto")} />
+                    Oculto
+                  </MenuItems>
+                  <MenuItems onClick={changeStatus}>
+                    <CircleStatus color={colorStatus("en correcion")} />
+                    En correcion
+                  </MenuItems>
+                  <MenuItems onClick={changeStatus}>
+                    <CircleStatus color={colorStatus("rechazado")} />
+                    Rechazado
+                  </MenuItems>
+                </span>
+              )}
             </Menu>
           </Options>
           <WrapperColaborators>
@@ -138,11 +143,13 @@ const TracingCommitmentDetails = (props) => {
             <Colaborator>
               <AccountCircleIcon style={{ fontSize: 50 }} />
               <NameColaborator> {commitment.colaborators} </NameColaborator>
-              <BtnDeleteColaborator
-                src={DeletedIco}
-                alt="ico_deleted"
-                onClick={handleDelColModal}
-              />
+              {rol === "collaborator" ? null : (
+                <BtnDeleteColaborator
+                  src={DeletedIco}
+                  alt="ico_deleted"
+                  onClick={handleDelColModal}
+                />
+              )}
             </Colaborator>
             {addColaborator ? (
               <WrapperColaborators>
@@ -170,7 +177,7 @@ const TracingCommitmentDetails = (props) => {
                   </BtnSecundary>
                 </BtnGroup>
               </WrapperColaborators>
-            ) : (
+            ) : rol === "collaborator" ? null : (
               <BtnAddColaborator onClick={handleAddColaborator}>
                 <img src={AddIco} alt="add-ico" style={{ width: "18px" }} />
                 <BtnSecundary primary>Agregar colaborador</BtnSecundary>
