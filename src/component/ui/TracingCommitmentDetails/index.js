@@ -79,7 +79,7 @@ const TracingCommitmentDetails = (props) => {
 
   return (
     <Fragment>
-      <h1> {commitment.title} </h1>
+      <h1> {commitment.organization} </h1>
       <Wrapper>
         <WrapperTask>Lista de tareas de seguimiento</WrapperTask>
         <WrapperOpc>

@@ -11,6 +11,7 @@ import {
 } from "./styled";
 import User from "../../../assets/img/usercard.svg";
 import Map from "../../../assets/img/mapcard.svg";
+import Btn from "../GeneralButton";
 
 const status = {
   validando: {
@@ -45,15 +46,15 @@ const status = {
   },
 };
 
-const CommitmentCard = ({ data }) => {
+const CommitmentCard = ({ data, btnTitle, onClick }) => {
   return (
     <div style={{ display: "flex", justifyContent: "space-beetwen" }}>
       <Wrapper>
         <Logo src={data.logo} />
-        <TxtPrimary> {data.title} </TxtPrimary>
+        <TxtPrimary> {data.organization} </TxtPrimary>
         <Badge style={{ alignSelf: "flex-start", padding: ".5rem 0" }}>
           <SvgImg src={User} />
-          <Txtlight> {data.organization} </Txtlight>
+          <Txtlight> Juan perez </Txtlight>
         </Badge>
         <TxtSecundary> {data.brief} </TxtSecundary>
         <Badge style={{ width: "100%", padding: ".5rem 0" }}>
@@ -66,6 +67,9 @@ const CommitmentCard = ({ data }) => {
             {status[data.status].value}{" "}
           </Status>
         </Badge>
+        {btnTitle ? (
+          <Btn title={btnTitle} type="secundary" onClick={onClick} />
+        ) : null}
       </Wrapper>
     </div>
   );

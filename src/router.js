@@ -28,8 +28,11 @@ const router = () => {
           <Route exact path="/management" component={AdminManagement} />
           <Route exact path="/commitment" component={Commitment} />
           <Route exact path="/community" component={Community} />
-          <Route exact path="/details_commitment/:id" />
-          <Route exact path="/commitment_report" component={CommitmentReport} />
+          <Route
+            exact
+            path="/commitment_report/:id"
+            component={CommitmentReport}
+          />
           <Route
             exact
             path="/traicing_commitment/:id"

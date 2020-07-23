@@ -13,9 +13,8 @@ import axios from "axios";
 
 const fields = [
   "Id",
-  "Titulo",
-  "Agente",
   "Organización",
+  "Agente",
   "Lugar",
   "Sede",
   "Categoria",
@@ -60,7 +59,7 @@ const PoolTable = () => {
 
   const viewDetails = (item) => {
     history.push({
-      pathname: `/details_commitment/${item.id}`,
+      pathname: `/commitment_report/${item.id}`,
       state: item,
     });
   };
@@ -82,9 +81,8 @@ const PoolTable = () => {
             {commitments.map((commitment) => (
               <TableRow key={commitment.id}>
                 <TableCell align="center">{commitment.id}</TableCell>
-                <TableCell align="center">{commitment.title}</TableCell>
-                <TableCell align="center">{`${commitment.first_name} ${commitment.last_name}`}</TableCell>
                 <TableCell align="center">{commitment.organization}</TableCell>
+                <TableCell align="center">{`${commitment.first_name} ${commitment.last_name}`}</TableCell>
                 <TableCell align="center">{commitment.city}</TableCell>
                 <TableCell align="center">{commitment.state}</TableCell>
                 <TableCell align="center">{commitment.sector}</TableCell>

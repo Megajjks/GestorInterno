@@ -12,10 +12,9 @@ import Eye from "../../../../assets/img/eye.svg";
 import axios from "axios";
 
 const fields = [
-  "Titulo",
+  "Organización",
   "Colaboradores",
   "Agente",
-  "Organización",
   "Lugar",
   "Sede",
   "Categoria",
@@ -81,10 +80,9 @@ const TracingTable = () => {
           <TableBody>
             {commitments.map((commitment) => (
               <TableRow key={commitment.id}>
-                <TableCell align="center">{commitment.title}</TableCell>
+                <TableCell align="center">{commitment.organization}</TableCell>
                 <TableCell align="center">{commitment.colaborators}</TableCell>
                 <TableCell align="center">{`${commitment.first_name} ${commitment.last_name}`}</TableCell>
-                <TableCell align="center">{commitment.organization}</TableCell>
                 <TableCell align="center">{commitment.city}</TableCell>
                 <TableCell align="center">{commitment.state}</TableCell>
                 <TableCell align="center">{commitment.sector}</TableCell>
