@@ -1,6 +1,5 @@
 import React, { useState, Fragment } from "react";
 import {
-  Wrapper,
   WrapperContainer,
   Title,
   Information,
@@ -18,7 +17,6 @@ import {
   Btn,
   TxtRequired,
 } from "./styled";
-import Paper from "@material-ui/core/Paper";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
@@ -36,18 +34,18 @@ const NewCommitment = () => {
     phone: "",
     logo: "",
     img: "",
-    question_1: "",
-    question_2: "",
-    question_3: "",
-    question_4: "",
-    question_5: "",
-    question_6: "",
-    question_7: "",
-    question_8: "",
-    question_9: "",
-    question_10: "",
-    question_11: "",
-    question_12: "",
+    q1: "",
+    q2: "",
+    q3: "",
+    q4: "",
+    q5: "",
+    q6: "",
+    q7: "",
+    q8: "",
+    q9: "",
+    q10: "",
+    q11: "",
+    q12: "",
     send_emails: false,
     agree: false,
   });
@@ -89,21 +87,22 @@ const NewCommitment = () => {
       commitment.state === "" ||
       commitment.position === "" ||
       commitment.email === "" ||
+      !(/^\w+([\.\+\-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(commitment.email)) ||
       commitment.phone === "" ||
       commitment.logo === "" ||
       commitment.img === "" ||
-      commitment.question_1 === "" ||
-      commitment.question_2 === "" ||
-      commitment.question_2 === "" ||
-      commitment.question_3 === "" ||
-      commitment.question_4 === "" ||
-      commitment.question_5 === "" ||
-      commitment.question_6 === "" ||
-      commitment.question_7 === "" ||
-      commitment.question_8 === "" ||
-      commitment.question_10 === "" ||
-      commitment.question_11 === "" ||
-      commitment.question_12 === "" ||
+      commitment.q1 === "" ||
+      commitment.q2 === "" ||
+      commitment.q3 === "" ||
+      commitment.q4 === "" ||
+      commitment.q5 === "" ||
+      commitment.q6 === "" ||
+      commitment.q7 === "" ||
+      commitment.q8 === "" ||
+      commitment.q9 === "" ||
+      commitment.q10 === "" ||
+      commitment.q11 === "" ||
+      commitment.q12 === "" ||
       commitment.agree === false
     ) {
       setError({
@@ -300,8 +299,8 @@ const NewCommitment = () => {
               <TxtRequired>*</TxtRequired>
             </Label>
             <TextArea
-              name="question_1"
-              value={commitment.question_1}
+              name="q1"
+              value={commitment.q1}
               onChange={handleOnChange}
             />
           </Field>
@@ -311,8 +310,8 @@ const NewCommitment = () => {
               <TxtRequired>*</TxtRequired>
             </Label>
             <TextArea
-              name="question_2"
-              value={commitment.question_2}
+              name="q2"
+              value={commitment.q2}
               onChange={handleOnChange}
             />
           </Field>
@@ -365,8 +364,8 @@ const NewCommitment = () => {
             <Input
               type="text"
               placeholder="La organización A,(junto a la B)"
-              name="question_3"
-              value={commitment.question_3}
+              name="q3"
+              value={commitment.q3}
               onChange={handleOnChange}
               style={{ textAlign: "center" }}
             />{" "}
@@ -374,8 +373,8 @@ const NewCommitment = () => {
             <Input
               type="text"
               placeholder="# de agentes "
-              name="question_7"
-              value={commitment.question_7}
+              name="q7"
+              value={commitment.q7}
               onChange={handleOnChange}
               style={{ width: "130px", textAlign: "center" }}
             />{" "}
@@ -383,16 +382,16 @@ const NewCommitment = () => {
             <Input
               type="text"
               placeholder="periodo de tiempo"
-              name="question_5"
-              value={commitment.question_5}
+              name="q5"
+              value={commitment.q5}
               onChange={handleOnChange}
               style={{ width: "150px", textAlign: "center" }}
             />{" "}
             para contribuir a la comunidad de Agentes de cambio, a través de{" "}
             <TextArea
               placeholder="¿cómo el impacto esperado contribuye a los demás actores?"
-              name="question_6"
-              value={commitment.question_6}
+              name="q6"
+              value={commitment.q6}
               onChange={handleOnChange}
               style={{ width: "100%", height: "40px", textAlign: "center" }}
             />
@@ -402,8 +401,8 @@ const NewCommitment = () => {
               ¿Qué acción se va a implementar? <TxtRequired>*</TxtRequired>
             </Label>
             <TextArea
-              name="question_4"
-              value={commitment.question_4}
+              name="q4"
+              value={commitment.q4}
               onChange={handleOnChange}
             />
           </Field>
@@ -415,9 +414,9 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="question_8"
+                name="q8"
                 value="1"
-                checked={commitment.question_8 === "1"}
+                checked={commitment.q8 === "1"}
                 onChange={handleOnChange}
               />{" "}
               Vinculación con actores clave
@@ -425,9 +424,9 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="question_8"
+                name="q8"
                 value="2"
-                checked={commitment.question_8 === "2"}
+                checked={commitment.q8 === "2"}
                 onChange={handleOnChange}
               />{" "}
               Herramientas y metodologías para impulsar la innovación social y
@@ -436,9 +435,9 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="question_8"
+                name="q8"
                 value="3"
-                checked={commitment.question_8 === "3"}
+                checked={commitment.q8 === "3"}
                 onChange={handleOnChange}
               />{" "}
               Asesorías especializadas
@@ -446,9 +445,9 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="question_8"
+                name="q8"
                 value="4"
-                checked={commitment.question_8 === "4"}
+                checked={commitment.q8 === "4"}
                 onChange={handleOnChange}
               />{" "}
               Fondos para escalar la iniciativa
@@ -456,9 +455,9 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="question_8"
+                name="q8"
                 value="5"
-                checked={commitment.question_8 === "5"}
+                checked={commitment.q8 === "5"}
                 onChange={handleOnChange}
               />{" "}
               Difusión y comunicación
@@ -466,9 +465,9 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="question_8"
+                name="q8"
                 value="6"
-                checked={commitment.question_8 === "6"}
+                checked={commitment.q8 === "6"}
                 onChange={handleOnChange}
               />{" "}
               Otro
@@ -480,8 +479,8 @@ const NewCommitment = () => {
               especificarlo a continuación:
             </Label>
             <TextArea
-              name="question_9"
-              value={commitment.question_9}
+              name="q9"
+              value={commitment.q9}
               onChange={handleOnChange}
             />
           </Field>
@@ -491,9 +490,9 @@ const NewCommitment = () => {
               <TxtRequired>*</TxtRequired>
             </Label>
             <Select
-              name="question_10"
+              name="q10"
               style={{ width: "37em" }}
-              value={commitment.question_10}
+              value={commitment.q10}
               onChange={handleOnChange}
             >
               <option value="">-- Seleccione --</option>
@@ -518,16 +517,16 @@ const NewCommitment = () => {
               especificarlo a continuación
             </Label>
             <TextArea
-              name="question_11"
-              value={commitment.question_11}
+              name="q11"
+              value={commitment.q11}
               onChange={handleOnChange}
             />
           </Field>
           <Field>
             <Label>Comentario o Duda Adicional</Label>
             <TextArea
-              name="question_12"
-              value={commitment.question_12}
+              name="q12"
+              value={commitment.q12}
               onChange={handleOnChange}
             />
           </Field>
