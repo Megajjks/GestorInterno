@@ -62,7 +62,10 @@ const TracingCommitmentDetails = ({ rol }) => {
   };
 
   const showDetailCommitment = () => {
-    history.push("/commitment_report");
+    history.push({
+      pathname: `/commitment_report/${commitment.id}`,
+      state: { isDetail: true },
+    });
   };
   const handleDropdownStatus = (event) => {
     setDropdownStatus(event.currentTarget);

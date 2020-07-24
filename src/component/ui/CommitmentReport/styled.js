@@ -1,38 +1,38 @@
 import React from "react";
 import styled from "styled-components";
-import { withStyles } from '@material-ui/core/styles';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import { withStyles } from "@material-ui/core/styles";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 export const StyledMenu = withStyles({
   paper: {
-    border: "1px solid #d3d4d5"
-  }
-})(props => (
+    border: "1px solid #d3d4d5",
+  },
+})((props) => (
   <Menu
     elevation={0}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: "bottom",
-      horizontal: "center"
+      horizontal: "center",
     }}
     transformOrigin={{
       vertical: "top",
-      horizontal: "center"
+      horizontal: "center",
     }}
     {...props}
   />
 ));
 
-export const StyledMenuItem = withStyles(theme => ({
+export const StyledMenuItem = withStyles((theme) => ({
   root: {
     "&:focus": {
       backgroundColor: "#F6503E",
       "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-        color: theme.palette.common.white
-      }
-    }
-  }
+        color: theme.palette.common.white,
+      },
+    },
+  },
 }))(MenuItem);
 
 export const Wrapper = styled.div`
@@ -54,7 +54,7 @@ export const Img = styled.img`
 `;
 
 export const WrapperFormData = styled.div`
-  width: 90%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -70,6 +70,7 @@ export const WrapperIconEdit = styled.div`
 export const ImgEditCommitment = styled.img`
   width: 30px;
   height: 30px;
+  cursor: pointer;
 `;
 
 export const WrapperImgTxt = styled.div`
@@ -175,14 +176,14 @@ export const WrapperContact = styled.div`
   width: 40%;
   display: flex;
   flex-direction: row;
+  padding-bottom: 3em;
 `;
 
 export const WrapperButtons = styled.div`
   width: 90%;
   display: flex;
   flex-direction: row;
-  margin-top: 2em;
-  margin-bottom: 2em;
+  margin-bottom: 3em;
 `;
 
 export const ButtonAccept = styled.button`

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Wrapper,
   Img,
@@ -25,7 +26,7 @@ import {
   ButtonAccept,
   ButtonDecline,
   StyledMenu,
-  StyledMenuItem
+  StyledMenuItem,
 } from "./styled";
 import Logo from "../../../assets/img/logcom.png";
 import IconEdit from "../../../assets/img/editar.svg";
@@ -42,9 +43,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
-import ListItemText from '@material-ui/core/ListItemText';
+import ListItemText from "@material-ui/core/ListItemText";
+import EditCommitmentModal from "../modals/EditCommitmentModal";
 
-const CommitmentReport = () => {
+const CommitmentReport = ({ isDetail, rol }) => {
   const [dataForm, setDataForm] = useState({
     id: "1",
     first_name: "Anáhuac ",
@@ -76,8 +78,10 @@ const CommitmentReport = () => {
     question_11: "",
     question_12: "",
   });
-
+  const history = useHistory();
   const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [showEditCommitmentModal, setShowEditCommitmentModal] = useState(false);
 
   const feedback = () => {
     ClickOpenModalFeedback();
@@ -91,16 +95,20 @@ const CommitmentReport = () => {
     setOpen(false);
   };
 
-  //Dropdown menu
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const openModalAcceptFeedback = event => {
+  const openModalAcceptFeedback = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const closeModalAcceptFeedback = () => {
     setAnchorEl(null);
+  };
+
+  const openEditCommitmentModal = () => {
+    setShowEditCommitmentModal(true);
+  };
+
+  const closeEditCommitmentModal = () => {
+    setShowEditCommitmentModal(false);
   };
 
   return (
@@ -114,7 +122,9 @@ const CommitmentReport = () => {
             {dataForm.first_name} {dataForm.last_name}
           </TxtIcon>
         </WrapperImgTxt>
-        <TxtQuestion style={{ marginTop: "12px" }}>{dataForm.question_1}</TxtQuestion>
+        <TxtQuestion style={{ marginTop: "12px" }}>
+          {dataForm.question_1}
+        </TxtQuestion>
         <Sector>
           <TxtSector>Sector: </TxtSector>
           <TypeSector>{dataForm.sector}</TypeSector>
@@ -185,73 +195,79 @@ const CommitmentReport = () => {
             <TxtIcon>{dataForm.email}</TxtIcon>
           </WrapperImgTxt>
         </WrapperContact>
-        <WrapperButtons>
-          <ButtonDecline onClick={() => feedback()}>Declinar</ButtonDecline>
+        {history.location.state.isDetail ? null : (
+          <WrapperButtons>
+            <ButtonDecline onClick={() => feedback()}>Declinar</ButtonDecline>
 
-
-          <ButtonAccept onClick={openModalAcceptFeedback}>Aceptar Compromiso</ButtonAccept>
-          <StyledMenu
-            id="customized-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={closeModalAcceptFeedback}
-          >
-            <StyledMenuItem>
-              <ListItemText primary="Aceptar" />
-            </StyledMenuItem>
-            <StyledMenuItem onClick={() => feedback()}>
-              <ListItemText primary="Aceptar con corrección"/>
-            </StyledMenuItem>
-          </StyledMenu>
-
-
-        </WrapperButtons>
+            <ButtonAccept onClick={openModalAcceptFeedback}>
+              Aceptar Compromiso
+            </ButtonAccept>
+            <StyledMenu
+              id="customized-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={closeModalAcceptFeedback}
+            >
+              <StyledMenuItem>
+                <ListItemText primary="Aceptar" />
+              </StyledMenuItem>
+              <StyledMenuItem onClick={() => feedback()}>
+                <ListItemText primary="Aceptar con corrección" />
+              </StyledMenuItem>
+            </StyledMenu>
+          </WrapperButtons>
+        )}
       </WrapperFormData>
-      <WrapperIconEdit>
-        <ImgEditCommitment src={IconEdit} />
-      </WrapperIconEdit>
-      <>
-        <Dialog
-          open={open}
-          onClose={closeModalFeedback}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {"Respuesta para Compromiso"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Escribe aquí el titulo del mensaje que se enviará
-            </DialogContentText>
-            <TextField
-              type="text"
-              name="titleFeedback"
-              label="Titulo de Mensaje"
-              color="secondary"
-              fullWidth
-              margin="dense"
-              style={{ marginTop: "10px" }}
-            />
-            <TextField
-              type="text"
-              name="descriptionFeedback"
-              label="Descripción de Mensaje"
-              color="secondary"
-              fullWidth
-              margin="dense"
-              style={{ marginTop: "10px" }}
-            />
-            <ButtonAccept>Enviar</ButtonAccept>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={closeModalFeedback} color="secondary">
-              Cerrar
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </>
+      {rol === "collaborator" ? null : (
+        <WrapperIconEdit>
+          <ImgEditCommitment src={IconEdit} onClick={openEditCommitmentModal} />
+        </WrapperIconEdit>
+      )}
+
+      <Dialog
+        open={open}
+        onClose={closeModalFeedback}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Respuesta para Compromiso"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Escribe aquí el titulo del mensaje que se enviará
+          </DialogContentText>
+          <TextField
+            type="text"
+            name="titleFeedback"
+            label="Titulo de Mensaje"
+            color="secondary"
+            fullWidth
+            margin="dense"
+            style={{ marginTop: "10px" }}
+          />
+          <TextField
+            type="text"
+            name="descriptionFeedback"
+            label="Descripción de Mensaje"
+            color="secondary"
+            fullWidth
+            margin="dense"
+            style={{ marginTop: "10px" }}
+          />
+          <ButtonAccept>Enviar</ButtonAccept>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeModalFeedback} color="secondary">
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <EditCommitmentModal
+        open={showEditCommitmentModal}
+        handleClose={closeEditCommitmentModal}
+      />
     </Wrapper>
   );
 };
