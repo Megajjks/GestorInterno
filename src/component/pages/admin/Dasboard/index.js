@@ -63,6 +63,16 @@ const data = [
     status: "declinado",
     colaborators: "Empleado 1 de ahosoka",
   },
+  {
+    id: "7",
+    logo: Logo,
+    organization: "Agencia GEMA",
+    brief:
+      "Agencia para la Igualdad y el Desarrollo GEMA se compromete a generar 20 líderes agentes de cambio, durante un año, a través de la Iniciativa»SAL»,",
+    location: "Querétaro",
+    status: "prevalidado",
+    colaborators: "Empleado 1 de ahosoka",
+  },
 ];
 
 const Dasboard = () => {

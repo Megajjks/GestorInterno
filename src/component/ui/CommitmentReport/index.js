@@ -45,6 +45,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import ListItemText from "@material-ui/core/ListItemText";
 import EditCommitmentModal from "../modals/EditCommitmentModal";
+import DynamicScrollToTop from "../../hooks/DynamicScrollToTop";
 
 const CommitmentReport = ({ isDetail, rol }) => {
   const [dataForm, setDataForm] = useState({
@@ -113,6 +114,7 @@ const CommitmentReport = ({ isDetail, rol }) => {
 
   return (
     <Wrapper>
+      <DynamicScrollToTop />
       <Img src={Logo} />
       <WrapperFormData>
         <TxtTitleOrganization>{dataForm.organization}</TxtTitleOrganization>

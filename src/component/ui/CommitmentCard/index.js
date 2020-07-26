@@ -19,6 +19,11 @@ const status = {
     background: "#0038BA",
     color: "#FFFFFF",
   },
+  prevalidado: {
+    value: "Pre validado",
+    background: "#0038BA",
+    color: "#FFFFFF",
+  },
   proceso: {
     value: "En proceso",
     background: "#FF4F13",

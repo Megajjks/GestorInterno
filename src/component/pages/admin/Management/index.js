@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CommitmentCardList from "../../../ui/CommitmentCardList";
 import Logo from "../../../../assets/img/logcom.png";
+import { SearchBar } from "./styled";
 
 const data = [
   {
@@ -41,7 +42,7 @@ const data = [
       "Scientiax se compromete a inspirar a 100 niñas a ser líderes innovadoras para la creación de startups que resuelvan un problema social basado en los",
     location: "Querétaro",
     status: "oculto",
-    colaborators: "Empleado 1 de ahosoka",
+    colaborators: "Empleado 2 de ahosoka",
   },
   {
     id: "5",
@@ -49,9 +50,9 @@ const data = [
     organization: "Incubadora de la UTCJ",
     brief:
       "Incubadora de Empresas de la Universidad Tecnológica de Ciudad Juarez se compromete a generar una comunidad local de 100 agentes de cambio de agosto 2020",
-    location: "Querétaro",
+    location: "Mexico",
     status: "correcion",
-    colaborators: "Empleado 1 de ahosoka",
+    colaborators: "Empleado 3 de ahosoka",
   },
   {
     id: "6",
@@ -66,11 +67,44 @@ const data = [
 ];
 
 const Management = () => {
+  const [commitments, setCommitments] = useState(data);
+  const [searchString, setSearchString] = useState("");
+
+  useEffect(() => {
+    if (!searchString) {
+      return;
+    }
+    const busqueda = commitments.filter((item) => {
+      const payload = searchString.toLowerCase();
+      const organization = item.organization.toLowerCase();
+      const location = item.location.toLowerCase();
+      const status = item.status.toLowerCase();
+      const colaborators = item.colaborators.toLowerCase();
+
+      if (searchString === "") {
+        return commitments;
+      } else if (
+        organization.includes(payload) ||
+        location.includes(payload) ||
+        status.includes(payload) ||
+        colaborators.includes(payload)
+      ) {
+        return item;
+      }
+    });
+    setCommitments(busqueda);
+  }, [searchString]);
+  const search = (e) => {
+    const { value } = e.target;
+    setSearchString(value);
+  };
+
   return (
     <div>
       <h1>Compromisos asignados</h1>
+      <SearchBar value={searchString} onChange={search} />
       <CommitmentCardList
-        commitments={data}
+        commitments={commitments}
         btnTitle="Gestionar compromiso"
         btnUrlBase="/traicing_commitment"
       />
