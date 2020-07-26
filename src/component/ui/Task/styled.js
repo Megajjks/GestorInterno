@@ -37,16 +37,33 @@ export const TaskData = styled.div`
 `;
 
 export const WrapperPriority = styled.div`
-  width: 20%;
+  width: 35%;
   display: flex;
   flex-direction: column;
+`;
+
+export const WrapperStatusTask = styled.div`
+  background-color: ${({ theme: { colors } }) => colors.lowPriority};
+  margin-top: 10px;
+  border-radius: 1.5px;
+  margin-left: 2px;
+  height: 2em;
+  flex-direction: row;
+  text-align: center;
+`;
+
+export const StatusTask = styled.h1`
+  color: ${(props) => props.theme.colors.black};
+  font-weight: 600;
+  font-size: 1em;
+  margin-top: 6px;
 `;
 
 export const CloseTask = styled.img`
   width: 10px;
   height: 10px;
   padding-top: 15px;
-  padding-left: 5.8em;
+  padding-left: 9.8em;
   &:hover {
     cursor: pointer;
   }
@@ -56,14 +73,20 @@ export const TaskPriority = styled.div`
   background-color: ${({ theme: { colors } }) => colors.lowPriority};
   margin-top: 10px;
   margin-bottom: 5px;
-  margin-left: 6.1em;
+  margin-left: 10em;
   border-radius: 1.5px;
   width: 5px;
   height: 60px;
 `;
 
+export const SectionEditTask = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+`;
+
 export const WrapperCollaborator = styled.div`
-  width: 30%;
+  width: 35%;
   display: flex;
   flex-direction: row;
 `;
@@ -73,6 +96,21 @@ export const Collaborator = styled.h1`
   font-weight: 600;
   font-size: 1.2em;
   margin-bottom: 2px;
+`;
+
+export const WrapperEditTask = styled.div`
+  width: 5%;
+  display: flex;
+  flex-direction: row;
+`;
+
+export const ImgEditTask = styled.img`
+  width: 16px;
+  height: 16px;
+  margin-top: 18px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const WrapperExpiration = styled.div`
@@ -104,7 +142,7 @@ export const TitleTask = styled.h1`
 `;
 
 export const TxtDescriptionTask = styled.h1`
-  width: 80%;
+  width: 100%;
   color: ${(props) => props.theme.colors.greyTitle};
   font-weight: 200;
   font-size: 15px;
