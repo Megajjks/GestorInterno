@@ -12,6 +12,8 @@ import Button from "../GeneralButton";
 import TaskIco from "../../../assets/img/gestion.svg";
 import EyeIco from "../../../assets/img/eye.svg";
 import StatusIco from "../../../assets/img/point.svg";
+import ModalCreateTask from "../modals/CreateTask"
+import TaskList from "../TaskList"
 import {
   Wrapper,
   WrapperTask,
@@ -56,9 +58,19 @@ const TracingCommitmentDetails = (props) => {
     setAddColaborator(false);
   };
 
+  const [openCreateTask, setOpenCreateTask] = useState(false);
+
+  const ClickOpenModalCreateTask = () => {
+    setOpenCreateTask(true);
+  };
+
+  const closeModalCreateTask = () => {
+    setOpenCreateTask(false);
+  };
+
   const addTask = () => {
-    //function to create Task
     console.log("add task");
+    ClickOpenModalCreateTask()
   };
 
   const showDetailCommitment = () => {
@@ -77,11 +89,15 @@ const TracingCommitmentDetails = (props) => {
     setDropdownStatus(null);
   };
 
+  
+
   return (
     <Fragment>
       <h1> {commitment.title} </h1>
       <Wrapper>
-        <WrapperTask>Lista de tareas de seguimiento</WrapperTask>
+        <WrapperTask>
+          <TaskList></TaskList>
+        </WrapperTask>
         <WrapperOpc>
           <Options>
             <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
@@ -185,6 +201,10 @@ const TracingCommitmentDetails = (props) => {
         open={delColModal}
         handleClose={handlecloseModal}
         callback={() => deleteCollaborator("wsfq1")}
+      />
+      <ModalCreateTask
+        openNewTask={openCreateTask}
+        closeModalNewTask={closeModalCreateTask}
       />
     </Fragment>
   );
