@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Tablestyle, TableHeader, EyeIcon, Details } from "./styled";
+import { Tablestyle, TableHeader, EyeIcon, Details, SearchBar } from "./styled";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -13,9 +13,8 @@ import axios from "axios";
 
 const fields = [
   "Id",
-  "Titulo",
-  "Agente",
   "Organización",
+  "Agente",
   "Lugar",
   "Sede",
   "Categoria",
@@ -31,6 +30,7 @@ const PoolTable = () => {
     message: "",
   });
   const history = useHistory();
+  const [searchString, setSearchString] = useState("");
 
   const fetchCommitment = async () => {
     setStatus({ loader: true });
@@ -60,13 +60,50 @@ const PoolTable = () => {
 
   const viewDetails = (item) => {
     history.push({
-      pathname: `/details_commitment/${item.id}`,
+      pathname: `/commitment_report/${item.id}`,
       state: item,
     });
   };
 
+  useEffect(() => {
+    if (!searchString) {
+      return;
+    }
+    const busqueda = commitments.filter((item) => {
+      const payload = searchString.toLowerCase();
+      const id = item.id.toLowerCase();
+      const organization = item.organization.toLowerCase();
+      const agent = `${item.first_name.toLowerCase()}  ${item.last_name.toLowerCase()}`;
+      const city = item.city.toLowerCase();
+      const status = item.status.toLowerCase();
+      const sector = item.sector.toLowerCase();
+      const state = item.state.toLowerCase();
+
+      if (searchString === "") {
+        return commitments;
+      } else if (
+        id.includes(payload) ||
+        organization.includes(payload) ||
+        agent.includes(payload) ||
+        city.includes(payload) ||
+        state.includes(payload) ||
+        sector.includes(payload) ||
+        status.includes(payload)
+      ) {
+        return item;
+      }
+    });
+    setCommitments(busqueda);
+  }, [searchString]);
+
+  const search = (e) => {
+    const { value } = e.target;
+    setSearchString(value);
+  };
+
   return (
     <Fragment>
+      <SearchBar value={searchString} onChange={search} />
       <TableContainer component={Paper}>
         <Tablestyle aria-label="simple table">
           <TableHeader>
@@ -82,9 +119,8 @@ const PoolTable = () => {
             {commitments.map((commitment) => (
               <TableRow key={commitment.id}>
                 <TableCell align="center">{commitment.id}</TableCell>
-                <TableCell align="center">{commitment.title}</TableCell>
-                <TableCell align="center">{`${commitment.first_name} ${commitment.last_name}`}</TableCell>
                 <TableCell align="center">{commitment.organization}</TableCell>
+                <TableCell align="center">{`${commitment.first_name} ${commitment.last_name}`}</TableCell>
                 <TableCell align="center">{commitment.city}</TableCell>
                 <TableCell align="center">{commitment.state}</TableCell>
                 <TableCell align="center">{commitment.sector}</TableCell>

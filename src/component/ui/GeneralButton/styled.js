@@ -33,7 +33,7 @@ export const ButtonPrimary = styled.button`
 `;
 
 export const ButtonSecundary = styled(ButtonPrimary)`
-  background-color: #f3f4f8;
+  background-color: transparent;
   color: ${(props) => props.theme.colors.primary};
   border: 2px solid ${(props) => props.theme.colors.primary};
   &:hover {
