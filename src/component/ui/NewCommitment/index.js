@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import { useHistory } from "react-router-dom";
 import {
   WrapperContainer,
   Title,
@@ -50,6 +51,8 @@ const NewCommitment = () => {
     agree: false,
   });
 
+  const history = useHistory();
+
   const [error, setError] = useState({
     status: false,
     message: "",
@@ -87,7 +90,9 @@ const NewCommitment = () => {
       commitment.state === "" ||
       commitment.position === "" ||
       commitment.email === "" ||
-      !(/^\w+([\.\+\-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(commitment.email)) ||
+      !/^\w+([\.\+\-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(
+        commitment.email
+      ) ||
       commitment.phone === "" ||
       commitment.logo === "" ||
       commitment.img === "" ||
@@ -130,6 +135,8 @@ const NewCommitment = () => {
         status: false,
         message: "",
       });
+      //redirection when the request has been correct
+      history.push("/success_commitment");
     } catch (e) {
       setError({
         status: true,
