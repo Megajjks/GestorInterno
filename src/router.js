@@ -13,6 +13,7 @@ import Community from "./component/pages/agent/Community";
 import NewCommitment from "./component/ui/NewCommitment";
 import TracingCommitmentDetails from "./component/ui/TracingCommitmentDetails";
 import CommitmentReport from "./component/ui/CommitmentReport";
+import SuccessSendCommitment from "./component/ui/SuccessSendCommitment";
 
 const router = () => {
   return (
@@ -20,6 +21,11 @@ const router = () => {
       <Switch>
         <Route exact path="/" component={Login} />
         <Route exact path="/new_commitment" component={NewCommitment} />
+        <Route
+          exact
+          path="/success_commitment"
+          component={SuccessSendCommitment}
+        />
         <Navegation>
           <Route exact path="/dasboard" component={AdminDasboard} />
           <Route exact path="/users" component={AdminUsers} />

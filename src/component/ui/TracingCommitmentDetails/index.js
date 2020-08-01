@@ -12,8 +12,8 @@ import Button from "../GeneralButton";
 import TaskIco from "../../../assets/img/gestion.svg";
 import EyeIco from "../../../assets/img/eye.svg";
 import StatusIco from "../../../assets/img/point.svg";
-import ModalCreateTask from "../modals/CreateTask"
-import TaskList from "../TaskList"
+import ModalCreateTask from "../modals/CreateTaskModal";
+import TaskList from "../TaskList";
 import {
   Wrapper,
   WrapperTask,
@@ -70,7 +70,7 @@ const TracingCommitmentDetails = ({ rol }) => {
 
   const addTask = () => {
     console.log("add task");
-    ClickOpenModalCreateTask()
+    ClickOpenModalCreateTask();
   };
 
   const showDetailCommitment = () => {
@@ -91,8 +91,6 @@ const TracingCommitmentDetails = ({ rol }) => {
     //Put request that change the status of commitment
     setDropdownStatus(null);
   };
-
-  
 
   return (
     <Fragment>

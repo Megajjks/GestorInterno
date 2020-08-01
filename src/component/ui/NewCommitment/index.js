@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import { useHistory } from "react-router-dom";
 import {
   WrapperContainer,
   Title,
@@ -23,8 +24,8 @@ import axios from "axios";
 
 const NewCommitment = () => {
   const [commitment, setCommitment] = useState({
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     organization: "",
     sector: "",
     city: "",
@@ -46,9 +47,11 @@ const NewCommitment = () => {
     q10: "",
     q11: "",
     q12: "",
-    send_emails: false,
+    sendEmails: false,
     agree: false,
   });
+
+  const history = useHistory();
 
   const [error, setError] = useState({
     status: false,
@@ -79,15 +82,17 @@ const NewCommitment = () => {
 
   const validateData = () => {
     if (
-      commitment.first_name === "" ||
-      commitment.last_name === "" ||
+      commitment.firstName === "" ||
+      commitment.lastName === "" ||
       commitment.organization === "" ||
       commitment.sector === "" ||
       commitment.city === "" ||
       commitment.state === "" ||
       commitment.position === "" ||
       commitment.email === "" ||
-      !(/^\w+([\.\+\-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(commitment.email)) ||
+      !/^\w+([\.\+\-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(
+        commitment.email
+      ) ||
       commitment.phone === "" ||
       commitment.logo === "" ||
       commitment.img === "" ||
@@ -130,6 +135,8 @@ const NewCommitment = () => {
         status: false,
         message: "",
       });
+      //redirection when the request has been correct
+      history.push("/success_commitment");
     } catch (e) {
       setError({
         status: true,
@@ -158,8 +165,8 @@ const NewCommitment = () => {
               </Label>
               <Input
                 type="text"
-                name="first_name"
-                value={commitment.first_name}
+                name="firstName"
+                value={commitment.firstName}
                 onChange={handleOnChange}
               />
             </Field>
@@ -169,8 +176,8 @@ const NewCommitment = () => {
               </Label>
               <Input
                 type="text"
-                name="last_name"
-                value={commitment.last_name}
+                name="lastName"
+                value={commitment.lastName}
                 onChange={handleOnChange}
               />
             </Field>
@@ -534,12 +541,12 @@ const NewCommitment = () => {
           <WrapperInputRadio>
             <InputRadio
               type="checkbox"
-              name="send_emails"
-              checked={commitment.send_emails}
+              name="sendEmails"
+              checked={commitment.sendEmails}
               onChange={() =>
                 setCommitment({
                   ...commitment,
-                  send_emails: !commitment.send_emails,
+                  sendEmails: !commitment.sendEmails,
                 })
               }
             />{" "}
