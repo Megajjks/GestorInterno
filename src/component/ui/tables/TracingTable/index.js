@@ -10,6 +10,7 @@ import Spinner from "../../Spinner";
 import Error from "../../Error";
 import Eye from "../../../../assets/img/eye.svg";
 import api from "../../../../helpers/api";
+import { filterWithStatus } from "../../../../helpers";
 
 const fields = [
   "Organización",
@@ -37,7 +38,9 @@ const TracingTable = () => {
       setStatus({ loader: true });
       try {
         const response = await api.get("/commitments");
-        setCommitments(response.data);
+        setCommitments(
+          filterWithStatus(response.data, ["proceso", "cumplido", "oculto"])
+        );
         setStatus({
           loader: false,
           isError: false,
@@ -63,9 +66,8 @@ const TracingTable = () => {
     const busqueda = commitments.filter((item) => {
       console.log(item);
       const payload = searchString.toLowerCase();
-      const colaborators = item.colaborators.toLowerCase();
       const organization = item.organization.toLowerCase();
-      const agent = `${item.first_name.toLowerCase()}  ${item.last_name.toLowerCase()}`;
+      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
       const city = item.city.toLowerCase();
       const status = item.status.toLowerCase();
       const sector = item.sector.toLowerCase();
@@ -74,7 +76,6 @@ const TracingTable = () => {
       if (searchString === "") {
         return commitments;
       } else if (
-        colaborators.includes(payload) ||
         organization.includes(payload) ||
         agent.includes(payload) ||
         city.includes(payload) ||

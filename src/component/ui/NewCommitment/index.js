@@ -20,7 +20,7 @@ import {
 } from "./styled";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import axios from "axios";
+import api from "../../../helpers/api";
 
 const NewCommitment = () => {
   const [commitment, setCommitment] = useState({
@@ -126,10 +126,7 @@ const NewCommitment = () => {
   const sendData = async () => {
     try {
       //const response = await axios.post('http://localhost:5000/commitment',{commitment})
-      const response = await axios.post(
-        "http://localhost:5000/commitment",
-        commitment
-      );
+      const response = await api.post("/commitments", commitment);
       console.log("👉 Returned data:", response);
       setError({
         status: false,

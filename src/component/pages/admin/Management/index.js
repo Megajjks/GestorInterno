@@ -4,6 +4,7 @@ import Spinner from "../../../ui/Spinner";
 import Error from "../../../ui/Error";
 import { SearchBar } from "./styled";
 import api from "../../../../helpers/api";
+import { filterWithStatus } from "../../../../helpers";
 
 const Management = () => {
   const [commitments, setCommitments] = useState([]);
@@ -19,7 +20,9 @@ const Management = () => {
       setStatus({ loader: true });
       try {
         const response = await api.get("/commitments?status=proceso");
-        setCommitments(response.data);
+        setCommitments(
+          filterWithStatus(response.data, ["proceso", "cumplido"])
+        );
         setStatus({
           loader: false,
           isError: false,

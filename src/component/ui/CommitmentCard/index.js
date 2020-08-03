@@ -12,6 +12,7 @@ import {
 import User from "../../../assets/img/usercard.svg";
 import Map from "../../../assets/img/mapcard.svg";
 import Btn from "../GeneralButton";
+import { dataStatus } from "../../../helpers/index";
 
 const status = {
   validando: {
@@ -53,6 +54,7 @@ const status = {
 
 const CommitmentCard = ({ data, btnTitle, onClick }) => {
   let brief = `${data.q1.slice(0, 200)}...`;
+  let infoStatus = dataStatus(data.status);
   return (
     <div style={{ display: "flex", justifyContent: "space-beetwen" }}>
       <Wrapper>
@@ -68,10 +70,7 @@ const CommitmentCard = ({ data, btnTitle, onClick }) => {
             <SvgImg src={Map} />
             <Txtlight> {data.city} </Txtlight>
           </Badge>
-          <Status status={status[data.status]}>
-            {" "}
-            {status[data.status].value}{" "}
-          </Status>
+          <Status status={infoStatus}> {infoStatus.value} </Status>
         </Badge>
         {btnTitle ? (
           <Btn title={btnTitle} type="secundary" onClick={onClick} />
