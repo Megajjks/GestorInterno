@@ -35,9 +35,7 @@ const PoolTable = () => {
   const fetchCommitment = async () => {
     setStatus({ loader: true });
     try {
-      const response = await api.get(
-        "commitments"
-      );
+      const response = await api.get("commitments");
       setCommitments(response.data);
       setStatus({
         loader: false,
@@ -73,7 +71,7 @@ const PoolTable = () => {
       const payload = searchString.toLowerCase();
       const id = item.id.toLowerCase();
       const organization = item.organization.toLowerCase();
-      const agent = `${item.first_name.toLowerCase()}  ${item.last_name.toLowerCase()}`;
+      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
       const city = item.city.toLowerCase();
       const status = item.status.toLowerCase();
       const sector = item.sector.toLowerCase();

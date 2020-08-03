@@ -52,6 +52,7 @@ const status = {
 };
 
 const CommitmentCard = ({ data, btnTitle, onClick }) => {
+  let brief = `${data.q1.slice(0, 200)}...`;
   return (
     <div style={{ display: "flex", justifyContent: "space-beetwen" }}>
       <Wrapper>
@@ -59,13 +60,13 @@ const CommitmentCard = ({ data, btnTitle, onClick }) => {
         <TxtPrimary> {data.organization} </TxtPrimary>
         <Badge style={{ alignSelf: "flex-start", padding: ".5rem 0" }}>
           <SvgImg src={User} />
-          <Txtlight> Juan perez </Txtlight>
+          <Txtlight> {`${data.firstName}  ${data.lastName}`} </Txtlight>
         </Badge>
-        <TxtSecundary> {data.brief} </TxtSecundary>
+        <TxtSecundary> {brief} </TxtSecundary>
         <Badge style={{ width: "100%", padding: ".5rem 0" }}>
           <Badge style={{ alignSelf: "flex-start", padding: ".5rem 0" }}>
             <SvgImg src={Map} />
-            <Txtlight> {data.location} </Txtlight>
+            <Txtlight> {data.city} </Txtlight>
           </Badge>
           <Status status={status[data.status]}>
             {" "}
