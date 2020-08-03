@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import Spinner from "../../Spinner";
 import Error from "../../Error";
 import Eye from "../../../../assets/img/eye.svg";
-import axios from "axios";
+import api from "../../../../helpers/api";
 
 const fields = [
   "Id",
@@ -35,8 +35,8 @@ const PoolTable = () => {
   const fetchCommitment = async () => {
     setStatus({ loader: true });
     try {
-      const response = await axios.get(
-        "https://my-json-server.typicode.com/Megajjks/dbAshokaTest/commitments"
+      const response = await api.get(
+        "commitments"
       );
       setCommitments(response.data);
       setStatus({
@@ -120,7 +120,7 @@ const PoolTable = () => {
               <TableRow key={commitment.id}>
                 <TableCell align="center">{commitment.id}</TableCell>
                 <TableCell align="center">{commitment.organization}</TableCell>
-                <TableCell align="center">{`${commitment.first_name} ${commitment.last_name}`}</TableCell>
+                <TableCell align="center">{`${commitment.firstName} ${commitment.lastName}`}</TableCell>
                 <TableCell align="center">{commitment.city}</TableCell>
                 <TableCell align="center">{commitment.state}</TableCell>
                 <TableCell align="center">{commitment.sector}</TableCell>
