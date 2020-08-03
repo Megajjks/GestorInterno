@@ -19,3 +19,26 @@ export const colorStatus = (status) => {
       return "";
   }
 };
+
+/* export const dataFilterStatus = (data) => {
+  data.map(commitment => {
+    commitment.filter(commitmentFilter => commitmentFilter.status === 'validando' || 
+      commitmentFilter.status === 'prevalidado')
+  })
+} */
+
+
+export const filterWithStatus = (data, query) => {
+    const filteredData = data.filter( (item) => {
+        for (let key in query) {
+          if(item.status === undefined){
+            return false
+          }
+          else if (query[key].includes(item.status)) {
+            return true;
+          }
+        }
+        return false;
+    });
+    return filteredData;
+};

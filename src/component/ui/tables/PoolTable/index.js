@@ -10,6 +10,7 @@ import Spinner from "../../Spinner";
 import Error from "../../Error";
 import Eye from "../../../../assets/img/eye.svg";
 import api from "../../../../helpers/api";
+import { filterWithStatus } from "../../../../helpers"
 
 const fields = [
   "Id",
@@ -35,8 +36,10 @@ const PoolTable = () => {
   const fetchCommitment = async () => {
     setStatus({ loader: true });
     try {
-      const response = await api.get("commitments");
-      setCommitments(response.data);
+      const response = await api.get("/commitments");
+      //filter commitments with status
+      let query= ["prevalidado", "validando", "correcion"]
+      setCommitments(filterWithStatus(response.data, query));
       setStatus({
         loader: false,
         isError: false,
