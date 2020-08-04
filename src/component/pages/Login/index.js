@@ -12,13 +12,13 @@ import {
 import GeneralButton from "../../ui/GeneralButton";
 import TextField from "@material-ui/core/TextField";
 import LoginImg from "../../../assets/img/imageLogin.jpg";
-import axios from "axios";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import api from "../../../helpers/api";
 
 const GenericLogin = () => {
   const history = useHistory();
@@ -33,11 +33,9 @@ const GenericLogin = () => {
         handleClickOpen();
         return;
       }
-      const response = await axios.post(LOGIN_URL, {
-        email: email,
-        password: password,
-      });
-      if (response.data === "Email or password are incorrect") {
+      const response = await api.get(`/users?email=${email}`);
+      console.log(response);
+      if (response.data.length === 0) {
         handleClickOpen();
         return;
       }
