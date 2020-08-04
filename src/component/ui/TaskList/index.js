@@ -1,15 +1,21 @@
 import React, { useState } from "react";
-import axios from "axios";
 import Task from "../Task";
+import api from "../../../helpers/api"
 
 const TaskList = () => {
 
     const [tasks, setTasks] = useState([])
 
-    const TASKS_URL = "https://run.mocky.io/v3/a32789cd-ecc6-4a2f-993d-3d849415f946";
+    const getCommitmentId = () => {
+        const URLactual = window.location;
+        const commitment = URLactual.pathname;
+        const res = commitment.split("/");
+        const id = res[2];
+        return id;
+      }
 
     const getTasks = async () => {
-        const response = await axios.get(TASKS_URL)
+        const response = await api.get(`/tasks?idCommitment=${getCommitmentId()}`)
         setTasks(response.data)
     }
 
@@ -24,8 +30,8 @@ const TaskList = () => {
                     status={task.status}
                     priority={task.priority}
                     date={task.date}
-                    collaborator={task.user.firstName + " " + task.user.lastName}
-                    role={task.user.role}
+                    collaborator={task.collaborator}
+                    role={task.role}
                 ></Task>
             ))}
         </>

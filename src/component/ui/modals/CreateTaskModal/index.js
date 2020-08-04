@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -8,6 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { ButtonCreateTask, useStyles } from "./styled";
+import api from "../../../../helpers/api"
 
 const CreateTaskModal = ({ openNewTask, closeModalNewTask }) => {
   const classes = useStyles();
@@ -27,6 +27,14 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask }) => {
 
   const { title, description, date } = task;
 
+  const getCommitmentId = () => {
+    const URLactual = window.location;
+    const commitment = URLactual.pathname;
+    const res = commitment.split("/");
+    const id = res[2];
+    return id;
+  }
+
   const submitTask = (e) => {
     e.preventDefault();
     if (title.trim() === "" || description.trim() === "" || date === "") {
@@ -34,6 +42,24 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask }) => {
       return;
     }
     setError(false);
+    setTask({
+      ...task,
+      "idCommitment": getCommitmentId()
+    })
+    try {
+      const fetchTask = async () => {
+        const response = await api.post("/tasks", {
+          title: title,
+          description: description,
+          status: true,
+          priority: "low",
+          date: date
+        })
+      }
+      fetchTask()
+    } catch(e) {
+      console.log(e)
+    }
     setTask({
       title: "",
       description: "",
