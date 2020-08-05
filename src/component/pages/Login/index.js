@@ -22,9 +22,12 @@ import api from "../../../helpers/api";
 
 const GenericLogin = () => {
   const history = useHistory();
-  const [email, updateEmail] = useState("");
-  const [password, updatePassword] = useState("");
-  const LOGIN_URL = "http://localhost:5000/login";
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { email, password } = user;
 
   const submitData = async (e) => {
     e.preventDefault();
@@ -33,24 +36,22 @@ const GenericLogin = () => {
         handleClickOpen();
         return;
       }
-      const response = await api.get(`/users?email=${email}`);
+      const response = await api.post(`/login`, user);
       console.log(response);
-      if (response.data.length === 0) {
+      if (!response.data.accessToken) {
         handleClickOpen();
         return;
-      }
-      if (response.data.role === "admin") {
-        history.push("/dasboard_admin");
       } else {
-        history.push("/dasboard");
+        //save in localStorage
+        const loginData = {
+          accessToken: response.data.accessToken,
+          refreshToken: response.data.refreshToken,
+          firstName: response.data.first_name,
+          role: response.data.role,
+        };
+        localStorage.setItem("login_data", JSON.stringify(loginData));
+        history.push("/dashboard");
       }
-      const loginData = {
-        accessToken: response.data.accessToken,
-        refreshToken: response.data.refreshToken,
-        first_name: response.data.first_name,
-        role: response.data.role,
-      };
-      localStorage.setItem("login_data", JSON.stringify(loginData));
     } catch (error) {
       return console.log("Credentials are not valid");
     }
@@ -79,7 +80,7 @@ const GenericLogin = () => {
             label="EMAIL"
             color="secondary"
             fullWidth
-            onChange={(e) => updateEmail(e.target.value)}
+            onChange={(e) => setUser({ ...user, email: e.target.value })}
             value={email}
             style={{ marginTop: "10px" }}
           />
@@ -89,7 +90,7 @@ const GenericLogin = () => {
             label="CONTRASEÑA"
             fullWidth
             color="secondary"
-            onChange={(e) => updatePassword(e.target.value)}
+            onChange={(e) => setUser({ ...user, password: e.target.value })}
             value={password}
             style={{ marginTop: "10px", marginBottom: "20px" }}
           />
