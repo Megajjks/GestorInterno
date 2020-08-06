@@ -27,30 +27,10 @@ export const Options = styled(WrapperColaborators)`
   padding: 0 2.5em;
 `;
 
-export const Colaborator = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const NameColaborator = styled.p`
-  width: 10em;
-  margin: 0;
-  padding: 0 0.5em;
-`;
-
-export const BtnDeleteColaborator = styled.img`
-  width: 1em;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 export const BtnAddColaborator = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5em;
   color: ${({ theme: { colors } }) => colors.primary};
   font-weight: 600;
   &:hover {

@@ -1,27 +1,24 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import AlertModal from "../modals/AlertModal";
-import { colorStatus } from "../../../helpers";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import Button from "../GeneralButton";
+import TaskList from "../TaskList";
+import CollaboratorCardList from "../CollaboratorCardList";
+import { dataStatus } from "../../../helpers";
+
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import Menu from "@material-ui/core/Menu";
-import DeletedIco from "../../../assets/img/delete.svg";
+
 import AddIco from "../../../assets/img/add.svg";
-import Button from "../GeneralButton";
 import TaskIco from "../../../assets/img/gestion.svg";
 import EyeIco from "../../../assets/img/eye.svg";
 import StatusIco from "../../../assets/img/point.svg";
 import ModalCreateTask from "../modals/CreateTaskModal";
-import TaskList from "../TaskList";
 import {
   Wrapper,
   WrapperTask,
   WrapperOpc,
   WrapperColaborators,
-  Colaborator,
-  NameColaborator,
-  BtnDeleteColaborator,
   BtnAddColaborator,
   BtnGroup,
   BtnSecundary,
@@ -29,36 +26,47 @@ import {
   MenuItems,
   CircleStatus,
 } from "./styled";
+import api from "../../../helpers/api";
 
 const TracingCommitmentDetails = ({ rol }) => {
   const history = useHistory();
   const [commitment, setCommitment] = useState(history.location.state);
-  const [delColModal, setDelColModal] = useState(false);
   const [addColaborator, setAddColaborator] = useState(false);
   const [dropdownStatus, setDropdownStatus] = useState(null);
+  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
-  const handleDelColModal = () => {
-    setDelColModal(true);
-  };
+  //HTTP REQUEST FUNCTION
 
-  const handlecloseModal = () => {
-    setDelColModal(false);
-  };
-
-  const handleAddColaborator = () => {
-    setAddColaborator(true);
-  };
-
-  const deleteCollaborator = (id) => {
-    setDelColModal(false);
-  };
-
+  //post to colaborador
   const postColaborator = () => {
     //function to add colaborator
     setAddColaborator(false);
   };
 
+  //put to commitment
+  const changeStatus = async (status) => {
+    //Put request that change the status of commitment
+    try {
+      const response = await api.put(
+        `/commitments/${commitment.id}/${status}`,
+        { headers: { Authorization: token } }
+      );
+      setCommitment({ ...commitment, status });
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+    setDropdownStatus(null);
+  };
+
+  //functions add collaborator
+  const handleAddColaborator = () => {
+    setAddColaborator(true);
+  };
+
   const [openCreateTask, setOpenCreateTask] = useState(false);
+
+  //functions to open, close, add Task
 
   const ClickOpenModalCreateTask = () => {
     setOpenCreateTask(true);
@@ -73,22 +81,20 @@ const TracingCommitmentDetails = ({ rol }) => {
     ClickOpenModalCreateTask();
   };
 
+  //function to show details
   const showDetailCommitment = () => {
     history.push({
       pathname: `/commitment_report/${commitment.id}`,
       state: { isDetail: true },
     });
   };
+
+  //function to view and edit status
   const handleDropdownStatus = (event) => {
     setDropdownStatus(event.currentTarget);
   };
 
   const handleCloseDropdownStatus = () => {
-    setDropdownStatus(null);
-  };
-
-  const changeStatus = () => {
-    //Put request that change the status of commitment
     setDropdownStatus(null);
   };
 
@@ -112,9 +118,9 @@ const TracingCommitmentDetails = ({ rol }) => {
             <Button
               aria-controls="simple-menu"
               aria-haspopup="true"
-              title="En proceso"
+              title={dataStatus(commitment.status).value}
               type="status"
-              color={colorStatus("en proceso")}
+              color={dataStatus(commitment.status).background}
               ico={StatusIco}
               onClick={handleDropdownStatus}
             />
@@ -125,30 +131,30 @@ const TracingCommitmentDetails = ({ rol }) => {
               open={Boolean(dropdownStatus)}
               onClose={handleCloseDropdownStatus}
             >
-              <MenuItems onClick={changeStatus}>
-                <CircleStatus color={colorStatus("en proceso")} />
+              <MenuItems onClick={() => changeStatus("proceso")}>
+                <CircleStatus color={dataStatus("proceso").background} />
                 En proceso
               </MenuItems>
-              <MenuItems onClick={changeStatus}>
-                <CircleStatus color={colorStatus("cumplido")} />
+              <MenuItems onClick={() => changeStatus("cumplido")}>
+                <CircleStatus color={dataStatus("cumplido").background} />
                 Cumplido
               </MenuItems>
               {rol === "collaborator" ? null : (
                 <span>
-                  <MenuItems onClick={changeStatus}>
-                    <CircleStatus color={colorStatus("por validar")} />
+                  <MenuItems onClick={() => changeStatus("validando")}>
+                    <CircleStatus color={dataStatus("validando").background} />
                     Por validar
                   </MenuItems>
-                  <MenuItems onClick={changeStatus}>
-                    <CircleStatus color={colorStatus("oculto")} />
+                  <MenuItems onClick={() => changeStatus("oculto")}>
+                    <CircleStatus color={dataStatus("oculto").background} />
                     Oculto
                   </MenuItems>
-                  <MenuItems onClick={changeStatus}>
-                    <CircleStatus color={colorStatus("en correcion")} />
+                  <MenuItems onClick={() => changeStatus("correcion")}>
+                    <CircleStatus color={dataStatus("correcion").background} />
                     En correcion
                   </MenuItems>
-                  <MenuItems onClick={changeStatus}>
-                    <CircleStatus color={colorStatus("rechazado")} />
+                  <MenuItems onClick={() => changeStatus("declinado")}>
+                    <CircleStatus color={dataStatus("declinado").background} />
                     Rechazado
                   </MenuItems>
                 </span>
@@ -156,18 +162,10 @@ const TracingCommitmentDetails = ({ rol }) => {
             </Menu>
           </Options>
           <WrapperColaborators>
-            <h2>Colaboradores</h2>
-            <Colaborator>
-              <AccountCircleIcon style={{ fontSize: 50 }} />
-              <NameColaborator> {commitment.colaborators} </NameColaborator>
-              {rol === "collaborator" ? null : (
-                <BtnDeleteColaborator
-                  src={DeletedIco}
-                  alt="ico_deleted"
-                  onClick={handleDelColModal}
-                />
-              )}
-            </Colaborator>
+            <CollaboratorCardList
+              collaborators={commitment.collaborators}
+              rolUser="1"
+            />
             {addColaborator ? (
               <WrapperColaborators>
                 <Autocomplete
@@ -203,13 +201,6 @@ const TracingCommitmentDetails = ({ rol }) => {
           </WrapperColaborators>
         </WrapperOpc>
       </Wrapper>
-      <AlertModal
-        title="¿Estas seguro?"
-        message="Estas seguro de eliminar al colaborador"
-        open={delColModal}
-        handleClose={handlecloseModal}
-        callback={() => deleteCollaborator("wsfq1")}
-      />
       <ModalCreateTask
         openNewTask={openCreateTask}
         closeModalNewTask={closeModalCreateTask}
