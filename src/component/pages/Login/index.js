@@ -52,6 +52,7 @@ const GenericLogin = () => {
           firstName: data.first_name,
           role: data.role,
         };
+        localStorage.clear();
         localStorage.setItem("login_data", JSON.stringify(loginData));
         history.push("/dashboard");
       }
