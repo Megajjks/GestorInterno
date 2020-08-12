@@ -50,7 +50,7 @@ const Navegation = (props) => {
       />
       <Body>
         <Navbar />
-        <div style={{ padding: ".2em 5em" }}>{props.children}</div>
+        <div style={{ padding: ".2em 3em" }}>{props.children}</div>
       </Body>
     </Wraper>
   );

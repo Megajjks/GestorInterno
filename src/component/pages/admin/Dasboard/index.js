@@ -11,12 +11,15 @@ const Dasboard = () => {
     isError: false,
     message: "",
   });
+  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   useEffect(() => {
     const fetchCommitments = async () => {
       setStatus({ loader: true });
       try {
-        const response = await api.get("/commitments");
+        const response = await api.get("/commitments", {
+          headers: { Authorization: token },
+        });
         setData(response.data);
         setStatus({
           loader: false,

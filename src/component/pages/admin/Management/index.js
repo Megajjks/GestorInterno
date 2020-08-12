@@ -14,12 +14,15 @@ const Management = () => {
     isError: false,
     message: "",
   });
+  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   useEffect(() => {
     const fetchCommitments = async () => {
       setStatus({ loader: true });
       try {
-        const response = await api.get("/commitments?status=proceso");
+        const response = await api.get("/commitments", {
+          headers: { Authorization: token },
+        });
         setCommitments(
           filterWithStatus(response.data, ["proceso", "cumplido"])
         );
