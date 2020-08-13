@@ -36,7 +36,15 @@ const PoolTable = () => {
   const fetchCommitment = async () => {
     setStatus({ loader: true });
     try {
-      const response = await api.get("/commitments");
+
+      let getAccessToken = window.localStorage.getItem('login_data');
+      let accessTokenObj = JSON.parse(getAccessToken);
+      let accessToken = accessTokenObj.accessToken;
+
+      const response = await api.get("/commitments", {
+        headers: { Authorization: accessToken }
+      });
+
       //filter commitments with status
       let query = ["prevalidado", "validando", "correcion"];
       setCommitments(filterWithStatus(response.data, query));
@@ -121,7 +129,20 @@ const PoolTable = () => {
               <TableRow key={commitment.id}>
                 <TableCell align="center">{commitment.id}</TableCell>
                 <TableCell align="center">{commitment.organization}</TableCell>
-                <TableCell align="center">{`${commitment.firstName} ${commitment.lastName}`}</TableCell>
+
+                <TableCell align="center" style={{ width: "10em" }}>
+                  <ul>
+                    {commitment.collaborators.map((user) => (
+                      <li
+                        key={user.firstName}
+                        style={{ margin: "0", fontSize: "13px" }}
+                      >
+                        {`${user.firstName} ${user.lastName}`}
+                      </li>
+                    ))}
+                  </ul>
+                </TableCell>
+                
                 <TableCell align="center">{commitment.city}</TableCell>
                 <TableCell align="center">{commitment.state}</TableCell>
                 <TableCell align="center">{commitment.sector}</TableCell>

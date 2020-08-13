@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Wrapper,
@@ -46,43 +46,38 @@ import TextField from "@material-ui/core/TextField";
 import ListItemText from "@material-ui/core/ListItemText";
 import EditCommitmentModal from "../modals/EditCommitmentModal";
 import DynamicScrollToTop from "../../hooks/DynamicScrollToTop";
+import api from "../../../helpers/api";
 
 const CommitmentReport = ({ isDetail, rol }) => {
-  const [dataForm, setDataForm] = useState({
-    id: "1",
-    first_name: "Anáhuac ",
-    last_name: "Queretaro",
-    organization: "La Universidad Anáhuac Queretaro",
-    sector: "Sector privado",
-    city: "Querétaro",
-    state: "Querétaro",
-    position: "Coordinación",
-    email: "anahuac@gmail.com",
-    phone: "5514789545",
-    logo: "path",
-    img: "path",
-    question_1:
-      "La Universidad Anáhuac Quéretaro se compromete a capacitar a docentes provenientes del 40% de las carreras, abrir un grupo estudiantil que cree emprendimientos sociales, generar un bootcamp de emprendimiento social y promover conferencias sobre innovación social generando al menos 153 Agentes de Cambio durante el ciclo escolar 2019-2020 para contribuir a la Comunidad de Agentes de Cambio a través de la difusión y sensibilización acerca del  emprendimiento e innovación social así como formación de los estudiantes desde la empatía y la corresponsabilidad.",
-    question_2: "",
-    question_3:
-      "Ashoka México, Centroamérica y el Caribe, CEMEX y el Técnologico de Monterrey",
-    question_4:
-      "Codiseño y lanzamiento de la convocatoria del Premio CEMEX-TEC con un bootcamp de emprendimiento social y cambio sistématico para los ganadores",
-    question_5: "Enero a Octubre 2020",
-    question_6:
-      "Fortalecer y conectar lideres innovadores sociales de todo el mundo, con la finalidad de aumentar su impacto y que ellos puedan replicar el conocimiento adquirido en sus contextos",
-    question_7:
-      "Se va a impactar a 36 líderes agentes de cambio de manera distinta",
-    question_8: "Asesorias Especializadas",
-    question_9: "",
-    question_10: "Facebook",
-    question_11: "",
-    question_12: "",
-  });
+
+  const [dataForm, setDataForm] = useState({});
+  const [questions, setQuestions] = useState([]);
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [showEditCommitmentModal, setShowEditCommitmentModal] = useState(false);
+
+  useEffect(() => {
+    const fetchCommitmentReport = async () => {
+      try {
+  
+        const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
+        const idCommitment = history.location.state.id;
+  
+        const response = await api.get(`/commitments/${idCommitment}`, {
+          headers: { Authorization: token }
+        });
+        
+        setDataForm(response.data)
+        setQuestions(response.data.answers)
+        console.log(response.data.answers)
+        
+      } catch (e) {
+        console.log(e);
+      }
+    }; 
+    fetchCommitmentReport();
+  }, []);
 
   const feedback = () => {
     ClickOpenModalFeedback();
@@ -121,11 +116,13 @@ const CommitmentReport = ({ isDetail, rol }) => {
         <WrapperImgTxt>
           <Icon src={IconUser} />
           <TxtIcon>
-            {dataForm.first_name} {dataForm.last_name}
+            {dataForm.firstName} {dataForm.lastName}
           </TxtIcon>
         </WrapperImgTxt>
         <TxtQuestion style={{ marginTop: "12px" }}>
-          {dataForm.question_1}
+          {questions.map((question) => (
+            question.questionId === 1 ? question.answer : null
+          ))}
         </TxtQuestion>
         <Sector>
           <TxtSector>Sector: </TxtSector>
@@ -148,43 +145,77 @@ const CommitmentReport = ({ isDetail, rol }) => {
         <TitleQuestion>
           Organizaciones o personas que se comprometen
         </TitleQuestion>
-        <TxtQuestion>{dataForm.question_3}</TxtQuestion>
+        <TxtQuestion>
+          {questions.map((question) => (
+            question.questionId === 3 ? question.answer : null
+          ))}
+        </TxtQuestion>
         <TitleQuestion>Acción que se va a implementar</TitleQuestion>
-        <TxtQuestion>{dataForm.question_4}</TxtQuestion>
+        <TxtQuestion>
+          {questions.map((question) => (
+            question.questionId === 4 ? question.answer : null
+          ))}
+        </TxtQuestion>
         <TitleQuestion>
           Periodo de tiempo para desarrollo de compromiso
         </TitleQuestion>
-        <TxtQuestion>{dataForm.question_5}</TxtQuestion>
+        <TxtQuestion>
+          {questions.map((question) => (
+            question.questionId === 5 ? question.answer : null
+          ))}
+        </TxtQuestion>
         <TitleQuestion>
           Contribución de compromiso para generar más Agentes de Cambio
         </TitleQuestion>
-        <TxtQuestion>{dataForm.question_6}</TxtQuestion>
+        <TxtQuestion>
+          {questions.map((question) => (
+            question.questionId === 6 ? question.answer : null
+          ))}
+        </TxtQuestion>
         <TitleQuestion>
           Agentes de Cambio para impactar con compromiso
         </TitleQuestion>
-        <TxtQuestion>{dataForm.question_7}</TxtQuestion>
+        <TxtQuestion>
+          {questions.map((question) => (
+            question.questionId === 7 ? question.answer : null
+          ))}
+        </TxtQuestion>
         <TitleQuestion>
           Manera en que Ashoka y su red ayudarán a escalar compromiso
         </TitleQuestion>
         <WrapperCheckbox>
           <WrapperImgTxt>
             <IconPointSvg src={IconPoint} />
-            <TxtIcon>{dataForm.question_8}</TxtIcon>
+            <TxtIcon>
+              {questions.map((question) => (
+                question.questionId === 8 ? question.answer : null
+              ))}
+            </TxtIcon>
           </WrapperImgTxt>
         </WrapperCheckbox>
         <TxtQuestion>
-          {/* En caso de elegir la opción de "otro" (pregunta 9) */}
+          {questions.map((question) => (
+            question.questionId === 9 ? question.answer : null
+          ))}
         </TxtQuestion>
         <TitleQuestion>
           Me entere de #MillonesdeAgentesdeCambio mediante
         </TitleQuestion>
-        <TxtQuestion>{dataForm.question_10}</TxtQuestion>
         <TxtQuestion>
-          {/* En caso de elegir la opción de "otro" (pregunta 11)*/}
+          {questions.map((question) => (
+            question.questionId === 10 ? question.answer : null
+          ))}
+        </TxtQuestion>
+        <TxtQuestion>
+          {questions.map((question) => (
+            question.questionId === 11 ? question.answer : null
+          ))}
         </TxtQuestion>
         <TitleQuestion>Comentarios o dudas adicionales</TitleQuestion>
         <TxtQuestion>
-          {/* En caso de elegir la opción de "otro" (pregunta 12)*/}
+          {questions.map((question) => (
+            question.questionId === 12 ? question.answer : null
+          ))}
         </TxtQuestion>
         <TitleQuestion>Contacto</TitleQuestion>
         <WrapperContact>
