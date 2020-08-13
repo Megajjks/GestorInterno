@@ -32,12 +32,15 @@ const TracingTable = () => {
   });
   const history = useHistory();
   const [searchString, setSearchString] = useState("");
+  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   useEffect(() => {
     const fetchCommitment = async () => {
       setStatus({ loader: true });
       try {
-        const response = await api.get("/commitments");
+        const response = await api.get("/commitments", {
+          headers: { Authorization: token },
+        });
         setCommitments(
           filterWithStatus(response.data, ["proceso", "cumplido", "oculto"])
         );
@@ -92,7 +95,7 @@ const TracingTable = () => {
   const viewDetails = (item) => {
     history.push({
       pathname: `/traicing_commitment/${item.id}`,
-      state: item,
+      state: item.id,
     });
   };
 
@@ -121,7 +124,7 @@ const TracingTable = () => {
                 <TableCell align="center">{commitment.organization}</TableCell>
                 <TableCell align="center" style={{ width: "10em" }}>
                   <ul>
-                    {commitment.collaborator.map((user) => (
+                    {commitment.collaborators.map((user) => (
                       <li
                         key={user.firstName}
                         style={{ margin: "0", fontSize: "13px" }}

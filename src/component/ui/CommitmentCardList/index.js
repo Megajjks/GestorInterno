@@ -8,7 +8,7 @@ const CommitmentCardList = ({ commitments, btnTitle, btnUrlBase }) => {
   const handleClick = (item) => {
     history.push({
       pathname: `${btnUrlBase}/${item.id}`,
-      state: item,
+      state: item.id,
     });
   };
   return (

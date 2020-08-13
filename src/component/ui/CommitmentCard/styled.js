@@ -12,13 +12,10 @@ export const Wrapper = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 #ddd;
   transition: transform 0.2s ease-out;
-  &:hover {
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-    transform: scale(1.02);
-  }
 `;
 export const Logo = styled.img`
-  width: 12rem;
+  max-width: 124px;
+  height: auto;
 `;
 export const Badge = styled.div`
   display: flex;
