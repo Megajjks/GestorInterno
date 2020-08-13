@@ -11,6 +11,10 @@ import {
 } from "./styled";
 import GeneralButton from "../../ui/GeneralButton";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import LoginImg from "../../../assets/img/imageLogin.jpg";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -31,6 +35,7 @@ const GenericLogin = () => {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const { email, password } = user;
 
@@ -116,7 +121,7 @@ const GenericLogin = () => {
             style={{ marginTop: "10px" }}
           />
           <TextField
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             label="CONTRASEÑA"
             fullWidth
@@ -124,6 +129,18 @@ const GenericLogin = () => {
             onChange={handleChange}
             value={state.user.password}
             style={{ marginTop: "10px", marginBottom: "20px" }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <GeneralButton title="Login" />
         </Form>

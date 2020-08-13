@@ -4,7 +4,7 @@ import Spinner from "../../../ui/Spinner";
 import Error from "../../../ui/Error";
 import api from "../../../../helpers/api";
 
-const Dasboard = () => {
+const Dashboard = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState({
     loader: false,
@@ -40,7 +40,7 @@ const Dasboard = () => {
 
   return (
     <div>
-      <h1>Dasboard</h1>
+      <h1>Dashboard</h1>
       <CommitmentCardList
         commitments={data}
         btnTitle="Leer compromiso"
@@ -52,4 +52,4 @@ const Dasboard = () => {
   );
 };
 
-export default Dasboard;
+export default Dashboard;

@@ -88,7 +88,7 @@ const TracingCommitmentDetails = ({ rol }) => {
       try {
         const response = await api.post("/collaborators/add", {
           headers: { Authorization: token },
-          data: { collaboratorId: id, commitmentId: commitment.id },
+          data: { userId: id, commitmentId: commitment.id },
         });
         console.log(response);
       } catch (e) {

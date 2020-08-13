@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Navegation from "./component/ui/Navegation";
 import Login from "./component/pages/Login";
-import AdminDasboard from "./component/pages/admin/Dasboard";
+import AdminDashboard from "./component/pages/admin/Dashboard";
 import AdminUsers from "./component/pages/admin/Users";
 import AdminPool from "./component/pages/admin/Pool";
 import AdminTracing from "./component/pages/admin/Tracing";
@@ -27,7 +27,7 @@ const router = () => {
           component={SuccessSendCommitment}
         />
         <Navegation>
-          <Route exact path="/dasboard" component={AdminDasboard} />
+          <Route exact path="/dashboard" component={AdminDashboard} />
           <Route exact path="/users" component={AdminUsers} />
           <Route exact path="/pool" component={AdminPool} />
           <Route exact path="/tracing" component={AdminTracing} />
