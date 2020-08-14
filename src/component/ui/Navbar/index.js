@@ -11,15 +11,16 @@ import api from "../../../helpers/api";
 const Navbar = ({ goback }) => {
   const history = useHistory();
   const [user, setUser] = useState({});
+  const { firstName, lastName, image } = user;
   const [dropdownUser, setDropdownUser] = useState(null);
 
   //get the logged in user data
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await api.get("/users");
+        let userId = JSON.parse(localStorage.getItem("login_data")).userId;
+        const response = await api.get(`/users/${userId}`);
         setUser(response.data);
-        console.log(response);
       } catch (e) {
         console.log(e);
       }
@@ -47,16 +48,18 @@ const Navbar = ({ goback }) => {
     <Nav goback={goback}>
       {goback ? <ArrowBackIcon style={{ color: "#000000" }} /> : null}
       <MenuNav>
-        <Badge badgeContent={4} color="primary" style={{ marginRight: "2em" }}>
+        <Badge badgeContent={0} color="primary" style={{ marginRight: "2em" }}>
           <NotificationsIcon />
         </Badge>
         <AvatarBadge
           aria-label="more"
           aria-controls="long-menu-user-list"
           aria-haspopup="true"
+          alt={`${firstName} profile`}
+          src={image ? image : null}
           onClick={handleClickAvatarUser}
         >
-          JS
+          {}
         </AvatarBadge>
         <Menu
           id="long-menu-user-list"

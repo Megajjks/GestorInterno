@@ -7,10 +7,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Spinner from "../../Spinner";
-import Error from "../../Error";
+import Error from "../../alerts/Error";
 import Eye from "../../../../assets/img/eye.svg";
 import api from "../../../../helpers/api";
-import { filterWithStatus } from "../../../../helpers";
+import { filterWithStatus, dataStatus } from "../../../../helpers";
 
 const fields = [
   "Id",
@@ -36,13 +36,12 @@ const PoolTable = () => {
   const fetchCommitment = async () => {
     setStatus({ loader: true });
     try {
-
-      let getAccessToken = window.localStorage.getItem('login_data');
+      let getAccessToken = window.localStorage.getItem("login_data");
       let accessTokenObj = JSON.parse(getAccessToken);
       let accessToken = accessTokenObj.accessToken;
 
       const response = await api.get("/commitments", {
-        headers: { Authorization: accessToken }
+        headers: { Authorization: accessToken },
       });
 
       //filter commitments with status
@@ -80,7 +79,6 @@ const PoolTable = () => {
     }
     const busqueda = commitments.filter((item) => {
       const payload = searchString.toLowerCase();
-      const id = item.id.toLowerCase();
       const organization = item.organization.toLowerCase();
       const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
       const city = item.city.toLowerCase();
@@ -91,13 +89,12 @@ const PoolTable = () => {
       if (searchString === "") {
         return commitments;
       } else if (
-        id.includes(payload) ||
         organization.includes(payload) ||
         agent.includes(payload) ||
         city.includes(payload) ||
         state.includes(payload) ||
         sector.includes(payload) ||
-        status.includes(payload)
+        status.includes(dataStatus(payload).tag)
       ) {
         return item;
       }
@@ -131,22 +128,15 @@ const PoolTable = () => {
                 <TableCell align="center">{commitment.organization}</TableCell>
 
                 <TableCell align="center" style={{ width: "10em" }}>
-                  <ul>
-                    {commitment.collaborators.map((user) => (
-                      <li
-                        key={user.firstName}
-                        style={{ margin: "0", fontSize: "13px" }}
-                      >
-                        {`${user.firstName} ${user.lastName}`}
-                      </li>
-                    ))}
-                  </ul>
+                  {`${commitment.firstName} ${commitment.lastName}`}
                 </TableCell>
-                
+
                 <TableCell align="center">{commitment.city}</TableCell>
                 <TableCell align="center">{commitment.state}</TableCell>
                 <TableCell align="center">{commitment.sector}</TableCell>
-                <TableCell align="center">{commitment.status}</TableCell>
+                <TableCell align="center">
+                  {dataStatus(commitment.status).value}
+                </TableCell>
                 <TableCell align="center">
                   <Details onClick={() => viewDetails(commitment)}>
                     <EyeIcon src={Eye} alt="details" />

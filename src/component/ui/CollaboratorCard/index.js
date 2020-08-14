@@ -21,6 +21,7 @@ const CollaboratorCard = ({ collaborator, rolUser }) => {
 
   //deleted collaborator
   useEffect(() => {
+    //check if deleted is true, this behavior comes from the deleted status that is modified in the modal to deleted
     if (deleted) {
       const deletedCollaborator = async () => {
         try {
@@ -31,7 +32,6 @@ const CollaboratorCard = ({ collaborator, rolUser }) => {
             },
             headers: { Authorization: token },
           });
-          console.log(response);
         } catch (e) {
           console.log(e);
         }
