@@ -35,41 +35,32 @@ import IconState from "../../../assets/img/location2.svg";
 import IconPoint from "../../../assets/img/point.svg";
 import IconMail from "../../../assets/img/mail.svg";
 import IconPhone from "../../../assets/img/phone.svg";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import TextField from "@material-ui/core/TextField";
+import FeedbackModal from "../modals/FeedbackModal";
 import ListItemText from "@material-ui/core/ListItemText";
 import EditCommitmentModal from "../modals/EditCommitmentModal";
 import DynamicScrollToTop from "../../hooks/DynamicScrollToTop";
 import api from "../../../helpers/api";
 
 const CommitmentReport = ({ isDetail, rol }) => {
-
   const [dataForm, setDataForm] = useState({});
   const [questions, setQuestions] = useState([]);
-  const [commitmentFeedback, setCommitmentFeedback] = useState({
-    title: "",
-    description: ""
-  });
   const history = useHistory();
-  const [open, setOpen] = React.useState(false);
+  const [openModalFeedback, setOpenModalFeedback] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [showEditCommitmentModal, setShowEditCommitmentModal] = useState(false);
   const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
+  const [updateOptionFeedback, setUpdateOptionFeedback] = useState({
+    option: "",
+    idCommitment: null
+  });
 
   useEffect(() => {
     const fetchCommitmentReport = async () => {
       try {
         const idCommitment = history.location.state.id;
-  
         const response = await api.get(`/commitments/${idCommitment}`, {
           headers: { Authorization: token }
         });
-        
         setDataForm(response.data)
         setQuestions(response.data.answers)
       } catch (e) {
@@ -81,7 +72,7 @@ const CommitmentReport = ({ isDetail, rol }) => {
 
   const acceptCommitment = async () => {
     try {
-      const response = await api.put(`/commitments/${dataForm.id}/proceso`,
+      const response = await api.put(`/commitments/${dataForm.id}/proceso`, {},
         { headers: { Authorization: token } }
       );
       console.log(response);
@@ -91,35 +82,25 @@ const CommitmentReport = ({ isDetail, rol }) => {
     history.push("/pool");
   };
 
-  const acceptFeedback = () => {
-    alert("Aceptado con feedback")
-  }
-
-  const declineFeedback = () => {
-    
-  }
-
-  const feedback = (option) => {
-    alert(option)
-    ClickOpenModalFeedback();
+  //functions modal feedback
+  
+  const feedback = option => {
+    setUpdateOptionFeedback({
+      option: option,
+      idCommitment: dataForm.id
+    })
+    clickOpenModalFeedback();
   };
 
-  const updateCommitmentFeedback = e => {
-    setCommitmentFeedback({
-      ...commitmentFeedback,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const { titleFeedback, descriptionFeedback } = commitmentFeedback;
-
-  const ClickOpenModalFeedback = () => {
-    setOpen(true);
+  const clickOpenModalFeedback = () => {
+    setOpenModalFeedback(true);
   };
 
   const closeModalFeedback = () => {
-    setOpen(false);
+    setOpenModalFeedback(false);
   };
+
+  //options decline or accept commitment
 
   const openModalAcceptFeedback = (event) => {
     setAnchorEl(event.currentTarget);
@@ -287,53 +268,16 @@ const CommitmentReport = ({ isDetail, rol }) => {
           <ImgEditCommitment src={IconEdit} onClick={openEditCommitmentModal} />
         </WrapperIconEdit>
       )}
-
-      <Dialog
-        open={open}
-        onClose={closeModalFeedback}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Respuesta para Compromiso"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Escribe aquí el titulo del mensaje que se enviará
-          </DialogContentText>
-          <TextField
-            type="text"
-            name="titleFeedback"
-            label="Titulo de Mensaje"
-            color="secondary"
-            fullWidth
-            margin="dense"
-            onChange={updateCommitmentFeedback}
-            value={titleFeedback}
-            style={{ marginTop: "10px" }}
-          />
-          <TextField
-            type="text"
-            name="descriptionFeedback"
-            label="Descripción de Mensaje"
-            color="secondary"
-            fullWidth
-            margin="dense"
-            onChange={updateCommitmentFeedback}
-            value={descriptionFeedback}
-            style={{ marginTop: "10px" }}
-          />
-          <ButtonAccept onClick={() => acceptFeedback()}>Enviar</ButtonAccept>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeModalFeedback} color="secondary">
-            Cerrar
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <FeedbackModal 
+        openModalFeedback={openModalFeedback}
+        closeModalFeedback={closeModalFeedback}
+        optionFeedback={updateOptionFeedback}
+      />
       <EditCommitmentModal
         open={showEditCommitmentModal}
         handleClose={closeEditCommitmentModal}
+        dataForm={dataForm}
+        questions={questions}
       />
     </Wrapper>
   );

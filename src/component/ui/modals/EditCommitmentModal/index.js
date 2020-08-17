@@ -9,13 +9,12 @@ import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import Brand from "../../../../assets/img/logcom.png";
 import { WrapperLogo, Logo } from "./styled";
 
-const EditCommitmentModal = ({ handleClose, open }) => {
+const EditCommitmentModal = ({ handleClose, open, dataForm, questions }) => {
   const [commitment, setCommitment] = useState({
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     organization: "",
     sector: "",
     city: "",
@@ -38,11 +37,12 @@ const EditCommitmentModal = ({ handleClose, open }) => {
     q11: "",
     q12: "",
   });
+
   const handleOnChange = (e) => {
-    setCommitment({
+    /* setCommitment({
       ...commitment,
       [e.target.name]: e.target.value,
-    });
+    }); */
   };
   const putCommitment = () => {
     /* update data of commitment */
@@ -60,7 +60,7 @@ const EditCommitmentModal = ({ handleClose, open }) => {
       <DialogTitle id="alert-dialog-slide-title">Editar compromiso</DialogTitle>
       <DialogContent>
         <WrapperLogo>
-          <Logo src={Brand} alt="logo" />
+          <Logo src={dataForm.img} alt="logo" />
           <input
             accept="image/png, .jpeg, .jpg"
             id="contained-button-file"
@@ -78,8 +78,8 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         </WrapperLogo>
         <TextField
           type="text"
-          name="first_name"
-          value={commitment.first_name}
+          name="firstName"
+          value={dataForm.firstName}
           onChange={handleOnChange}
           label="Nombre(s)"
           color="secondary"
@@ -89,8 +89,8 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         />
         <TextField
           type="text"
-          name="last_name"
-          value={commitment.last_name}
+          name="lastName"
+          value={dataForm.lastName}
           onChange={handleOnChange}
           label="Apellido(s)"
           color="secondary"
@@ -101,7 +101,7 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         <TextField
           type="text"
           name="organization"
-          value={commitment.organization}
+          value={dataForm.organization}
           onChange={handleOnChange}
           label="Organización"
           color="secondary"
@@ -109,12 +109,13 @@ const EditCommitmentModal = ({ handleClose, open }) => {
           margin="dense"
           style={{ marginTop: "10px", marginBottom: "30px" }}
         />
+      
         <InputLabel id="sector-select-label">Sector</InputLabel>
         <Select
           labelId="sector-select-label"
           id="sector-select"
           name="sector"
-          value={commitment.sector}
+          value={dataForm.sector}
           onChange={handleOnChange}
           fullWidth
         >
@@ -127,10 +128,11 @@ const EditCommitmentModal = ({ handleClose, open }) => {
           </MenuItem>
           <MenuItem value="ciudadania">Ciudadanía</MenuItem>
         </Select>
+        
         <TextField
           type="text"
           name="city"
-          value={commitment.city}
+          value={dataForm.city}
           onChange={handleOnChange}
           label="Ciudad"
           color="secondary"
@@ -143,7 +145,7 @@ const EditCommitmentModal = ({ handleClose, open }) => {
           labelId="state-select-label"
           id="state-select"
           name="state"
-          value={commitment.state}
+          value={dataForm.state}
           onChange={handleOnChange}
           fullWidth
         >
@@ -184,7 +186,7 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         <TextField
           type="text"
           name="position"
-          value={commitment.position}
+          value={dataForm.position}
           onChange={handleOnChange}
           label="Posición"
           color="secondary"
@@ -195,7 +197,7 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         <TextField
           type="text"
           name="email"
-          value={commitment.email}
+          value={dataForm.email}
           onChange={handleOnChange}
           label="Correo electronico"
           color="secondary"
@@ -206,7 +208,7 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         <TextField
           type="text"
           name="phone"
-          value={commitment.phone}
+          value={dataForm.phone}
           onChange={handleOnChange}
           label="Telefono"
           color="secondary"
@@ -216,8 +218,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         />
         <TextField
           type="text"
-          name="q1"
-          value={commitment.q1}
+          name="question1"
+          value={questions.map((question) => (
+            question.questionId === 1 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           label="Breve descripción de tu proyecto/iniciativa/emprendimiento"
           color="secondary"
@@ -229,8 +233,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         />
         <TextField
           type="text"
-          name="q2"
-          value={commitment.q2}
+          name="question2"
+          value={questions.map((question) => (
+            question.questionId === 2 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           label="Redes sociales de tu proyecto/iniciativa/emprendimiento"
           color="secondary"
@@ -242,8 +248,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         />
         <TextField
           type="text"
-          name="q3"
-          value={commitment.q3}
+          name="question3"
+          value={questions.map((question) => (
+            question.questionId === 3 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           label="¿Qué organizaciones o personas se comprometen?"
           color="secondary"
@@ -255,8 +263,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         />
         <TextField
           type="text"
-          name="q7"
-          value={commitment.q7}
+          name="question7"
+          value={questions.map((question) => (
+            question.questionId === 7 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           label="¿Cuántos Agentes de Cambio impactarás con este compromiso?"
           color="secondary"
@@ -268,8 +278,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         />
         <TextField
           type="text"
-          name="q5"
-          value={commitment.q5}
+          name="question5"
+          value={questions.map((question) => (
+            question.questionId === 5 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           label="¿En qué periodo de tiempo se va a realizar el compromiso?"
           color="secondary"
@@ -281,8 +293,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         />
         <TextField
           type="text"
-          name="q6"
-          value={commitment.q6}
+          name="question6"
+          value={questions.map((question) => (
+            question.questionId === 6 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           label="¿cómo el impacto esperado contribuye a los demás actores?"
           color="secondary"
@@ -294,8 +308,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         />
         <TextField
           type="text"
-          name="q4"
-          value={commitment.q4}
+          name="question4"
+          value={questions.map((question) => (
+            question.questionId === 4 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           label="¿Qué acción se va a implementar?"
           color="secondary"
@@ -312,8 +328,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         <Select
           labelId="q8-select-label"
           id="q8-select"
-          name="q8"
-          value={commitment.q8}
+          name="question8"
+          value={questions.map((question) => (
+            question.questionId === 8 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           fullWidth
         >
@@ -330,8 +348,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         </Select>
         <TextField
           type="text"
-          name="q9"
-          value={commitment.q9}
+          name="question9"
+          value={questions.map((question) => (
+            question.questionId === 9 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           label="En caso de tener una necesidad distinta a estos, favor de
               especificarlo a continuación:"
@@ -348,8 +368,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         <Select
           labelId="q10-select-label"
           id="q10-select"
-          name="q10"
-          value={commitment.q10}
+          name="question10"
+          value={questions.map((question) => (
+            question.questionId === 10 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           fullWidth
         >
@@ -370,8 +392,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         </Select>
         <TextField
           type="text"
-          name="q11"
-          value={commitment.q11}
+          name="question11"
+          value={questions.map((question) => (
+            question.questionId === 11 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           label="En caso de colocar otro o si quieres especificar, favor de
               especificarlo a continuación"
@@ -384,8 +408,10 @@ const EditCommitmentModal = ({ handleClose, open }) => {
         />
         <TextField
           type="text"
-          name="q12"
-          value={commitment.q12}
+          name="question12"
+          value={questions.map((question) => (
+            question.questionId === 12 ? question.answer : null
+          ))}
           onChange={handleOnChange}
           label="Comentario o Duda Adicional"
           color="secondary"

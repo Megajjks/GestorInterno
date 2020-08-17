@@ -125,19 +125,7 @@ const PoolTable = () => {
               <TableRow key={commitment.id}>
                 <TableCell align="center">{commitment.id}</TableCell>
                 <TableCell align="center">{commitment.organization}</TableCell>
-
-                <TableCell align="center" style={{ width: "10em" }}>
-                  <ul>
-                    {commitment.collaborators.map((user) => (
-                      <li
-                        key={user.firstName}
-                        style={{ margin: "0", fontSize: "13px" }}
-                      >
-                        {`${user.firstName} ${user.lastName}`}
-                      </li>
-                    ))}
-                  </ul>
-                </TableCell>
+                <TableCell align="center">{commitment.firstName} {commitment.lastName}</TableCell>
                 
                 <TableCell align="center">{commitment.city}</TableCell>
                 <TableCell align="center">{commitment.state}</TableCell>
