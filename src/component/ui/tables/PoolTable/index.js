@@ -36,13 +36,9 @@ const PoolTable = () => {
   const fetchCommitment = async () => {
     setStatus({ loader: true });
     try {
-
-      let getAccessToken = window.localStorage.getItem('login_data');
-      let accessTokenObj = JSON.parse(getAccessToken);
-      let accessToken = accessTokenObj.accessToken;
-
+      const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
       const response = await api.get("/commitments", {
-        headers: { Authorization: accessToken }
+        headers: { Authorization: token }
       });
 
       //filter commitments with status

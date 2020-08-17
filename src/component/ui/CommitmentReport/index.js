@@ -28,7 +28,6 @@ import {
   StyledMenu,
   StyledMenuItem,
 } from "./styled";
-import Logo from "../../../assets/img/logcom.png";
 import IconEdit from "../../../assets/img/editar.svg";
 import IconUser from "../../../assets/img/usercard.svg";
 import IconCity from "../../../assets/img/location1.svg";
@@ -52,16 +51,19 @@ const CommitmentReport = ({ isDetail, rol }) => {
 
   const [dataForm, setDataForm] = useState({});
   const [questions, setQuestions] = useState([]);
+  const [commitmentFeedback, setCommitmentFeedback] = useState({
+    title: "",
+    description: ""
+  });
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [showEditCommitmentModal, setShowEditCommitmentModal] = useState(false);
+  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   useEffect(() => {
     const fetchCommitmentReport = async () => {
       try {
-  
-        const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
         const idCommitment = history.location.state.id;
   
         const response = await api.get(`/commitments/${idCommitment}`, {
@@ -70,8 +72,6 @@ const CommitmentReport = ({ isDetail, rol }) => {
         
         setDataForm(response.data)
         setQuestions(response.data.answers)
-        console.log(response.data.answers)
-        
       } catch (e) {
         console.log(e);
       }
@@ -79,9 +79,39 @@ const CommitmentReport = ({ isDetail, rol }) => {
     fetchCommitmentReport();
   }, []);
 
-  const feedback = () => {
+  const acceptCommitment = async () => {
+    try {
+      const response = await api.put(`/commitments/${dataForm.id}/proceso`,
+        { headers: { Authorization: token } }
+      );
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+    history.push("/pool");
+  };
+
+  const acceptFeedback = () => {
+    alert("Aceptado con feedback")
+  }
+
+  const declineFeedback = () => {
+    
+  }
+
+  const feedback = (option) => {
+    alert(option)
     ClickOpenModalFeedback();
   };
+
+  const updateCommitmentFeedback = e => {
+    setCommitmentFeedback({
+      ...commitmentFeedback,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const { titleFeedback, descriptionFeedback } = commitmentFeedback;
 
   const ClickOpenModalFeedback = () => {
     setOpen(true);
@@ -110,7 +140,7 @@ const CommitmentReport = ({ isDetail, rol }) => {
   return (
     <Wrapper>
       <DynamicScrollToTop />
-      <Img src={Logo} />
+      <Img src={dataForm.img} />
       <WrapperFormData>
         <TxtTitleOrganization>{dataForm.organization}</TxtTitleOrganization>
         <WrapperImgTxt>
@@ -230,7 +260,7 @@ const CommitmentReport = ({ isDetail, rol }) => {
         </WrapperContact>
         {history.location.state.isDetail ? null : (
           <WrapperButtons>
-            <ButtonDecline onClick={() => feedback()}>Declinar</ButtonDecline>
+            <ButtonDecline onClick={() => feedback("declinar")}>Declinar</ButtonDecline>
 
             <ButtonAccept onClick={openModalAcceptFeedback}>
               Aceptar Compromiso
@@ -242,10 +272,10 @@ const CommitmentReport = ({ isDetail, rol }) => {
               open={Boolean(anchorEl)}
               onClose={closeModalAcceptFeedback}
             >
-              <StyledMenuItem>
+              <StyledMenuItem onClick={() => acceptCommitment()}>
                 <ListItemText primary="Aceptar" />
               </StyledMenuItem>
-              <StyledMenuItem onClick={() => feedback()}>
+              <StyledMenuItem onClick={() => feedback("aceptar")}>
                 <ListItemText primary="Aceptar con corrección" />
               </StyledMenuItem>
             </StyledMenu>
@@ -278,6 +308,8 @@ const CommitmentReport = ({ isDetail, rol }) => {
             color="secondary"
             fullWidth
             margin="dense"
+            onChange={updateCommitmentFeedback}
+            value={titleFeedback}
             style={{ marginTop: "10px" }}
           />
           <TextField
@@ -287,9 +319,11 @@ const CommitmentReport = ({ isDetail, rol }) => {
             color="secondary"
             fullWidth
             margin="dense"
+            onChange={updateCommitmentFeedback}
+            value={descriptionFeedback}
             style={{ marginTop: "10px" }}
           />
-          <ButtonAccept>Enviar</ButtonAccept>
+          <ButtonAccept onClick={() => acceptFeedback()}>Enviar</ButtonAccept>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeModalFeedback} color="secondary">
