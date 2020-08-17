@@ -12,7 +12,7 @@ export const Img = styled.img`
   width: 200px;
 `;
 
-export const txt = styled.p`
+export const Txt = styled.p`
   margin: 0;
   padding: 0;
 `;

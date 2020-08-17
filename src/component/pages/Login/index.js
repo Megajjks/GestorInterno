@@ -43,55 +43,26 @@ const GenericLogin = () => {
     e.preventDefault();
     dispatch({ type: actions.fetchLogin });
     try {
+      //when the server response is a 200
       const { data } = await api.post(`/login`, state.user);
-      if (!data.accessToken) {
-        dispatch({
-          type: actions.fetchLoginError,
-          payload: "Crendenciales inválidas",
-        });
-      } else {
-        dispatch({ type: actions.fetchLoginSuccess });
-        const loginData = {
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-          firstName: data.first_name,
-          role: data.role,
-        };
-        localStorage.clear();
-        localStorage.setItem("login_data", JSON.stringify(loginData));
-        history.push("/dashboard");
-      }
+      dispatch({ type: actions.fetchLoginSuccess });
+      const loginData = {
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+        firstName: data.firstName,
+        userId: data.userId,
+        role: data.role,
+      };
+      localStorage.clear();
+      localStorage.setItem("login_data", JSON.stringify(loginData));
+      history.push("/dashboard");
     } catch (error) {
+      //when the server response is different than a 200
       dispatch({
         type: actions.fetchLoginError,
         payload: "Crendenciales inválidas",
       });
     }
-
-    /*   try {
-      if (email.trim() === "" || password === "") {
-        handleClickOpen();
-        return;
-      }
-      const response = await api.post(`/login`, state.user);
-      console.log(response);
-      if (!response.data.accessToken) {
-        handleClickOpen();
-        return;
-      } else {
-        //save in localStorage
-        const loginData = {
-          accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken,
-          firstName: response.data.first_name,
-          role: response.data.role,
-        };
-        localStorage.setItem("login_data", JSON.stringify(loginData));
-        history.push("/dashboard");
-      }
-    } catch (error) {
-      return console.log("Credentials are not valid");
-    }*/
   };
 
   const handleClose = () => {

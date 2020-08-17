@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CommitmentCardList from "../../../ui/CommitmentCardList";
 import Spinner from "../../../ui/Spinner";
-import Error from "../../../ui/Error";
+import Error from "../../../ui/alerts/Error";
 import api from "../../../../helpers/api";
 import { Section, Btn } from "./styled";
 

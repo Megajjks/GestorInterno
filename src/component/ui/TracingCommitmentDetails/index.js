@@ -4,8 +4,8 @@ import Button from "../GeneralButton";
 import TaskList from "../TaskList";
 import CollaboratorCardList from "../CollaboratorCardList";
 import Spinner from "../Spinner";
-import Error from "../Error";
-import { dataStatus } from "../../../helpers";
+import Error from "../alerts/Error";
+import { dataStatus, filterWithRol } from "../../../helpers";
 
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
@@ -65,15 +65,15 @@ const TracingCommitmentDetails = ({ rol }) => {
     getCommitment();
   }, []);
 
-  //get list of all collaborator
+  //get list of all collaborator and Admins
   useEffect(() => {
     const getListCollaborator = async () => {
       try {
-        const url = `/collaborators`;
+        const url = `/users`;
         const response = await api.get(url, {
           headers: { Authorization: token },
         });
-        setListCollaborator(response.data);
+        setListCollaborator(filterWithRol(response.data, ["1", "2"]));
       } catch (e) {
         console.log(e);
       }
@@ -85,12 +85,11 @@ const TracingCommitmentDetails = ({ rol }) => {
   const addCollaborator = () => {
     //function to add colaborator
     const postColaborator = async (id) => {
+      let data = { userId: id, commitmentId: commitment.id };
       try {
-        const response = await api.post("/collaborators/add", {
+        const response = await api.post("/collaborators/add", data, {
           headers: { Authorization: token },
-          data: { userId: id, commitmentId: commitment.id },
         });
-        console.log(response);
       } catch (e) {
         console.log(e);
       }
@@ -113,12 +112,15 @@ const TracingCommitmentDetails = ({ rol }) => {
   const changeStatus = async (status) => {
     //Put request that change the status of commitment
     try {
+      const url = `/commitments/${commitment.id}/${status}`;
       const response = await api.put(
-        `/commitments/${commitment.id}/${status}`,
-        { headers: { Authorization: token } }
+        url,
+        {},
+        {
+          headers: { Authorization: token },
+        }
       );
       setCommitment({ ...commitment, status });
-      console.log(response);
     } catch (e) {
       console.log(e);
     }

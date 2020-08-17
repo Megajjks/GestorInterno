@@ -7,10 +7,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Spinner from "../../Spinner";
-import Error from "../../Error";
+import Error from "../../alerts/Error";
 import Eye from "../../../../assets/img/eye.svg";
 import api from "../../../../helpers/api";
-import { filterWithStatus } from "../../../../helpers";
+import { filterWithStatus, dataStatus } from "../../../../helpers";
 
 const fields = [
   "Organización",
@@ -84,7 +84,7 @@ const TracingTable = () => {
         city.includes(payload) ||
         state.includes(payload) ||
         sector.includes(payload) ||
-        status.includes(payload)
+        status.includes(dataStatus(payload).tag)
       ) {
         return item;
       }
@@ -138,7 +138,9 @@ const TracingTable = () => {
                 <TableCell align="center">{commitment.city}</TableCell>
                 <TableCell align="center">{commitment.state}</TableCell>
                 <TableCell align="center">{commitment.sector}</TableCell>
-                <TableCell align="center">{commitment.status}</TableCell>
+                <TableCell align="center">
+                  {dataStatus(commitment.status).value}
+                </TableCell>
                 <TableCell align="center">
                   <Details onClick={() => viewDetails(commitment)}>
                     <EyeIcon src={Eye} alt="details" />
