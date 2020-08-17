@@ -63,7 +63,7 @@ const TracingCommitmentDetails = ({ rol }) => {
       }
     };
     getCommitment();
-  }, []);
+  }, [commitment.status]);
 
   //get list of all collaborator and Admins
   useEffect(() => {
