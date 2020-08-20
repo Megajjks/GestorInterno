@@ -42,6 +42,7 @@ const TracingCommitmentDetails = ({ rol }) => {
   const [dropdownStatus, setDropdownStatus] = useState(null);
   const [listCollaborator, setListCollaborator] = useState([]);
   const [likelyCollaborator, setLikelyCollaborator] = useState([]);
+  const [reload, setReload] = useState(false);
   const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   //HTTP REQUEST FUNCTION
@@ -63,7 +64,7 @@ const TracingCommitmentDetails = ({ rol }) => {
       }
     };
     getCommitment();
-  }, [commitment.status]);
+  }, [reload]);
 
   //get list of all collaborator and Admins
   useEffect(() => {
@@ -90,13 +91,13 @@ const TracingCommitmentDetails = ({ rol }) => {
         const response = await api.post("/collaborators/add", data, {
           headers: { Authorization: token },
         });
+        setReload(!reload);
       } catch (e) {
         console.log(e);
       }
     };
     //if list is avoid
     if (likelyCollaborator.length === 0) {
-      console.log("entre");
       return;
     }
     //adding collaborator one by one
@@ -120,7 +121,7 @@ const TracingCommitmentDetails = ({ rol }) => {
           headers: { Authorization: token },
         }
       );
-      setCommitment({ ...commitment, status });
+      setReload(!reload);
     } catch (e) {
       console.log(e);
     }
@@ -153,7 +154,7 @@ const TracingCommitmentDetails = ({ rol }) => {
   const showDetailCommitment = () => {
     history.push({
       pathname: `/commitment_report/${commitment.id}`,
-      state: { isDetail: true },
+      state: { id: commitment.id, isDetail: true },
     });
   };
 
@@ -240,6 +241,8 @@ const TracingCommitmentDetails = ({ rol }) => {
               <CollaboratorCardList
                 collaborators={commitment.collaborators}
                 rolUser="1"
+                reload={reload}
+                setReload={setReload}
               />
               {addColaborator ? (
                 <WrapperColaborators>

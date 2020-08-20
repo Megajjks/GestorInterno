@@ -9,7 +9,7 @@ import {
   BtnDeleteColaborator,
 } from "./styled";
 
-const CollaboratorCard = ({ collaborator, rolUser }) => {
+const CollaboratorCard = ({ collaborator, rolUser, reload, setReload }) => {
   const [showModal, setShowColModal] = useState(false);
   const [deleted, setDeleted] = useState(false);
   const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
@@ -32,6 +32,7 @@ const CollaboratorCard = ({ collaborator, rolUser }) => {
             },
             headers: { Authorization: token },
           });
+          setReload(!reload);
         } catch (e) {
           console.log(e);
         }

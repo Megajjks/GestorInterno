@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Task from "../Task";
 import api from "../../../helpers/api";
-import axios from "axios"
+import axios from "axios";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
@@ -15,11 +15,11 @@ const TaskList = () => {
   };
 
   const getTasks = async () => {
-    const response = await api.get(`https://5f22f3000e9f660016d88abe.mockapi.io/api/v1/tasks?idCommitment=${getCommitmentId()}`);
-    setTasks(response.data);
+    /* const response = await api.get(`https://5f22f3000e9f660016d88abe.mockapi.io/api/v1/tasks?idCommitment=${getCommitmentId()}`);
+    setTasks(response.data); */
   };
 
-  getTasks()
+  getTasks();
 
   return (
     <>
