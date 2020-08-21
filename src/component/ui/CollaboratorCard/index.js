@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import AlertModal from "../modals/AlertModal";
 import DeletedIco from "../../../assets/img/delete.svg";
+import AvatarIco from "../../../assets/img/usercard.svg";
 import api from "../../../helpers/api";
 import {
   Colaborator,
@@ -44,7 +45,10 @@ const CollaboratorCard = ({ collaborator, rolUser, reload, setReload }) => {
   return (
     <Fragment>
       <Colaborator>
-        <ImgCollaborator src={collaborator.image} alt="profile img" />
+        <ImgCollaborator
+          src={collaborator.image ? collaborator.image : AvatarIco}
+          alt="profile img"
+        />
         <NameColaborator>
           {`${collaborator.firstName}  ${collaborator.lastName}`}{" "}
         </NameColaborator>
