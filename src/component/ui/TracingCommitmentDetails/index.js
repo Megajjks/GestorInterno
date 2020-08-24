@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import Button from "../GeneralButton";
 import TaskList from "../TaskList";
@@ -30,18 +30,15 @@ import {
 } from "./styled";
 import api from "../../../helpers/api";
 
+import { actions } from "./actions";
+import { initialState } from "./constants";
+import { reducer } from "./reducer";
+
 const TracingCommitmentDetails = ({ rol }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const history = useHistory();
-  const [commitment, setCommitment] = useState({ collaborators: [] });
-  const [status, setStatus] = useState({
-    spinner: false,
-    error: false,
-    message: "",
-  });
-  const [addColaborator, setAddColaborator] = useState(false);
-  const [dropdownStatus, setDropdownStatus] = useState(null);
-  const [listCollaborator, setListCollaborator] = useState([]);
-  const [likelyCollaborator, setLikelyCollaborator] = useState([]);
+  const [reload, setReload] = useState(false);
+  const [openCreateTask, setOpenCreateTask] = useState(false);
   const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   //HTTP REQUEST FUNCTION
@@ -49,43 +46,48 @@ const TracingCommitmentDetails = ({ rol }) => {
   //get commitment and data to show
   useEffect(() => {
     const getCommitment = async () => {
-      setStatus({ ...status, spinner: true });
+      dispatch({ type: actions.getCommitment });
       try {
         const url = `/commitments/${history.location.state}`;
-        const response = await api.get(url, {
+        const { data } = await api.get(url, {
           headers: { Authorization: token },
         });
-        setCommitment(response.data);
-        setStatus({ ...status, spinner: false, error: false });
+        dispatch({ type: actions.getCommitmentSuccess, payload: data });
       } catch (e) {
-        setStatus({ ...status, spinner: false, error: true, message: { e } });
-        console.log(e);
+        dispatch({
+          type: actions.getCommitmentError,
+          payload: "Ocurrio un error en la peteción",
+        });
+      }
+    };
+
+    const getListCollaborator = async () => {
+      dispatch({ type: actions.getCollaboratorsList });
+      try {
+        const url = `/users`;
+        const { data } = await api.get(url, {
+          headers: { Authorization: token },
+        });
+        dispatch({
+          type: actions.getCollaboratorsListSuccess,
+          payload: filterWithRol(data, ["1", "2"]),
+        });
+      } catch (e) {
+        dispatch({
+          type: actions.getCollaboratorsListError,
+          payload: "Ocurrio un error",
+        });
       }
     };
     getCommitment();
-  }, [commitment.status]);
-
-  //get list of all collaborator and Admins
-  useEffect(() => {
-    const getListCollaborator = async () => {
-      try {
-        const url = `/users`;
-        const response = await api.get(url, {
-          headers: { Authorization: token },
-        });
-        setListCollaborator(filterWithRol(response.data, ["1", "2"]));
-      } catch (e) {
-        console.log(e);
-      }
-    };
     getListCollaborator();
-  }, []);
+  }, [state.reload]);
 
   //post to add colaborador in commitment
   const addCollaborator = () => {
     //function to add colaborator
     const postColaborator = async (id) => {
-      let data = { userId: id, commitmentId: commitment.id };
+      let data = { userId: id, commitmentId: state.commitment.id };
       try {
         const response = await api.post("/collaborators/add", data, {
           headers: { Authorization: token },
@@ -95,24 +97,36 @@ const TracingCommitmentDetails = ({ rol }) => {
       }
     };
     //if list is avoid
-    if (likelyCollaborator.length === 0) {
-      console.log("entre");
+    if (state.likelyCollaborator.length === 0) {
+      handleWrapperAddColaborator();
       return;
     }
     //adding collaborator one by one
     Promise.all(
-      likelyCollaborator.map(
+      state.likelyCollaborator.map(
         async (collaborator) => await postColaborator(collaborator.id)
       )
-    );
-    setAddColaborator(false);
+    )
+      .then(() =>
+        dispatch({
+          type: actions.saveColaborators,
+          payload: !state.reload,
+        })
+      )
+      .catch(() =>
+        dispatch({
+          type: actions.errorColaborators,
+          payload: "Ocurrio un error",
+        })
+      );
   };
 
   //put to commitment
   const changeStatus = async (status) => {
     //Put request that change the status of commitment
+    dispatch({ type: actions.updateStatusCommitment });
     try {
-      const url = `/commitments/${commitment.id}/${status}`;
+      const url = `/commitments/${state.commitment.id}/${status}`;
       const response = await api.put(
         url,
         {},
@@ -120,19 +134,25 @@ const TracingCommitmentDetails = ({ rol }) => {
           headers: { Authorization: token },
         }
       );
-      setCommitment({ ...commitment, status });
+      dispatch({
+        type: actions.updateStatusCommitmentSuccess,
+        payload: !state.reload,
+      });
     } catch (e) {
-      console.log(e);
+      dispatch({
+        type: actions.updateStatusCommitmentError,
+        payload: "Ocurrio un error",
+      });
     }
-    setDropdownStatus(null);
   };
 
   //functions add collaborator
-  const handleAddColaborator = () => {
-    setAddColaborator(true);
+  const handleWrapperAddColaborator = () => {
+    dispatch({
+      type: actions.wrapperAddCollaboratorOnOff,
+      payload: !state.wrapperAddCollaborator,
+    });
   };
-
-  const [openCreateTask, setOpenCreateTask] = useState(false);
 
   //functions to open, close, add Task
 
@@ -152,24 +172,31 @@ const TracingCommitmentDetails = ({ rol }) => {
   //function to show details
   const showDetailCommitment = () => {
     history.push({
-      pathname: `/commitment_report/${commitment.id}`,
-      state: { isDetail: true },
+      pathname: `/commitment_report/${state.commitment.id}`,
+      state: { id: state.commitment.id, isDetail: true },
     });
   };
 
   //function to view and edit status
   const handleDropdownStatus = (event) => {
-    setDropdownStatus(event.currentTarget);
+    dispatch({
+      type: actions.dropDownStatusOpen,
+      payload: event.currentTarget,
+    });
   };
 
   const handleCloseDropdownStatus = () => {
-    setDropdownStatus(null);
+    dispatch({ type: actions.dropDownStatusClose });
+  };
+
+  const handleNewColaborator = (item) => {
+    dispatch({ type: actions.setColaborator, payload: item });
   };
 
   const renderView = () => {
     return (
       <Fragment>
-        <h1> {commitment.organization} </h1>
+        <h1> {state.commitment.organization} </h1>
         <Wrapper>
           <WrapperTask>
             <TaskList></TaskList>
@@ -187,17 +214,17 @@ const TracingCommitmentDetails = ({ rol }) => {
               <Button
                 aria-controls="simple-menu"
                 aria-haspopup="true"
-                title={dataStatus(commitment.status).value}
+                title={dataStatus(state.commitment.status).value}
                 type="status"
-                color={dataStatus(commitment.status).background}
+                color={dataStatus(state.commitment.status).background}
                 ico={StatusIco}
                 onClick={handleDropdownStatus}
               />
               <Menu
                 id="simple-menu"
-                anchorEl={dropdownStatus}
+                anchorEl={state.dropdownStatus}
                 keepMounted
-                open={Boolean(dropdownStatus)}
+                open={Boolean(state.dropdownStatus)}
                 onClose={handleCloseDropdownStatus}
               >
                 <MenuItems onClick={() => changeStatus("proceso")}>
@@ -238,19 +265,21 @@ const TracingCommitmentDetails = ({ rol }) => {
             </Options>
             <WrapperColaborators>
               <CollaboratorCardList
-                collaborators={commitment.collaborators}
+                collaborators={state.commitment.collaborators}
                 rolUser="1"
+                reload={reload}
+                setReload={setReload}
               />
-              {addColaborator ? (
+              {state.wrapperAddCollaborator ? (
                 <WrapperColaborators>
                   <Autocomplete
                     onChange={(event, newValue) =>
-                      setLikelyCollaborator(newValue)
+                      handleNewColaborator(newValue)
                     }
                     style={{ width: "15em" }}
                     multiple
                     id="tags-standard"
-                    options={listCollaborator}
+                    options={state.listColaborators}
                     getOptionLabel={(option) =>
                       `${option.firstName} ${option.lastName}`
                     }
@@ -264,7 +293,7 @@ const TracingCommitmentDetails = ({ rol }) => {
                     )}
                   />
                   <BtnGroup>
-                    <BtnSecundary onClick={() => setAddColaborator(false)}>
+                    <BtnSecundary onClick={handleWrapperAddColaborator}>
                       Cancelar
                     </BtnSecundary>
                     <BtnSecundary primary onClick={addCollaborator}>
@@ -273,7 +302,7 @@ const TracingCommitmentDetails = ({ rol }) => {
                   </BtnGroup>
                 </WrapperColaborators>
               ) : rol === "collaborator" ? null : (
-                <BtnAddColaborator onClick={handleAddColaborator}>
+                <BtnAddColaborator onClick={handleWrapperAddColaborator}>
                   <img src={AddIco} alt="add-ico" style={{ width: "18px" }} />
                   <BtnSecundary primary>Agregar colaborador</BtnSecundary>
                 </BtnAddColaborator>
@@ -286,12 +315,12 @@ const TracingCommitmentDetails = ({ rol }) => {
   };
 
   const renderError = () => {
-    return status.error ? <Error /> : renderView();
+    return state.commitmentError ? <Error /> : renderView();
   };
 
   return (
     <Fragment>
-      {status.spinner ? <Spinner /> : renderError()}
+      {state.commitmentLoading ? <Spinner /> : renderError()}
       <ModalCreateTask
         openNewTask={openCreateTask}
         closeModalNewTask={closeModalCreateTask}
