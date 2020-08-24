@@ -63,6 +63,7 @@ const CommitmentReport = ({ isDetail, rol }) => {
         });
         setDataForm(response.data)
         setQuestions(response.data.answers)
+        console.log(response.data.answers)
       } catch (e) {
         console.log(e);
       }

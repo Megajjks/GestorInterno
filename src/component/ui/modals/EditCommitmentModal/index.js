@@ -11,8 +11,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { WrapperLogo, Logo } from "./styled";
 
-const EditCommitmentModal = ({ handleClose, open, dataForm, questions }) => {
-  const [commitment, setCommitment] = useState({
+const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
+  
+  /*const [commitment, setCommitment] = useState({
     firstName: "",
     lastName: "",
     organization: "",
@@ -36,8 +37,10 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions }) => {
     q10: "",
     q11: "",
     q12: "",
-  });
-
+  })*/
+  /*const[answers, setQuestions] = useState([
+    questions
+  ])*/
   const handleOnChange = (e) => {
     /* setCommitment({
       ...commitment,
@@ -48,6 +51,7 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions }) => {
     /* update data of commitment */
     handleClose();
   };
+  //console.log(answers)
   return (
     <Dialog
       open={open}
