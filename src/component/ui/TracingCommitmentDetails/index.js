@@ -1,4 +1,6 @@
-import React, { useState, Fragment, useEffect, useReducer } from "react";
+import React, { useState, Fragment, useEffect, useContext } from "react";
+import { CommitmentContext } from "../../context/CommitmentContext";
+import { actions } from "../../context/CommitmentContext/actions";
 import { useHistory } from "react-router-dom";
 import Button from "../GeneralButton";
 import TaskList from "../TaskList";
@@ -30,12 +32,8 @@ import {
 } from "./styled";
 import api from "../../../helpers/api";
 
-import { actions } from "./actions";
-import { initialState } from "./constants";
-import { reducer } from "./reducer";
-
 const TracingCommitmentDetails = ({ rol }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useContext(CommitmentContext);
   const history = useHistory();
   const [reload, setReload] = useState(false);
   const [openCreateTask, setOpenCreateTask] = useState(false);

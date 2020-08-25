@@ -13,4 +13,6 @@ export const initialState = {
   reload: false,
   dropdownStatus: null,
   wrapperAddCollaborator: false,
+  loadingDeletedCollaborator: false,
+  errorDeletedCollaborator: null,
 };

@@ -99,6 +99,24 @@ export const reducer = (state, action) => {
         ...state,
         wrapperAddCollaborator: action.payload,
       };
+    case actions.deletedCollaborator:
+      return {
+        ...state,
+        loadingDeletedCollaborator: true,
+        errorDeletedCollaborator: null,
+      };
+    case actions.deletedCollaboratorSuccess:
+      return {
+        ...state,
+        loadingDeletedCollaborator: false,
+        reload: action.payload,
+      };
+    case actions.deletedCollaboratorError:
+      return {
+        ...state,
+        loadingDeletedCollaborator: false,
+        errorDeletedCollaborator: action.payload,
+      };
     default:
       return state;
   }

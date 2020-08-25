@@ -16,4 +16,7 @@ export const actions = {
   dropDownStatusClose: "DROPDOWN_STATUS_CLOSE",
   setCommitmentStatus: "SET_COMMITMENT_STATUS",
   wrapperAddCollaboratorOnOff: "WRAPPER_ADD_COLLABORATOR_On_Off",
+  deletedCollaborator: "DELETED_COLLABORATOR",
+  deletedCollaboratorSuccess: "DELETED_COLLABORATOR_SUCCESS",
+  deletedCollaboratorError: "DELETED_COLLABORATOR_ERROR",
 };
