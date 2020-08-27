@@ -14,13 +14,14 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 const Navbar = ({ goback }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const history = useHistory();
+  const id = JSON.parse(localStorage.getItem("login_data")).userId;
 
   //get the logged in user data
   useEffect(() => {
     const getUser = async () => {
       dispatch({ type: actions.getUser });
       try {
-        const { data } = await api.get(`/users/${state.id}`);
+        const { data } = await api.get(`/users/${id}`);
         dispatch({ type: actions.getUserSuccess, payload: data });
       } catch (e) {
         dispatch({ type: actions.getUserError, payload: "Ocurrió un error" });
