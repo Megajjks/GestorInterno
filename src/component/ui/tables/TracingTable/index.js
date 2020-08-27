@@ -40,12 +40,12 @@ const TracingTable = () => {
           headers: { Authorization: token },
         });
         dispatch({
-          type: actions.getCommtimentsSuccess,
+          type: actions.getCommitmentsSuccess,
           payload: filterWithStatus(data, ["proceso", "cumplido", "oculto"]),
         });
       } catch (e) {
         dispatch({
-          type: actions.getCommtimentsError,
+          type: actions.getCommitmentsError,
           payload:
             "Por el momento no se pueden obtener los datos, verifique su conexión",
         });
@@ -71,7 +71,7 @@ const TracingTable = () => {
 
       if (searchString === "") {
         return dispatch({
-          type: actions.filterCommtiments,
+          type: actions.filterCommitments,
           payload: state.commitments,
         });
       } else if (
@@ -85,7 +85,7 @@ const TracingTable = () => {
         return item;
       }
     });
-    dispatch({ type: actions.filterCommtiments, payload: busqueda });
+    dispatch({ type: actions.filterCommitments, payload: busqueda });
   }, [searchString]);
 
   const viewDetails = (item) => {

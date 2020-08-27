@@ -5,7 +5,7 @@ export const reducer = (state, action) => {
       return {
         ...state,
         commitmentsLoader: true,
-        commitmentsError: null,
+        commitmentsError: false,
       };
     case actions.getCommitmentsSuccess:
       return {
@@ -17,7 +17,7 @@ export const reducer = (state, action) => {
       return {
         ...state,
         commitmentsLoader: false,
-        commitmentsError: action.payload,
+        commitmentsError: true,
       };
     case actions.filterCommitments:
       return {

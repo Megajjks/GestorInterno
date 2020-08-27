@@ -44,12 +44,12 @@ const PoolTable = () => {
         //filter commitments with status
         let query = ["prevalidado", "validando", "correcion"];
         dispatch({
-          type: actions.getCommtimentsSuccess,
+          type: actions.getCommitmentsSuccess,
           payload: filterWithStatus(data, query),
         });
       } catch (e) {
         dispatch({
-          type: actions.getCommtimentsError,
+          type: actions.getCommitmentsError,
           payload:
             "Por el momento no se pueden obtener los datos, verifique su conexión",
         });
@@ -80,7 +80,7 @@ const PoolTable = () => {
 
       if (searchString === "") {
         return dispatch({
-          type: actions.filterCommtiments,
+          type: actions.filterCommitments,
           payload: state.commitments,
         });
       } else if (
@@ -94,7 +94,7 @@ const PoolTable = () => {
         return item;
       }
     });
-    dispatch({ type: actions.filterCommtiments, payload: busqueda });
+    dispatch({ type: actions.filterCommitments, payload: busqueda });
   }, [searchString]);
 
   const search = (e) => {
