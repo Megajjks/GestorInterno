@@ -15,4 +15,11 @@ export const initialState = {
   wrapperAddCollaborator: false,
   loadingDeletedCollaborator: false,
   errorDeletedCollaborator: null,
+  newTask: {
+    title: "",
+    description: "",
+    date: "",
+  },
+  newTaskLoading: false,
+  newTaskError: null,
 };

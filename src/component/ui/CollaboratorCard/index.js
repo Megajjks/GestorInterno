@@ -12,7 +12,7 @@ import {
   BtnDeleteColaborator,
 } from "./styled";
 
-const CollaboratorCard = ({ collaborator, rolUser, reload, setReload }) => {
+const CollaboratorCard = ({ collaborator, rolUser }) => {
   const { state, dispatch } = useContext(CommitmentContext);
   const [showModal, setShowColModal] = useState(false);
   const [deleted, setDeleted] = useState(false);
@@ -37,7 +37,6 @@ const CollaboratorCard = ({ collaborator, rolUser, reload, setReload }) => {
             },
             headers: { Authorization: token },
           });
-          setReload(!reload); //se ira
           dispatch({
             type: actions.deletedCollaboratorSuccess,
             payload: !state.reload,

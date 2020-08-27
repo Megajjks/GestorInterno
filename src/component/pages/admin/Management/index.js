@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import CommitmentCardList from "../../../ui/CommitmentCardList";
 import Spinner from "../../../ui/Spinner";
 import Error from "../../../ui/alerts/Error";
@@ -6,39 +6,30 @@ import WithoutData from "../../../ui/alerts/WithoutData";
 import { SearchBar } from "./styled";
 import api from "../../../../helpers/api";
 import { filterWithIdCollaboratorAndStatus } from "../../../../helpers";
+import { actions } from "./actions";
+import { initialState } from "./constants";
+import { reducer } from "./reducer";
 
 const Management = () => {
-  const [commitments, setCommitments] = useState([]);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [searchString, setSearchString] = useState("");
-  const [status, setStatus] = useState({
-    loader: false,
-    isError: false,
-    message: "",
-  });
   const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
   const userId = JSON.parse(localStorage.getItem("login_data")).userId;
 
   useEffect(() => {
     const fetchCommitments = async () => {
-      setStatus({ loader: true });
+      dispatch({ type: actions.getCommitments });
       try {
-        const response = await api.get("/commitments", {
+        const { data } = await api.get("/commitments", {
           headers: { Authorization: token },
         });
-        setCommitments(
-          filterWithIdCollaboratorAndStatus(response.data, userId, ["proceso"])
-        );
-        setStatus({
-          loader: false,
-          isError: false,
+        dispatch({
+          type: actions.getCommitmentsSuccess,
+          payload: filterWithIdCollaboratorAndStatus(data, userId, ["proceso"]),
         });
       } catch (e) {
-        console.log(e);
-        setStatus({
-          loader: false,
-          isError: true,
-          message:
-            "Por el momento no se pueden obtener los datos, verifique su conexión",
+        dispatch({
+          type: actions.getCommitmentsError,
         });
       }
     };
@@ -49,7 +40,7 @@ const Management = () => {
     if (!searchString) {
       return;
     }
-    const busqueda = commitments.filter((item) => {
+    const busqueda = state.commitments.filter((item) => {
       const payload = searchString.toLowerCase();
       const organization = item.organization.toLowerCase();
       const location = item.city.toLowerCase();
@@ -57,7 +48,10 @@ const Management = () => {
       const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
 
       if (searchString === "") {
-        return commitments;
+        return dispatch({
+          type: actions.filterCommitments,
+          payload: state.commitments,
+        });
       } else if (
         organization.includes(payload) ||
         location.includes(payload) ||
@@ -67,7 +61,7 @@ const Management = () => {
         return item;
       }
     });
-    setCommitments(busqueda);
+    dispatch({ type: actions.filterCommitments, payload: busqueda });
   }, [searchString]);
   const search = (e) => {
     const { value } = e.target;
@@ -75,7 +69,11 @@ const Management = () => {
   };
 
   const renderCommitments = () => {
-    if (commitments.length === 0 && !status.loader && !status.isError) {
+    if (
+      state.commitments.length === 0 &&
+      !state.commitmentsLoader &&
+      !state.commitmentsError
+    ) {
       return (
         <WithoutData
           title="¡Oh! aun no tienes compromisos asignados"
@@ -85,7 +83,7 @@ const Management = () => {
     }
     return (
       <CommitmentCardList
-        commitments={commitments}
+        commitments={state.commitments}
         btnTitle="Gestionar compromiso"
         btnUrlBase="/traicing_commitment"
       />
@@ -97,8 +95,8 @@ const Management = () => {
       <h1>Compromisos asignados</h1>
       <SearchBar value={searchString} onChange={search} />
       {renderCommitments()}
-      {status.loader ? <Spinner /> : null}
-      {status.isError ? <Error /> : null}
+      {state.commitmentsLoader ? <Spinner /> : null}
+      {state.commitmentsError ? <Error /> : null}
     </div>
   );
 };

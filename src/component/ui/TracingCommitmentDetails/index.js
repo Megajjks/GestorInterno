@@ -35,7 +35,6 @@ import api from "../../../helpers/api";
 const TracingCommitmentDetails = ({ rol }) => {
   const { state, dispatch } = useContext(CommitmentContext);
   const history = useHistory();
-  const [reload, setReload] = useState(false);
   const [openCreateTask, setOpenCreateTask] = useState(false);
   const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
@@ -54,7 +53,7 @@ const TracingCommitmentDetails = ({ rol }) => {
       } catch (e) {
         dispatch({
           type: actions.getCommitmentError,
-          payload: "Ocurrio un error en la peteción",
+          payload: "Ocurrió un error en la petición",
         });
       }
     };
@@ -265,8 +264,6 @@ const TracingCommitmentDetails = ({ rol }) => {
               <CollaboratorCardList
                 collaborators={state.commitment.collaborators}
                 rolUser="1"
-                reload={reload}
-                setReload={setReload}
               />
               {state.wrapperAddCollaborator ? (
                 <WrapperColaborators>

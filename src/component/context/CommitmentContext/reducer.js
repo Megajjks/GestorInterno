@@ -117,6 +117,37 @@ export const reducer = (state, action) => {
         loadingDeletedCollaborator: false,
         errorDeletedCollaborator: action.payload,
       };
+    case actions.updateFieldAddTask:
+      return {
+        ...state,
+        newTask: {
+          ...state.newTask,
+          [action.payload.field]: action.payload.value,
+        },
+      };
+    case actions.addTask:
+      return {
+        ...state,
+        newTaskLoading: true,
+        newTaskError: null,
+      };
+    case actions.addTaskSuccess:
+      return {
+        ...state,
+        newTask: {
+          title: "",
+          description: "",
+          date: "",
+        },
+        newTaskLoading: false,
+        reload: action.payload,
+      };
+    case actions.addTaskError:
+      return {
+        ...state,
+        newTaskLoading: false,
+        newTaskError: action.payload,
+      };
     default:
       return state;
   }
