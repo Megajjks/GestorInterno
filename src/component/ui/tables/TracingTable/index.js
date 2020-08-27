@@ -7,9 +7,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Spinner from "../../Spinner";
-import Error from "../../Error";
+import Error from "../../alerts/Error";
 import Eye from "../../../../assets/img/eye.svg";
-import axios from "axios";
+import api from "../../../../helpers/api";
+import { filterWithStatus, dataStatus } from "../../../../helpers";
 
 const fields = [
   "Organización",
@@ -31,30 +32,32 @@ const TracingTable = () => {
   });
   const history = useHistory();
   const [searchString, setSearchString] = useState("");
-
-  const fetchCommitment = async () => {
-    setStatus({ loader: true });
-    try {
-      const response = await axios.get(
-        "https://my-json-server.typicode.com/Megajjks/dbAshokaTest/commitments"
-      );
-      setCommitments(response.data);
-      setStatus({
-        loader: false,
-        isError: false,
-      });
-    } catch (e) {
-      console.log(e);
-      setStatus({
-        loader: false,
-        isError: true,
-        message:
-          "Por el momento no se pueden obtener los datos, verifique su conexión",
-      });
-    }
-  };
+  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   useEffect(() => {
+    const fetchCommitment = async () => {
+      setStatus({ loader: true });
+      try {
+        const response = await api.get("/commitments", {
+          headers: { Authorization: token },
+        });
+        setCommitments(
+          filterWithStatus(response.data, ["proceso", "cumplido", "oculto"])
+        );
+        setStatus({
+          loader: false,
+          isError: false,
+        });
+      } catch (e) {
+        console.log(e);
+        setStatus({
+          loader: false,
+          isError: true,
+          message:
+            "Por el momento no se pueden obtener los datos, verifique su conexión",
+        });
+      }
+    };
     fetchCommitment();
   }, []);
 
@@ -66,9 +69,8 @@ const TracingTable = () => {
     const busqueda = commitments.filter((item) => {
       console.log(item);
       const payload = searchString.toLowerCase();
-      const colaborators = item.colaborators.toLowerCase();
       const organization = item.organization.toLowerCase();
-      const agent = `${item.first_name.toLowerCase()}  ${item.last_name.toLowerCase()}`;
+      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
       const city = item.city.toLowerCase();
       const status = item.status.toLowerCase();
       const sector = item.sector.toLowerCase();
@@ -77,13 +79,12 @@ const TracingTable = () => {
       if (searchString === "") {
         return commitments;
       } else if (
-        colaborators.includes(payload) ||
         organization.includes(payload) ||
         agent.includes(payload) ||
         city.includes(payload) ||
         state.includes(payload) ||
         sector.includes(payload) ||
-        status.includes(payload)
+        status.includes(dataStatus(payload).tag)
       ) {
         return item;
       }
@@ -94,7 +95,7 @@ const TracingTable = () => {
   const viewDetails = (item) => {
     history.push({
       pathname: `/traicing_commitment/${item.id}`,
-      state: item,
+      state: item.id,
     });
   };
 
@@ -121,12 +122,25 @@ const TracingTable = () => {
             {commitments.map((commitment) => (
               <TableRow key={commitment.id}>
                 <TableCell align="center">{commitment.organization}</TableCell>
-                <TableCell align="center">{commitment.colaborators}</TableCell>
-                <TableCell align="center">{`${commitment.first_name} ${commitment.last_name}`}</TableCell>
+                <TableCell align="center" style={{ width: "10em" }}>
+                  <ul>
+                    {commitment.collaborators.map((user) => (
+                      <li
+                        key={user.firstName}
+                        style={{ margin: "0", fontSize: "13px" }}
+                      >
+                        {`${user.firstName} ${user.lastName}`}
+                      </li>
+                    ))}
+                  </ul>
+                </TableCell>
+                <TableCell align="center">{`${commitment.firstName} ${commitment.lastName}`}</TableCell>
                 <TableCell align="center">{commitment.city}</TableCell>
                 <TableCell align="center">{commitment.state}</TableCell>
                 <TableCell align="center">{commitment.sector}</TableCell>
-                <TableCell align="center">{commitment.status}</TableCell>
+                <TableCell align="center">
+                  {dataStatus(commitment.status).value}
+                </TableCell>
                 <TableCell align="center">
                   <Details onClick={() => viewDetails(commitment)}>
                     <EyeIcon src={Eye} alt="details" />

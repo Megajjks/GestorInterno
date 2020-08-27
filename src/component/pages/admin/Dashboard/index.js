@@ -3,21 +3,23 @@ import CommitmentCardList from "../../../ui/CommitmentCardList";
 import Spinner from "../../../ui/Spinner";
 import Error from "../../../ui/alerts/Error";
 import api from "../../../../helpers/api";
-import { Section, Btn } from "./styled";
 
-const Commitment = () => {
+const Dashboard = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState({
     loader: false,
     isError: false,
     message: "",
   });
+  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   useEffect(() => {
     const fetchCommitments = async () => {
       setStatus({ loader: true });
       try {
-        const response = await api.get("/commitments");
+        const response = await api.get("/commitments", {
+          headers: { Authorization: token },
+        });
         setData(response.data);
         setStatus({
           loader: false,
@@ -38,15 +40,16 @@ const Commitment = () => {
 
   return (
     <div>
-      <Section>
-        <h1>Mis compromisos</h1>
-        <Btn to="/new_commitment">Crear un compromiso</Btn>
-      </Section>
-      <CommitmentCardList commitments={data} />
+      <h1>Dashboard</h1>
+      <CommitmentCardList
+        commitments={data}
+        btnTitle="Leer compromiso"
+        btnUrlBase="/commitment_report"
+      />
       {status.loader ? <Spinner /> : null}
       {status.isError ? <Error /> : null}
     </div>
   );
 };
 
-export default Commitment;
+export default Dashboard;

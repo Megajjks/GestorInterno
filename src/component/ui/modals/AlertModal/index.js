@@ -7,6 +7,11 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 
 const AlertModal = ({ title, message, handleClose, open, callback }) => {
+  const handleButton = (status) => {
+    callback(status);
+    handleClose();
+  };
+
   return (
     <Dialog
       open={open}
@@ -21,10 +26,10 @@ const AlertModal = ({ title, message, handleClose, open, callback }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={() => handleButton(false)} color="primary">
           cancelar
         </Button>
-        <Button onClick={callback} color="primary">
+        <Button onClick={() => handleButton(true)} color="primary">
           Aceptar
         </Button>
       </DialogActions>

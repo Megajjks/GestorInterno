@@ -20,7 +20,7 @@ import {
 } from "./styled";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import axios from "axios";
+import api from "../../../helpers/api";
 
 const NewCommitment = () => {
   const [commitment, setCommitment] = useState({
@@ -35,18 +35,18 @@ const NewCommitment = () => {
     phone: "",
     logo: "",
     img: "",
-    q1: "",
-    q2: "",
-    q3: "",
-    q4: "",
-    q5: "",
-    q6: "",
-    q7: "",
-    q8: "",
-    q9: "",
-    q10: "",
-    q11: "",
-    q12: "",
+    question1: "",
+    question2: "",
+    question3: "",
+    question4: "",
+    question5: "",
+    question6: "",
+    question7: "",
+    question8: "",
+    question9: "",
+    question10: "",
+    question11: "",
+    question12: "",
     sendEmails: false,
     agree: false,
   });
@@ -96,18 +96,18 @@ const NewCommitment = () => {
       commitment.phone === "" ||
       commitment.logo === "" ||
       commitment.img === "" ||
-      commitment.q1 === "" ||
-      commitment.q2 === "" ||
-      commitment.q3 === "" ||
-      commitment.q4 === "" ||
-      commitment.q5 === "" ||
-      commitment.q6 === "" ||
-      commitment.q7 === "" ||
-      commitment.q8 === "" ||
-      commitment.q9 === "" ||
-      commitment.q10 === "" ||
-      commitment.q11 === "" ||
-      commitment.q12 === "" ||
+      commitment.question1 === "" ||
+      commitment.question2 === "" ||
+      commitment.question3 === "" ||
+      commitment.question4 === "" ||
+      commitment.question5 === "" ||
+      commitment.question6 === "" ||
+      commitment.question7 === "" ||
+      commitment.question8 === "" ||
+      commitment.question9 === "" ||
+      commitment.question10 === "" ||
+      commitment.question11 === "" ||
+      commitment.question12 === "" ||
       commitment.agree === false
     ) {
       setError({
@@ -125,11 +125,7 @@ const NewCommitment = () => {
 
   const sendData = async () => {
     try {
-      //const response = await axios.post('http://localhost:5000/commitment',{commitment})
-      const response = await axios.post(
-        "http://localhost:5000/commitment",
-        commitment
-      );
+      const response = await api.post("/commitments", commitment);
       console.log("👉 Returned data:", response);
       setError({
         status: false,
@@ -202,13 +198,13 @@ const NewCommitment = () => {
                 onChange={handleOnChange}
               >
                 <option value="">-- Seleccione --</option>
-                <option value="academia">Academia</option>
-                <option value="sector_publico">Sector público</option>
-                <option value="sector_privado">Sector privado</option>
-                <option value="org_soc_civ">
+                <option value="Academia">Academia</option>
+                <option value="Sector público">Sector público</option>
+                <option value="Sector privado">Sector privado</option>
+                <option value="Organización de la sociedad civil">
                   Organización de la sociedad civil
                 </option>
-                <option value="ciudadania">Ciudadanía</option>
+                <option value="Ciudadanía">Ciudadanía</option>
               </Select>
             </Field>
             <Field>
@@ -232,38 +228,38 @@ const NewCommitment = () => {
                 onChange={handleOnChange}
               >
                 <option value="">-- Seleccione --</option>
-                <option value="aguascalientes">Aguascalientes</option>
-                <option value="baja_california">Baja California</option>
-                <option value="baja_california_cur">Baja California Sur</option>
-                <option value="campeche">Campeche</option>
-                <option value="chiapas">Chiapas</option>
-                <option value="chihuahua">Chihuahua</option>
-                <option value="cdmx">Ciudad de México</option>
-                <option value="coahuila">Coahuila</option>
-                <option value="colima">Colima</option>
-                <option value="durango">Durango</option>
-                <option value="estado_de_méxico">Estado de México</option>
-                <option value="guanajuato">Guanajuato</option>
-                <option value="guerrero">Guerrero</option>
-                <option value="hidalgo">Hidalgo</option>
-                <option value="jalisco">Jalisco</option>
-                <option value="michoacán">Michoacán</option>
-                <option value="morelos">Morelos</option>
-                <option value="nayarit">Nayarit</option>
-                <option value="nuevo León">Nuevo León</option>
-                <option value="oaxaca">Oaxaca</option>
-                <option value="puebla">Puebla</option>
-                <option value="querétaro">Querétaro</option>
-                <option value="quintana_roo">Quintana Roo</option>
-                <option value="san_luis_potosí">San Luis Potosí</option>
-                <option value="sinaloa">Sinaloa</option>
-                <option value="sonora">Sonora</option>
-                <option value="tabasco">Tabasco</option>
-                <option value="tamaulipas">Tamaulipas</option>
-                <option value="tlaxcala">Tlaxcala</option>
-                <option value="veracruz">Veracruz</option>
-                <option value="yucatán">Yucatán</option>
-                <option value="zacatecas">Zacatecas</option>
+                <option value="Aguascalientes">Aguascalientes</option>
+                <option value="Baja California">Baja California</option>
+                <option value="Baja California Sur">Baja California Sur</option>
+                <option value="Campeche">Campeche</option>
+                <option value="Chiapas">Chiapas</option>
+                <option value="Chihuahua">Chihuahua</option>
+                <option value="Ciudad de México">Ciudad de México</option>
+                <option value="Coahuila">Coahuila</option>
+                <option value="Colima">Colima</option>
+                <option value="Durango">Durango</option>
+                <option value="Estado de México">Estado de México</option>
+                <option value="Guanajuato">Guanajuato</option>
+                <option value="Guerrero">Guerrero</option>
+                <option value="Hidalgo">Hidalgo</option>
+                <option value="Jalisco">Jalisco</option>
+                <option value="Michoacán">Michoacán</option>
+                <option value="Morelos">Morelos</option>
+                <option value="Nayarit">Nayarit</option>
+                <option value="Nuevo León">Nuevo León</option>
+                <option value="Oaxaca">Oaxaca</option>
+                <option value="Puebla">Puebla</option>
+                <option value="Querétaro">Querétaro</option>
+                <option value="Quintana Roo">Quintana Roo</option>
+                <option value="San Luis Potosí">San Luis Potosí</option>
+                <option value="Sinaloa">Sinaloa</option>
+                <option value="Sonora">Sonora</option>
+                <option value="Tabasco">Tabasco</option>
+                <option value="Tamaulipas">Tamaulipas</option>
+                <option value="Tlaxcala">Tlaxcala</option>
+                <option value="Veracruz">Veracruz</option>
+                <option value="Yucatán">Yucatán</option>
+                <option value="Zacatecas">Zacatecas</option>
               </Select>
             </Field>
             <Field>
@@ -306,8 +302,8 @@ const NewCommitment = () => {
               <TxtRequired>*</TxtRequired>
             </Label>
             <TextArea
-              name="q1"
-              value={commitment.q1}
+              name="question1"
+              value={commitment.question1}
               onChange={handleOnChange}
             />
           </Field>
@@ -317,8 +313,8 @@ const NewCommitment = () => {
               <TxtRequired>*</TxtRequired>
             </Label>
             <TextArea
-              name="q2"
-              value={commitment.q2}
+              name="question2"
+              value={commitment.question2}
               onChange={handleOnChange}
             />
           </Field>
@@ -371,8 +367,8 @@ const NewCommitment = () => {
             <Input
               type="text"
               placeholder="La organización A,(junto a la B)"
-              name="q3"
-              value={commitment.q3}
+              name="question3"
+              value={commitment.question3}
               onChange={handleOnChange}
               style={{ textAlign: "center" }}
             />{" "}
@@ -380,8 +376,8 @@ const NewCommitment = () => {
             <Input
               type="text"
               placeholder="# de agentes "
-              name="q7"
-              value={commitment.q7}
+              name="question7"
+              value={commitment.question7}
               onChange={handleOnChange}
               style={{ width: "130px", textAlign: "center" }}
             />{" "}
@@ -389,16 +385,16 @@ const NewCommitment = () => {
             <Input
               type="text"
               placeholder="periodo de tiempo"
-              name="q5"
-              value={commitment.q5}
+              name="question5"
+              value={commitment.question5}
               onChange={handleOnChange}
               style={{ width: "150px", textAlign: "center" }}
             />{" "}
             para contribuir a la comunidad de Agentes de cambio, a través de{" "}
             <TextArea
               placeholder="¿cómo el impacto esperado contribuye a los demás actores?"
-              name="q6"
-              value={commitment.q6}
+              name="question6"
+              value={commitment.question6}
               onChange={handleOnChange}
               style={{ width: "100%", height: "40px", textAlign: "center" }}
             />
@@ -408,8 +404,8 @@ const NewCommitment = () => {
               ¿Qué acción se va a implementar? <TxtRequired>*</TxtRequired>
             </Label>
             <TextArea
-              name="q4"
-              value={commitment.q4}
+              name="question4"
+              value={commitment.question4}
               onChange={handleOnChange}
             />
           </Field>
@@ -421,9 +417,11 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="q8"
-                value="1"
-                checked={commitment.q8 === "1"}
+                name="question8"
+                value="Vinculación con actores clave"
+                checked={
+                  commitment.question8 === "Vinculación con actores clave"
+                }
                 onChange={handleOnChange}
               />{" "}
               Vinculación con actores clave
@@ -431,9 +429,12 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="q8"
-                value="2"
-                checked={commitment.q8 === "2"}
+                name="question8"
+                value="Herramientas y metodologías para impulsar la innovación social y la agencia de cambio"
+                checked={
+                  commitment.question8 ===
+                  "Herramientas y metodologías para impulsar la innovación social y la agencia de cambio"
+                }
                 onChange={handleOnChange}
               />{" "}
               Herramientas y metodologías para impulsar la innovación social y
@@ -442,9 +443,9 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="q8"
-                value="3"
-                checked={commitment.q8 === "3"}
+                name="question8"
+                value="Asesorías especializadas"
+                checked={commitment.question8 === "Asesorías especializadas"}
                 onChange={handleOnChange}
               />{" "}
               Asesorías especializadas
@@ -452,9 +453,11 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="q8"
-                value="4"
-                checked={commitment.q8 === "4"}
+                name="question8"
+                value="Fondos para escalar la iniciativa"
+                checked={
+                  commitment.question8 === "Fondos para escalar la iniciativa"
+                }
                 onChange={handleOnChange}
               />{" "}
               Fondos para escalar la iniciativa
@@ -462,9 +465,9 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="q8"
-                value="5"
-                checked={commitment.q8 === "5"}
+                name="question8"
+                value="Difusión y comunicación"
+                checked={commitment.question8 === "Difusión y comunicación"}
                 onChange={handleOnChange}
               />{" "}
               Difusión y comunicación
@@ -472,9 +475,9 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="q8"
-                value="6"
-                checked={commitment.q8 === "6"}
+                name="question8"
+                value="Otro"
+                checked={commitment.question8 === "Otro"}
                 onChange={handleOnChange}
               />{" "}
               Otro
@@ -486,8 +489,8 @@ const NewCommitment = () => {
               especificarlo a continuación:
             </Label>
             <TextArea
-              name="q9"
-              value={commitment.q9}
+              name="question9"
+              value={commitment.question9}
               onChange={handleOnChange}
             />
           </Field>
@@ -497,25 +500,25 @@ const NewCommitment = () => {
               <TxtRequired>*</TxtRequired>
             </Label>
             <Select
-              name="q10"
+              name="question10"
               style={{ width: "37em" }}
-              value={commitment.q10}
+              value={commitment.question10}
               onChange={handleOnChange}
             >
               <option value="">-- Seleccione --</option>
-              <option value="ashoka_staff">Ashoka Staff</option>
-              <option value="aliados_de_difusion">Aliados de Difusión</option>
-              <option value="facebook">Facebook</option>
-              <option value="instagram">Instagram</option>
-              <option value="twitter">Twitter</option>
-              <option value="linkedin">LinkedIn</option>
-              <option value="Sesion_de_compromisos">
+              <option value="Ashoka Staff">Ashoka Staff</option>
+              <option value="Aliados de Difusión">Aliados de Difusión</option>
+              <option value="Facebook">Facebook</option>
+              <option value="Instagram">Instagram</option>
+              <option value="Twitter">Twitter</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="Sesión de Compromisos">
                 Sesión de Compromisos
               </option>
-              <option value="conector_ashoka">Conector Ashoka</option>
-              <option value="embajador_ashoka">Embajador Ashoka</option>
-              <option value="sitio_web">Sitio Web Ashoka</option>
-              <option value="otro">otro</option>
+              <option value="Conector Ashoka">Conector Ashoka</option>
+              <option value="Embajador Ashoka">Embajador Ashoka</option>
+              <option value="Sitio Web Ashoka">Sitio Web Ashoka</option>
+              <option value="Otro">otro</option>
             </Select>
           </Field>
           <Field>
@@ -524,16 +527,16 @@ const NewCommitment = () => {
               especificarlo a continuación
             </Label>
             <TextArea
-              name="q11"
-              value={commitment.q11}
+              name="question11"
+              value={commitment.question11}
               onChange={handleOnChange}
             />
           </Field>
           <Field>
             <Label>Comentario o Duda Adicional</Label>
             <TextArea
-              name="q12"
-              value={commitment.q12}
+              name="question12"
+              value={commitment.question12}
               onChange={handleOnChange}
             />
           </Field>

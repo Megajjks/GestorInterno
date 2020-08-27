@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Wrapper,
@@ -11,61 +11,67 @@ import {
 } from "./styled";
 import GeneralButton from "../../ui/GeneralButton";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import LoginImg from "../../../assets/img/imageLogin.jpg";
-import axios from "axios";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import api from "../../../helpers/api";
+
+import { reducer } from "./reducer";
+import { initialState } from "./constants";
+import { actions } from "./actions";
 
 const GenericLogin = () => {
   const history = useHistory();
-  const [email, updateEmail] = useState("");
-  const [password, updatePassword] = useState("");
-  const LOGIN_URL = "http://localhost:5000/login";
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const { email, password } = user;
 
   const submitData = async (e) => {
     e.preventDefault();
+    dispatch({ type: actions.fetchLogin });
     try {
-      if (email.trim() === "" || password === "") {
-        handleClickOpen();
-        return;
-      }
-      const response = await axios.post(LOGIN_URL, {
-        email: email,
-        password: password,
-      });
-      if (response.data === "Email or password are incorrect") {
-        handleClickOpen();
-        return;
-      }
-      if (response.data.role === "admin") {
-        history.push("/dasboard_admin");
-      } else {
-        history.push("/dasboard");
-      }
+      //when the server response is a 200
+      const { data } = await api.post(`/login`, state.user);
+      dispatch({ type: actions.fetchLoginSuccess });
       const loginData = {
-        accessToken: response.data.accessToken,
-        refreshToken: response.data.refreshToken,
-        first_name: response.data.first_name,
-        role: response.data.role,
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+        firstName: data.firstName,
+        userId: data.userId,
+        role: data.role,
       };
+      localStorage.clear();
       localStorage.setItem("login_data", JSON.stringify(loginData));
+      history.push("/dashboard");
     } catch (error) {
-      return console.log("Credentials are not valid");
+      //when the server response is different than a 200
+      dispatch({
+        type: actions.fetchLoginError,
+        payload: "Crendenciales inválidas",
+      });
     }
   };
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClose = () => {
+    dispatch({ type: actions.toggleModal });
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleChange = (e) => {
+    let { name, value } = e.target;
+    dispatch({ type: actions.setUser, name, payload: value });
   };
 
   return (
@@ -81,19 +87,31 @@ const GenericLogin = () => {
             label="EMAIL"
             color="secondary"
             fullWidth
-            onChange={(e) => updateEmail(e.target.value)}
-            value={email}
+            onChange={handleChange}
+            value={state.user.email}
             style={{ marginTop: "10px" }}
           />
           <TextField
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             label="CONTRASEÑA"
             fullWidth
             color="secondary"
-            onChange={(e) => updatePassword(e.target.value)}
-            value={password}
+            onChange={handleChange}
+            value={state.user.password}
             style={{ marginTop: "10px", marginBottom: "20px" }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <GeneralButton title="Login" />
         </Form>
@@ -104,7 +122,7 @@ const GenericLogin = () => {
       </WrapperForm>
       <>
         <Dialog
-          open={open}
+          open={state.open}
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
@@ -112,8 +130,9 @@ const GenericLogin = () => {
           <DialogTitle id="alert-dialog-title">{""}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Los campos que has ingresado no son correctos, por favor
-              verificalos y vuelve a intentarlo.
+              {state.loginError
+                ? state.loginError
+                : "Los campos que has ingresado no son correctos, por favorverificalos y vuelve a intentarlo."}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
