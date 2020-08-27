@@ -11,7 +11,7 @@ import {
     ButtonAccept
 } from "./styled";
 
-const FeedbackModal = ({ openModalFeedback, closeModalFeedback, optionFeedback }) => {
+const FeedbackModal = ({ openModalFeedback, closeModalFeedback, option, idCommitmentReport }) => {
     const [commitmentFeedback, setCommitmentFeedback] = useState({
         titleFeedback: "",
         descriptionFeedback: ""
@@ -29,12 +29,12 @@ const FeedbackModal = ({ openModalFeedback, closeModalFeedback, optionFeedback }
     const fetchUpdateState = async () => {
         const response = "";
         try {
-            if (optionFeedback.option === "aceptar") {
-                response = await api.put(`/commitments/${optionFeedback.idCommitment}/correcion`, {},
+            if (option === "aceptar") {
+                response = await api.put(`/commitments/${idCommitmentReport}/correcion`, {},
                     { headers: { Authorization: token } }
                 );
             } else {
-                response = await api.put(`/commitments/${optionFeedback.idCommitment}/declinado`, {},
+                response = await api.put(`/commitments/${idCommitmentReport}/declinado`, {},
                     { headers: { Authorization: token } }
                 );
             }
