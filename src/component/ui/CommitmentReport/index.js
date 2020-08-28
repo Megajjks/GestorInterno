@@ -62,7 +62,7 @@ const CommitmentReport = ({ rol }) => {
         });
         dispatch({ type: actions.getDataFormSuccess, payload: data })
         dispatch({ type: actions.getQuestionsSuccess, payload: data.answers })
-        console.log(data.answers[0].answer)
+        console.log(data)
       } catch (e) {
         dispatch({ type: actions.getDataFormError, payload: "Error en peticion" });
         dispatch({ type: actions.getQuestionsError, payload: "Error en peticion" });
@@ -117,7 +117,7 @@ const CommitmentReport = ({ rol }) => {
   const closeEditCommitmentModal = () => {
     dispatch({ type: actions.closeEditCommitmentModal, payload: false })
   };
-
+//no muevas el scroll jaja 
   return (
     <Wrapper>
       <DynamicScrollToTop />
@@ -278,7 +278,6 @@ const CommitmentReport = ({ rol }) => {
         open={state.showEditCommitmentModal}
         handleClose={closeEditCommitmentModal}
         dataForm={state.dataForm}
-        questions={state.questions}
       />
     </Wrapper>
   );
