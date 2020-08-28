@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import Spinner from "../../Spinner";
 import Error from "../../alerts/Error";
 import Eye from "../../../../assets/img/eye.svg";
-import api from "../../../../helpers/api";
+import { api } from "../../../../helpers/api";
 import { filterWithStatus, dataStatus } from "../../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
@@ -30,15 +30,12 @@ const TracingTable = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const history = useHistory();
   const [searchString, setSearchString] = useState("");
-  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   useEffect(() => {
     const fetchCommitment = async () => {
       dispatch({ type: actions.getCommitments });
       try {
-        const { data } = await api.get("/commitments", {
-          headers: { Authorization: token },
-        });
+        const { data } = await api.get("/commitments");
         dispatch({
           type: actions.getCommitmentsSuccess,
           payload: filterWithStatus(data, ["proceso", "cumplido", "oculto"]),

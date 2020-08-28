@@ -9,7 +9,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import { ButtonCreateTask, useStyles } from "./styled";
-import api from "../../../../helpers/api";
+import { api } from "../../../../helpers/api";
 
 const CreateTaskModal = ({ openNewTask, closeModalNewTask }) => {
   const { state, dispatch } = useContext(CommitmentContext);

@@ -20,7 +20,7 @@ import {
 } from "./styled";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import api from "../../../helpers/api";
+import { api } from "../../../helpers/api";
 
 const NewCommitment = () => {
   const [commitment, setCommitment] = useState({

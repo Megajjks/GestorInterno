@@ -4,7 +4,7 @@ import Spinner from "../../../ui/Spinner";
 import Error from "../../../ui/alerts/Error";
 import WithoutData from "../../../ui/alerts/WithoutData";
 import { SearchBar } from "./styled";
-import api from "../../../../helpers/api";
+import { api } from "../../../../helpers/api";
 import { filterWithIdCollaboratorAndStatus } from "../../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
@@ -13,16 +13,13 @@ import { reducer } from "./reducer";
 const Management = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [searchString, setSearchString] = useState("");
-  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
   const userId = JSON.parse(localStorage.getItem("login_data")).userId;
 
   useEffect(() => {
     const fetchCommitments = async () => {
       dispatch({ type: actions.getCommitments });
       try {
-        const { data } = await api.get("/commitments", {
-          headers: { Authorization: token },
-        });
+        const { data } = await api.get("/commitments");
         dispatch({
           type: actions.getCommitmentsSuccess,
           payload: filterWithIdCollaboratorAndStatus(data, userId, ["proceso"]),

@@ -30,13 +30,12 @@ import {
   MenuItems,
   CircleStatus,
 } from "./styled";
-import api from "../../../helpers/api";
+import { api } from "../../../helpers/api";
 
 const TracingCommitmentDetails = ({ rol }) => {
   const { state, dispatch } = useContext(CommitmentContext);
   const history = useHistory();
   const [openCreateTask, setOpenCreateTask] = useState(false);
-  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   //HTTP REQUEST FUNCTION
 
@@ -46,9 +45,7 @@ const TracingCommitmentDetails = ({ rol }) => {
       dispatch({ type: actions.getCommitment });
       try {
         const url = `/commitments/${history.location.state}`;
-        const { data } = await api.get(url, {
-          headers: { Authorization: token },
-        });
+        const { data } = await api.get(url);
         dispatch({ type: actions.getCommitmentSuccess, payload: data });
       } catch (e) {
         dispatch({
@@ -62,9 +59,7 @@ const TracingCommitmentDetails = ({ rol }) => {
       dispatch({ type: actions.getCollaboratorsList });
       try {
         const url = `/users`;
-        const { data } = await api.get(url, {
-          headers: { Authorization: token },
-        });
+        const { data } = await api.get(url);
         dispatch({
           type: actions.getCollaboratorsListSuccess,
           payload: filterWithRol(data, ["1", "2"]),
@@ -86,9 +81,7 @@ const TracingCommitmentDetails = ({ rol }) => {
     const postColaborator = async (id) => {
       let data = { userId: id, commitmentId: state.commitment.id };
       try {
-        const response = await api.post("/collaborators/add", data, {
-          headers: { Authorization: token },
-        });
+        const response = await api.post("/collaborators/add", data);
       } catch (e) {
         console.log(e);
       }
@@ -124,13 +117,7 @@ const TracingCommitmentDetails = ({ rol }) => {
     dispatch({ type: actions.updateStatusCommitment });
     try {
       const url = `/commitments/${state.commitment.id}/${status}`;
-      const response = await api.put(
-        url,
-        {},
-        {
-          headers: { Authorization: token },
-        }
-      );
+      const response = await api.put(url);
       dispatch({
         type: actions.updateStatusCommitmentSuccess,
         payload: !state.reload,

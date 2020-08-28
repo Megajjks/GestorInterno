@@ -4,7 +4,7 @@ import { actions } from "../../context/CommitmentContext/actions";
 import AlertModal from "../modals/AlertModal";
 import DeletedIco from "../../../assets/img/delete.svg";
 import AvatarIco from "../../../assets/img/usercard.svg";
-import api from "../../../helpers/api";
+import { api } from "../../../helpers/api";
 import {
   Colaborator,
   ImgCollaborator,
@@ -35,7 +35,6 @@ const CollaboratorCard = ({ collaborator, rolUser }) => {
               userId: collaborator.id,
               commitmentId: collaborator.UsersCommitments.commitmentId,
             },
-            headers: { Authorization: token },
           });
           dispatch({
             type: actions.deletedCollaboratorSuccess,

@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import Spinner from "../../Spinner";
 import Error from "../../alerts/Error";
 import Eye from "../../../../assets/img/eye.svg";
-import api from "../../../../helpers/api";
+import { api } from "../../../../helpers/api";
 import { filterWithStatus, dataStatus } from "../../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
@@ -35,11 +35,7 @@ const PoolTable = () => {
     const fetchCommitment = async () => {
       dispatch({ type: actions.getCommitments });
       try {
-        const token = JSON.parse(localStorage.getItem("login_data"))
-          .accessToken;
-        const { data } = await api.get("/commitments", {
-          headers: { Authorization: token },
-        });
+        const { data } = await api.get("/commitments");
 
         //filter commitments with status
         let query = ["prevalidado", "validando", "correcion"];

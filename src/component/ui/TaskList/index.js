@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Task from "../Task";
-import api from "../../../helpers/api";
-import axios from "axios";
+import { api } from "../../../helpers/api";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
