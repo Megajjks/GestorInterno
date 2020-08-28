@@ -41,31 +41,37 @@ import EditCommitmentModal from "../modals/EditCommitmentModal";
 import DynamicScrollToTop from "../../hooks/DynamicScrollToTop";
 import api from "../../../helpers/api";
 
-import { actions } from './actions';
-import { initialState } from './constants';
-import { reducer } from './reducer';
+import { actions } from "./actions";
+import { initialState } from "./constants";
+import { reducer } from "./reducer";
 
 const CommitmentReport = ({ rol }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const history = useHistory();
   const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
-  
+
   useEffect(() => {
     const fetchCommitmentReport = async () => {
       dispatch({ type: actions.getDataForm });
       dispatch({ type: actions.getQuestions });
       try {
         const idCommitment = history.location.state.id;
-        const {data} = await api.get(`/commitments/${idCommitment}`, {
-          headers: { Authorization: token }
+        const { data } = await api.get(`/commitments/${idCommitment}`, {
+          headers: { Authorization: token },
         });
-        dispatch({ type: actions.getDataFormSuccess, payload: data })
-        dispatch({ type: actions.getQuestionsSuccess, payload: data.answers })
-        console.log(data)
+        dispatch({ type: actions.getDataFormSuccess, payload: data });
+        dispatch({ type: actions.getQuestionsSuccess, payload: data.answers });
+        console.log(data);
       } catch (e) {
-        dispatch({ type: actions.getDataFormError, payload: "Error en peticion" });
-        dispatch({ type: actions.getQuestionsError, payload: "Error en peticion" });
+        dispatch({
+          type: actions.getDataFormError,
+          payload: "Error en peticion",
+        });
+        dispatch({
+          type: actions.getQuestionsError,
+          payload: "Error en peticion",
+        });
         console.log(e);
       }
     };
@@ -74,7 +80,9 @@ const CommitmentReport = ({ rol }) => {
 
   const acceptCommitment = async () => {
     try {
-      const response = await api.put(`/commitments/${state.dataForm.id}/proceso`, {},
+      const response = await api.put(
+        `/commitments/${state.dataForm.id}/proceso`,
+        {},
         { headers: { Authorization: token } }
       );
       console.log(response);
@@ -85,45 +93,50 @@ const CommitmentReport = ({ rol }) => {
   };
 
   //functions modal feedback
-  
-  const feedback = option => {
-    dispatch({ type: actions.setOption, payload: option })
-    dispatch({ type: actions.setIdCommitment, payload: state.idCommitment })
+
+  const feedback = (option) => {
+    dispatch({ type: actions.setOption, payload: option });
+    dispatch({ type: actions.setIdCommitment, payload: state.idCommitment });
     clickOpenModalFeedback();
   };
 
   const clickOpenModalFeedback = () => {
-    dispatch({ type: actions.openModalFeedback, payload: true })
+    dispatch({ type: actions.openModalFeedback, payload: true });
   };
 
   const closeModalFeedback = () => {
-    dispatch({ type: actions.closeModalFeedback, payload: true })
+    dispatch({ type: actions.closeModalFeedback, payload: false });
   };
 
   //options decline or accept commitment
 
   const openModalAcceptFeedback = (event) => {
-    dispatch({ type: actions.openOptionAcceptFeedback, payload: event.currentTarget })
+    dispatch({
+      type: actions.openOptionAcceptFeedback,
+      payload: event.currentTarget,
+    });
   };
 
   const closeModalAcceptFeedback = () => {
-    dispatch({ type: actions.closeOptionAcceptFeedback, payload: null })
+    dispatch({ type: actions.closeOptionAcceptFeedback, payload: null });
   };
 
   const openEditCommitmentModal = () => {
-    dispatch({ type: actions.openEditCommitmentModal, payload: true })
+    dispatch({ type: actions.openEditCommitmentModal, payload: true });
   };
 
   const closeEditCommitmentModal = () => {
-    dispatch({ type: actions.closeEditCommitmentModal, payload: false })
+    dispatch({ type: actions.closeEditCommitmentModal, payload: false });
   };
-//no muevas el scroll jaja 
+  //no muevas el scroll jaja
   return (
     <Wrapper>
       <DynamicScrollToTop />
       <Img src={state.dataForm.img} />
       <WrapperFormData>
-        <TxtTitleOrganization>{state.dataForm.organization}</TxtTitleOrganization>
+        <TxtTitleOrganization>
+          {state.dataForm.organization}
+        </TxtTitleOrganization>
         <WrapperImgTxt>
           <Icon src={IconUser} />
           <TxtIcon>
@@ -131,9 +144,9 @@ const CommitmentReport = ({ rol }) => {
           </TxtIcon>
         </WrapperImgTxt>
         <TxtQuestion style={{ marginTop: "12px" }}>
-          {state.questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 1 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <Sector>
           <TxtSector>Sector: </TxtSector>
@@ -157,39 +170,39 @@ const CommitmentReport = ({ rol }) => {
           Organizaciones o personas que se comprometen
         </TitleQuestion>
         <TxtQuestion>
-          {state.questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 3 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>Acción que se va a implementar</TitleQuestion>
         <TxtQuestion>
-          {state.questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 4 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>
           Periodo de tiempo para desarrollo de compromiso
         </TitleQuestion>
         <TxtQuestion>
-          {state.questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 5 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>
           Contribución de compromiso para generar más Agentes de Cambio
         </TitleQuestion>
         <TxtQuestion>
-          {state.questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 6 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>
           Agentes de Cambio para impactar con compromiso
         </TitleQuestion>
         <TxtQuestion>
-          {state.questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 7 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>
           Manera en que Ashoka y su red ayudarán a escalar compromiso
@@ -198,35 +211,35 @@ const CommitmentReport = ({ rol }) => {
           <WrapperImgTxt>
             <IconPointSvg src={IconPoint} />
             <TxtIcon>
-              {state.questions.map((question) => (
+              {state.questions.map((question) =>
                 question.questionId === 8 ? question.answer : null
-              ))}
+              )}
             </TxtIcon>
           </WrapperImgTxt>
         </WrapperCheckbox>
         <TxtQuestion>
-          {state.questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 9 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>
           Me entere de #MillonesdeAgentesdeCambio mediante
         </TitleQuestion>
         <TxtQuestion>
-          {state.questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 10 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TxtQuestion>
-          {state.questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 11 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>Comentarios o dudas adicionales</TitleQuestion>
         <TxtQuestion>
-          {state.questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 12 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>Contacto</TitleQuestion>
         <WrapperContact>
@@ -241,7 +254,9 @@ const CommitmentReport = ({ rol }) => {
         </WrapperContact>
         {history.location.state.isDetail ? null : (
           <WrapperButtons>
-            <ButtonDecline onClick={() => feedback("declinar")}>Declinar</ButtonDecline>
+            <ButtonDecline onClick={() => feedback("declinar")}>
+              Declinar
+            </ButtonDecline>
 
             <ButtonAccept onClick={openModalAcceptFeedback}>
               Aceptar Compromiso
@@ -268,7 +283,7 @@ const CommitmentReport = ({ rol }) => {
           <ImgEditCommitment src={IconEdit} onClick={openEditCommitmentModal} />
         </WrapperIconEdit>
       )}
-      <FeedbackModal 
+      <FeedbackModal
         openModalFeedback={state.modalFeedback}
         closeModalFeedback={closeModalFeedback}
         option={state.option}

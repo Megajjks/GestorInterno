@@ -32,13 +32,11 @@ const FeedbackModal = ({
     try {
       if (optionFeedback.option === "aceptar") {
         response = await api.put(
-          `/commitments/${optionFeedback.idCommitment}/correcion`,
-          {}
+          `/commitments/${optionFeedback.idCommitment}/correcion`
         );
       } else {
         response = await api.put(
-          `/commitments/${optionFeedback.idCommitment}/declinado`,
-          {}
+          `/commitments/${optionFeedback.idCommitment}/declinado`
         );
       }
       console.log(response);
