@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -11,47 +11,45 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { WrapperLogo, Logo } from "./styled";
 
-const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
-  
-  /*const [commitment, setCommitment] = useState({
-    firstName: "",
-    lastName: "",
-    organization: "",
-    sector: "",
-    city: "",
-    state: "",
-    position: "",
-    email: "",
-    phone: "",
-    logo: "",
-    img: "",
-    q1: "",
-    q2: "",
-    q3: "",
-    q4: "",
-    q5: "",
-    q6: "",
-    q7: "",
-    q8: "",
-    q9: "",
-    q10: "",
-    q11: "",
-    q12: "",
-  })*/
-  /*const[answers, setQuestions] = useState([
-    questions
-  ])*/
+import states from '../../../../helpers/states';
+import sector from '../../../../helpers/sector';
+import commitmentImpact from '../../../../helpers/commitmentImpact';
+import socialNetworks from '../../../../helpers/socialNetworks';
+
+const EditCommitmentModal = ({ handleClose, open, dataForm }) =>{
+  const [data, setData] = useState(dataForm);
+
+  useEffect(() => {
+    setData(dataForm)
+  },[dataForm])
+
   const handleOnChange = (e) => {
-    /* setCommitment({
-      ...commitment,
-      [e.target.name]: e.target.value,
-    }); */
+    setData(
+      {
+        ...data,
+        [e.target.name]: e.target.value,
+      }
+    )
   };
+
+  const contestar = (e) => {
+    let {name, value} = e.target;
+    
+    let newAnswers = data.answers 
+    newAnswers.splice(name, 1, {answer: value})
+    setData(
+      {
+        ...data,
+        answers: newAnswers
+      }
+    )
+  }
+
   const putCommitment = () => {
     /* update data of commitment */
     handleClose();
   };
-  //console.log(answers)
+  
   return (
     <Dialog
       open={open}
@@ -83,7 +81,7 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         <TextField
           type="text"
           name="firstName"
-          value={dataForm.firstName}
+          value={data.firstName}
           onChange={handleOnChange}
           label="Nombre(s)"
           color="secondary"
@@ -94,7 +92,7 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         <TextField
           type="text"
           name="lastName"
-          value={dataForm.lastName}
+          value={data.lastName}
           onChange={handleOnChange}
           label="Apellido(s)"
           color="secondary"
@@ -105,7 +103,7 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         <TextField
           type="text"
           name="organization"
-          value={dataForm.organization}
+          value={data.organization}
           onChange={handleOnChange}
           label="Organización"
           color="secondary"
@@ -119,24 +117,21 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
           labelId="sector-select-label"
           id="sector-select"
           name="sector"
-          value={dataForm.sector}
+          value={data.sector}
           onChange={handleOnChange}
           fullWidth
         >
           <MenuItem value="">-- Seleccione --</MenuItem>
-          <MenuItem value="academia">Academia</MenuItem>
-          <MenuItem value="sector_publico">Sector público</MenuItem>
-          <MenuItem value="sector_privado">Sector privado</MenuItem>
-          <MenuItem value="org_soc_civ">
-            Organización de la sociedad civil
-          </MenuItem>
-          <MenuItem value="ciudadania">Ciudadanía</MenuItem>
+          {
+            sector.map((item, idx)=>{
+             return <MenuItem value={item} key={idx} >{item}</MenuItem>
+            })
+          }
         </Select>
-        
         <TextField
           type="text"
           name="city"
-          value={dataForm.city}
+          value={data.city}
           onChange={handleOnChange}
           label="Ciudad"
           color="secondary"
@@ -149,48 +144,21 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
           labelId="state-select-label"
           id="state-select"
           name="state"
-          value={dataForm.state}
+          value={data.state}
           onChange={handleOnChange}
           fullWidth
         >
-          <MenuItem value="">-- Seleccione --</MenuItem>
-          <MenuItem value="aguascalientes">Aguascalientes</MenuItem>
-          <MenuItem value="baja_california">Baja California</MenuItem>
-          <MenuItem value="baja_california_cur">Baja California Sur</MenuItem>
-          <MenuItem value="campeche">Campeche</MenuItem>
-          <MenuItem value="chiapas">Chiapas</MenuItem>
-          <MenuItem value="chihuahua">Chihuahua</MenuItem>
-          <MenuItem value="cdmx">Ciudad de México</MenuItem>
-          <MenuItem value="coahuila">Coahuila</MenuItem>
-          <MenuItem value="colima">Colima</MenuItem>
-          <MenuItem value="durango">Durango</MenuItem>
-          <MenuItem value="estado_de_méxico">Estado de México</MenuItem>
-          <MenuItem value="guanajuato">Guanajuato</MenuItem>
-          <MenuItem value="guerrero">Guerrero</MenuItem>
-          <MenuItem value="hidalgo">Hidalgo</MenuItem>
-          <MenuItem value="jalisco">Jalisco</MenuItem>
-          <MenuItem value="michoacán">Michoacán</MenuItem>
-          <MenuItem value="morelos">Morelos</MenuItem>
-          <MenuItem value="nayarit">Nayarit</MenuItem>
-          <MenuItem value="nuevo León">Nuevo León</MenuItem>
-          <MenuItem value="oaxaca">Oaxaca</MenuItem>
-          <MenuItem value="puebla">Puebla</MenuItem>
-          <MenuItem value="querétaro">Querétaro</MenuItem>
-          <MenuItem value="quintana_roo">Quintana Roo</MenuItem>
-          <MenuItem value="san_luis_potosí">San Luis Potosí</MenuItem>
-          <MenuItem value="sinaloa">Sinaloa</MenuItem>
-          <MenuItem value="sonora">Sonora</MenuItem>
-          <MenuItem value="tabasco">Tabasco</MenuItem>
-          <MenuItem value="tamaulipas">Tamaulipas</MenuItem>
-          <MenuItem value="tlaxcala">Tlaxcala</MenuItem>
-          <MenuItem value="veracruz">Veracruz</MenuItem>
-          <MenuItem value="yucatán">Yucatán</MenuItem>
-          <MenuItem value="zacatecas">Zacatecas</MenuItem>
+          <MenuItem value="">--Seleccione--</MenuItem>
+          {
+            states.map((item, idx)=>{
+             return <MenuItem value={item} key={idx} >{item}</MenuItem>
+            })
+          }
         </Select>
         <TextField
           type="text"
           name="position"
-          value={dataForm.position}
+          value={data.position}
           onChange={handleOnChange}
           label="Posición"
           color="secondary"
@@ -201,7 +169,7 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         <TextField
           type="text"
           name="email"
-          value={dataForm.email}
+          value={data.email}
           onChange={handleOnChange}
           label="Correo electronico"
           color="secondary"
@@ -212,7 +180,7 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         <TextField
           type="text"
           name="phone"
-          value={dataForm.phone}
+          value={data.phone}
           onChange={handleOnChange}
           label="Telefono"
           color="secondary"
@@ -222,11 +190,9 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         />
         <TextField
           type="text"
-          name="question1"
-          value={questions.map((question) => (
-            question.questionId === 1 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={0}
+          value={data.answers ?  data.answers[0].answer : ''}
+          onChange={contestar}
           label="Breve descripción de tu proyecto/iniciativa/emprendimiento"
           color="secondary"
           fullWidth
@@ -237,11 +203,9 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         />
         <TextField
           type="text"
-          name="question2"
-          value={questions.map((question) => (
-            question.questionId === 2 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={1}
+          value={data.answers ?  data.answers[1].answer : ''}
+          onChange={contestar}
           label="Redes sociales de tu proyecto/iniciativa/emprendimiento"
           color="secondary"
           fullWidth
@@ -252,11 +216,9 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         />
         <TextField
           type="text"
-          name="question3"
-          value={questions.map((question) => (
-            question.questionId === 3 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={2}
+          value={data.answers ?  data.answers[2].answer : ''}
+          onChange={contestar}
           label="¿Qué organizaciones o personas se comprometen?"
           color="secondary"
           fullWidth
@@ -267,11 +229,9 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         />
         <TextField
           type="text"
-          name="question7"
-          value={questions.map((question) => (
-            question.questionId === 7 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={6}
+          value={data.answers ?  data.answers[6].answer : ''}
+          onChange={contestar}
           label="¿Cuántos Agentes de Cambio impactarás con este compromiso?"
           color="secondary"
           fullWidth
@@ -282,11 +242,9 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         />
         <TextField
           type="text"
-          name="question5"
-          value={questions.map((question) => (
-            question.questionId === 5 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={4}
+          value={data.answers ?  data.answers[4].answer : ''}
+          onChange={contestar}
           label="¿En qué periodo de tiempo se va a realizar el compromiso?"
           color="secondary"
           fullWidth
@@ -297,11 +255,9 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         />
         <TextField
           type="text"
-          name="question6"
-          value={questions.map((question) => (
-            question.questionId === 6 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={5}
+          value={data.answers ?  data.answers[5].answer : ''}
+          onChange={contestar}
           label="¿cómo el impacto esperado contribuye a los demás actores?"
           color="secondary"
           fullWidth
@@ -312,11 +268,9 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         />
         <TextField
           type="text"
-          name="question4"
-          value={questions.map((question) => (
-            question.questionId === 4 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={3}
+          value={data.answers ?  data.answers[3].answer : ''}
+          onChange={contestar}
           label="¿Qué acción se va a implementar?"
           color="secondary"
           fullWidth
@@ -332,31 +286,23 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         <Select
           labelId="q8-select-label"
           id="q8-select"
-          name="question8"
-          value={questions.map((question) => (
-            question.questionId === 8 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={7}
+          value={data.answers ?  data.answers[7].answer : ''}
+          onChange={contestar}
           fullWidth
         >
           <MenuItem value="">-- Seleccione --</MenuItem>
-          <MenuItem value="1">Vinculación con actores clave</MenuItem>
-          <MenuItem value="2">
-            Herramientas y metodologías para impulsar la innovación social y la
-            agencia de cambio
-          </MenuItem>
-          <MenuItem value="3">Asesorías especializadas</MenuItem>
-          <MenuItem value="4">Fondos para escalar la iniciativa</MenuItem>
-          <MenuItem value="5">Difusión y comunicación</MenuItem>
-          <MenuItem value="6">Otro</MenuItem>
+          {
+            commitmentImpact.map((item, idx)=>{
+              return <MenuItem value={item} key={idx} >{item}</MenuItem>
+            })
+          }
         </Select>
         <TextField
           type="text"
-          name="question9"
-          value={questions.map((question) => (
-            question.questionId === 9 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={8}
+          value={data.answers ?  data.answers[8].answer : ''}
+          onChange={contestar}
           label="En caso de tener una necesidad distinta a estos, favor de
               especificarlo a continuación:"
           color="secondary"
@@ -372,35 +318,23 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         <Select
           labelId="q10-select-label"
           id="q10-select"
-          name="question10"
-          value={questions.map((question) => (
-            question.questionId === 10 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={9}
+          value={data.answers ?  data.answers[9].answer : ''}
+          onChange={contestar}
           fullWidth
         >
           <MenuItem value="">-- Seleccione --</MenuItem>
-          <MenuItem value="ashoka_staff">Ashoka Staff</MenuItem>
-          <MenuItem value="aliados_de_difusion">Aliados de Difusión</MenuItem>
-          <MenuItem value="facebook">Facebook</MenuItem>
-          <MenuItem value="instagram">Instagram</MenuItem>
-          <MenuItem value="twitter">Twitter</MenuItem>
-          <MenuItem value="linkedin">LinkedIn</MenuItem>
-          <MenuItem value="Sesion_de_compromisos">
-            Sesión de Compromisos
-          </MenuItem>
-          <MenuItem value="conector_ashoka">Conector Ashoka</MenuItem>
-          <MenuItem value="embajador_ashoka">Embajador Ashoka</MenuItem>
-          <MenuItem value="sitio_web">Sitio Web Ashoka</MenuItem>
-          <MenuItem value="otro">otro</MenuItem>
+          {
+            socialNetworks.map((item, idx)=>{
+             return <MenuItem value={item} key={idx} >{item}</MenuItem>
+            })
+          }
         </Select>
         <TextField
           type="text"
-          name="question11"
-          value={questions.map((question) => (
-            question.questionId === 11 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={10}
+          value={data.answers ?  data.answers[10].answer : ''}
+          onChange={contestar}
           label="En caso de colocar otro o si quieres especificar, favor de
               especificarlo a continuación"
           color="secondary"
@@ -413,10 +347,9 @@ const EditCommitmentModal = ({ handleClose, open, dataForm, questions}) =>{
         <TextField
           type="text"
           name="question12"
-          value={questions.map((question) => (
-            question.questionId === 12 ? question.answer : null
-          ))}
-          onChange={handleOnChange}
+          name={11}
+          value={data.answers ?  data.answers[11].answer : ''}
+          onChange={contestar}
           label="Comentario o Duda Adicional"
           color="secondary"
           fullWidth
