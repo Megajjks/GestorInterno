@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import { Tablestyle, TableHeader, EyeIcon, Details, SearchBar } from "./styled";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,8 +9,11 @@ import Paper from "@material-ui/core/Paper";
 import Spinner from "../../Spinner";
 import Error from "../../alerts/Error";
 import Eye from "../../../../assets/img/eye.svg";
-import api from "../../../../helpers/api";
+import { api } from "../../../../helpers/api";
 import { filterWithStatus, dataStatus } from "../../../../helpers";
+import { actions } from "./actions";
+import { initialState } from "./constants";
+import { reducer } from "./reducer";
 
 const fields = [
   "Organización",
@@ -24,36 +27,23 @@ const fields = [
 ];
 
 const TracingTable = () => {
-  const [commitments, setCommitments] = useState([]);
-  const [status, setStatus] = useState({
-    loader: false,
-    isError: false,
-    message: "",
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
   const history = useHistory();
   const [searchString, setSearchString] = useState("");
-  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   useEffect(() => {
     const fetchCommitment = async () => {
-      setStatus({ loader: true });
+      dispatch({ type: actions.getCommitments });
       try {
-        const response = await api.get("/commitments", {
-          headers: { Authorization: token },
-        });
-        setCommitments(
-          filterWithStatus(response.data, ["proceso", "cumplido", "oculto"])
-        );
-        setStatus({
-          loader: false,
-          isError: false,
+        const { data } = await api.get("/commitments");
+        dispatch({
+          type: actions.getCommitmentsSuccess,
+          payload: filterWithStatus(data, ["proceso", "cumplido", "oculto"]),
         });
       } catch (e) {
-        console.log(e);
-        setStatus({
-          loader: false,
-          isError: true,
-          message:
+        dispatch({
+          type: actions.getCommitmentsError,
+          payload:
             "Por el momento no se pueden obtener los datos, verifique su conexión",
         });
       }
@@ -66,7 +56,7 @@ const TracingTable = () => {
       return;
     }
     //const commitmentsBefore = [...commitments];
-    const busqueda = commitments.filter((item) => {
+    const busqueda = state.commitments.filter((item) => {
       console.log(item);
       const payload = searchString.toLowerCase();
       const organization = item.organization.toLowerCase();
@@ -77,7 +67,10 @@ const TracingTable = () => {
       const state = item.state.toLowerCase();
 
       if (searchString === "") {
-        return commitments;
+        return dispatch({
+          type: actions.filterCommitments,
+          payload: state.commitments,
+        });
       } else if (
         organization.includes(payload) ||
         agent.includes(payload) ||
@@ -89,7 +82,7 @@ const TracingTable = () => {
         return item;
       }
     });
-    setCommitments(busqueda);
+    dispatch({ type: actions.filterCommitments, payload: busqueda });
   }, [searchString]);
 
   const viewDetails = (item) => {
@@ -119,7 +112,7 @@ const TracingTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {commitments.map((commitment) => (
+            {state.commitments.map((commitment) => (
               <TableRow key={commitment.id}>
                 <TableCell align="center">{commitment.organization}</TableCell>
                 <TableCell align="center" style={{ width: "10em" }}>
@@ -152,8 +145,8 @@ const TracingTable = () => {
           </TableBody>
         </Tablestyle>
       </TableContainer>
-      {status.loader ? <Spinner /> : null}
-      {status.isError ? <Error /> : null}
+      {state.commitmentsLoader ? <Spinner /> : null}
+      {state.commitmentsError ? <Error /> : null}
     </Fragment>
   );
 };

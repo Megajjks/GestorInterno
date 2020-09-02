@@ -1,4 +1,6 @@
-import React, { useState, Fragment, useEffect, useReducer } from "react";
+import React, { useState, Fragment, useEffect, useContext } from "react";
+import { CommitmentContext } from "../../context/CommitmentContext";
+import { actions } from "../../context/CommitmentContext/actions";
 import { useHistory } from "react-router-dom";
 import Button from "../GeneralButton";
 import TaskList from "../TaskList";
@@ -28,18 +30,12 @@ import {
   MenuItems,
   CircleStatus,
 } from "./styled";
-import api from "../../../helpers/api";
-
-import { actions } from "./actions";
-import { initialState } from "./constants";
-import { reducer } from "./reducer";
+import { api } from "../../../helpers/api";
 
 const TracingCommitmentDetails = ({ rol }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useContext(CommitmentContext);
   const history = useHistory();
-  const [reload, setReload] = useState(false);
   const [openCreateTask, setOpenCreateTask] = useState(false);
-  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   //HTTP REQUEST FUNCTION
 
@@ -49,14 +45,12 @@ const TracingCommitmentDetails = ({ rol }) => {
       dispatch({ type: actions.getCommitment });
       try {
         const url = `/commitments/${history.location.state}`;
-        const { data } = await api.get(url, {
-          headers: { Authorization: token },
-        });
+        const { data } = await api.get(url);
         dispatch({ type: actions.getCommitmentSuccess, payload: data });
       } catch (e) {
         dispatch({
           type: actions.getCommitmentError,
-          payload: "Ocurrio un error en la peteción",
+          payload: "Ocurrió un error en la petición",
         });
       }
     };
@@ -65,9 +59,7 @@ const TracingCommitmentDetails = ({ rol }) => {
       dispatch({ type: actions.getCollaboratorsList });
       try {
         const url = `/users`;
-        const { data } = await api.get(url, {
-          headers: { Authorization: token },
-        });
+        const { data } = await api.get(url);
         dispatch({
           type: actions.getCollaboratorsListSuccess,
           payload: filterWithRol(data, ["1", "2"]),
@@ -89,9 +81,7 @@ const TracingCommitmentDetails = ({ rol }) => {
     const postColaborator = async (id) => {
       let data = { userId: id, commitmentId: state.commitment.id };
       try {
-        const response = await api.post("/collaborators/add", data, {
-          headers: { Authorization: token },
-        });
+        const response = await api.post("/collaborators/add", data);
       } catch (e) {
         console.log(e);
       }
@@ -127,13 +117,7 @@ const TracingCommitmentDetails = ({ rol }) => {
     dispatch({ type: actions.updateStatusCommitment });
     try {
       const url = `/commitments/${state.commitment.id}/${status}`;
-      const response = await api.put(
-        url,
-        {},
-        {
-          headers: { Authorization: token },
-        }
-      );
+      const response = await api.put(url);
       dispatch({
         type: actions.updateStatusCommitmentSuccess,
         payload: !state.reload,
@@ -267,8 +251,6 @@ const TracingCommitmentDetails = ({ rol }) => {
               <CollaboratorCardList
                 collaborators={state.commitment.collaborators}
                 rolUser="1"
-                reload={reload}
-                setReload={setReload}
               />
               {state.wrapperAddCollaborator ? (
                 <WrapperColaborators>

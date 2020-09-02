@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import CommitmentCardList from "../../../ui/CommitmentCardList";
 import Spinner from "../../../ui/Spinner";
 import Error from "../../../ui/alerts/Error";
-import api from "../../../../helpers/api";
+import { api } from "../../../../helpers/api";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -11,16 +11,13 @@ const Dashboard = () => {
     isError: false,
     message: "",
   });
-  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   useEffect(() => {
     const fetchCommitments = async () => {
       setStatus({ loader: true });
       try {
-        const response = await api.get("/commitments", {
-          headers: { Authorization: token },
-        });
-        setData(response.data);
+        const { data } = await api.get("/commitments");
+        setData(data);
         setStatus({
           loader: false,
           isError: false,

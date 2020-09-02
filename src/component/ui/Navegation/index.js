@@ -15,23 +15,23 @@ import M7 from "../../../assets/img/bullhorn.svg";
 
 const rol = {
   ADM_USR: [
-    { name: "Dashboard", label: "Dashboard", url: "/dasboard", img: M1 },
+    { name: "Dashboard", label: "Dashboard", url: "/dashboard", img: M1 },
     { name: "Usuarios", label: "Usuarios", url: "/users", img: M4 },
     { name: "Pool", label: "Pool", url: "/pool", img: M5 },
     { name: "Seguimiento", label: "Seguimiento", url: "/tracing", img: M3 },
     { name: "Gestion", label: "Gestion", url: "/management", img: M2 },
   ],
   COL_USR: [
-    { name: "Dashboard", label: "Dashboard", url: "/dasboard", img: M1 },
+    { name: "Dashboard", label: "Dashboard", url: "/dashboard", img: M1 },
     { name: "Gestion", label: "Gestion", url: "/management", img: M2 },
   ],
   AGE_USR: [
-    { name: "Dashboard", label: "Dashboard", url: "/dasboard", img: M1 },
+    { name: "Dashboard", label: "Dashboard", url: "/dashboard", img: M1 },
     { name: "Compromisos", label: "Compromisos", url: "/commitment", img: M6 },
     { name: "Comunidad", label: "Comunidad", url: "/community", img: M7 },
   ],
   ALL: [
-    { name: "Dashboard", label: "Dashboard", url: "/dasboard", img: M1 },
+    { name: "Dashboard", label: "Dashboard", url: "/dashboard", img: M1 },
     { name: "Usuarios", label: "Usuarios", url: "/users", img: M4 },
     { name: "Pool", label: "Pool", url: "/pool", img: M5 },
     { name: "Seguimiento", label: "Seguimiento", url: "/tracing", img: M3 },

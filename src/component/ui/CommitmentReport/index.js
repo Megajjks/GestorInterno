@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Wrapper,
@@ -41,39 +41,48 @@ import EditCommitmentModal from "../modals/EditCommitmentModal";
 import DynamicScrollToTop from "../../hooks/DynamicScrollToTop";
 import api from "../../../helpers/api";
 
-const CommitmentReport = ({ isDetail, rol }) => {
-  const [dataForm, setDataForm] = useState({});
-  const [questions, setQuestions] = useState([]);
+import { actions } from "./actions";
+import { initialState } from "./constants";
+import { reducer } from "./reducer";
+
+const CommitmentReport = ({ rol }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   const history = useHistory();
-  const [openModalFeedback, setOpenModalFeedback] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [showEditCommitmentModal, setShowEditCommitmentModal] = useState(false);
   const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
-  const [updateOptionFeedback, setUpdateOptionFeedback] = useState({
-    option: "",
-    idCommitment: null
-  });
 
   useEffect(() => {
     const fetchCommitmentReport = async () => {
+      dispatch({ type: actions.getDataForm });
+      dispatch({ type: actions.getQuestions });
       try {
         const idCommitment = history.location.state.id;
-        const response = await api.get(`/commitments/${idCommitment}`, {
-          headers: { Authorization: token }
+        const { data } = await api.get(`/commitments/${idCommitment}`, {
+          headers: { Authorization: token },
         });
-        setDataForm(response.data)
-        setQuestions(response.data.answers)
-        console.log(response.data.answers)
+        dispatch({ type: actions.getDataFormSuccess, payload: data });
+        dispatch({ type: actions.getQuestionsSuccess, payload: data.answers });
+        console.log(data);
       } catch (e) {
+        dispatch({
+          type: actions.getDataFormError,
+          payload: "Error en peticion",
+        });
+        dispatch({
+          type: actions.getQuestionsError,
+          payload: "Error en peticion",
+        });
         console.log(e);
       }
-    }; 
+    };
     fetchCommitmentReport();
   }, []);
 
   const acceptCommitment = async () => {
     try {
-      const response = await api.put(`/commitments/${dataForm.id}/proceso`, {},
+      const response = await api.put(
+        `/commitments/${state.dataForm.id}/proceso`,
+        {},
         { headers: { Authorization: token } }
       );
       console.log(response);
@@ -84,113 +93,116 @@ const CommitmentReport = ({ isDetail, rol }) => {
   };
 
   //functions modal feedback
-  
-  const feedback = option => {
-    setUpdateOptionFeedback({
-      option: option,
-      idCommitment: dataForm.id
-    })
+
+  const feedback = (option) => {
+    dispatch({ type: actions.setOption, payload: option });
+    dispatch({ type: actions.setIdCommitment, payload: state.idCommitment });
     clickOpenModalFeedback();
   };
 
   const clickOpenModalFeedback = () => {
-    setOpenModalFeedback(true);
+    dispatch({ type: actions.openModalFeedback, payload: true });
   };
 
   const closeModalFeedback = () => {
-    setOpenModalFeedback(false);
+    dispatch({ type: actions.closeModalFeedback, payload: false });
   };
 
   //options decline or accept commitment
 
   const openModalAcceptFeedback = (event) => {
-    setAnchorEl(event.currentTarget);
+    dispatch({
+      type: actions.openOptionAcceptFeedback,
+      payload: event.currentTarget,
+    });
   };
 
   const closeModalAcceptFeedback = () => {
-    setAnchorEl(null);
+    dispatch({ type: actions.closeOptionAcceptFeedback, payload: null });
   };
 
   const openEditCommitmentModal = () => {
-    setShowEditCommitmentModal(true);
+    dispatch({ type: actions.openEditCommitmentModal, payload: true });
   };
 
   const closeEditCommitmentModal = () => {
-    setShowEditCommitmentModal(false);
+    dispatch({ type: actions.closeEditCommitmentModal, payload: false });
   };
-
+  //no muevas el scroll jaja
   return (
     <Wrapper>
       <DynamicScrollToTop />
-      <Img src={dataForm.img} />
+      <Img src={state.dataForm.img} />
       <WrapperFormData>
-        <TxtTitleOrganization>{dataForm.organization}</TxtTitleOrganization>
+        <TxtTitleOrganization>
+          {state.dataForm.organization}
+        </TxtTitleOrganization>
         <WrapperImgTxt>
           <Icon src={IconUser} />
           <TxtIcon>
-            {dataForm.firstName} {dataForm.lastName}
+            {state.dataForm.firstName} {state.dataForm.lastName}
           </TxtIcon>
         </WrapperImgTxt>
         <TxtQuestion style={{ marginTop: "12px" }}>
-          {questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 1 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <Sector>
           <TxtSector>Sector: </TxtSector>
-          <TypeSector>{dataForm.sector}</TypeSector>
+          <TypeSector>{state.dataForm.sector}</TypeSector>
         </Sector>
         <Position>
           <TxtPosition>Cargo: </TxtPosition>
-          <TypePosition>{dataForm.position}</TypePosition>
+          <TypePosition>{state.dataForm.position}</TypePosition>
         </Position>
         <WrapperLocation>
           <WrapperImgTxt>
             <Icon src={IconState} />
-            <TxtIcon>{dataForm.city}</TxtIcon>
+            <TxtIcon>{state.dataForm.city}</TxtIcon>
           </WrapperImgTxt>
           <WrapperImgTxt>
             <Icon src={IconCity} />
-            <TxtIcon>{dataForm.state}</TxtIcon>
+            <TxtIcon>{state.dataForm.state}</TxtIcon>
           </WrapperImgTxt>
         </WrapperLocation>
         <TitleQuestion>
           Organizaciones o personas que se comprometen
         </TitleQuestion>
         <TxtQuestion>
-          {questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 3 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>Acción que se va a implementar</TitleQuestion>
         <TxtQuestion>
-          {questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 4 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>
           Periodo de tiempo para desarrollo de compromiso
         </TitleQuestion>
         <TxtQuestion>
-          {questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 5 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>
           Contribución de compromiso para generar más Agentes de Cambio
         </TitleQuestion>
         <TxtQuestion>
-          {questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 6 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>
           Agentes de Cambio para impactar con compromiso
         </TitleQuestion>
         <TxtQuestion>
-          {questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 7 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>
           Manera en que Ashoka y su red ayudarán a escalar compromiso
@@ -199,59 +211,61 @@ const CommitmentReport = ({ isDetail, rol }) => {
           <WrapperImgTxt>
             <IconPointSvg src={IconPoint} />
             <TxtIcon>
-              {questions.map((question) => (
+              {state.questions.map((question) =>
                 question.questionId === 8 ? question.answer : null
-              ))}
+              )}
             </TxtIcon>
           </WrapperImgTxt>
         </WrapperCheckbox>
         <TxtQuestion>
-          {questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 9 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>
           Me entere de #MillonesdeAgentesdeCambio mediante
         </TitleQuestion>
         <TxtQuestion>
-          {questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 10 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TxtQuestion>
-          {questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 11 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>Comentarios o dudas adicionales</TitleQuestion>
         <TxtQuestion>
-          {questions.map((question) => (
+          {state.questions.map((question) =>
             question.questionId === 12 ? question.answer : null
-          ))}
+          )}
         </TxtQuestion>
         <TitleQuestion>Contacto</TitleQuestion>
         <WrapperContact>
           <WrapperImgTxt>
             <Icon src={IconPhone} />
-            <TxtIcon>{dataForm.phone}</TxtIcon>
+            <TxtIcon>{state.dataForm.phone}</TxtIcon>
           </WrapperImgTxt>
           <WrapperImgTxt>
             <Icon src={IconMail} />
-            <TxtIcon>{dataForm.email}</TxtIcon>
+            <TxtIcon>{state.dataForm.email}</TxtIcon>
           </WrapperImgTxt>
         </WrapperContact>
         {history.location.state.isDetail ? null : (
           <WrapperButtons>
-            <ButtonDecline onClick={() => feedback("declinar")}>Declinar</ButtonDecline>
+            <ButtonDecline onClick={() => feedback("declinar")}>
+              Declinar
+            </ButtonDecline>
 
             <ButtonAccept onClick={openModalAcceptFeedback}>
               Aceptar Compromiso
             </ButtonAccept>
             <StyledMenu
               id="customized-menu"
-              anchorEl={anchorEl}
+              anchorEl={state.optionAcceptFeedback}
               keepMounted
-              open={Boolean(anchorEl)}
+              open={Boolean(state.optionAcceptFeedback)}
               onClose={closeModalAcceptFeedback}
             >
               <StyledMenuItem onClick={() => acceptCommitment()}>
@@ -269,16 +283,16 @@ const CommitmentReport = ({ isDetail, rol }) => {
           <ImgEditCommitment src={IconEdit} onClick={openEditCommitmentModal} />
         </WrapperIconEdit>
       )}
-      <FeedbackModal 
-        openModalFeedback={openModalFeedback}
+      <FeedbackModal
+        openModalFeedback={state.modalFeedback}
         closeModalFeedback={closeModalFeedback}
-        optionFeedback={updateOptionFeedback}
+        option={state.option}
+        idCommitmentReport={state.idCommitment}
       />
       <EditCommitmentModal
-        open={showEditCommitmentModal}
+        open={state.showEditCommitmentModal}
         handleClose={closeEditCommitmentModal}
-        dataForm={dataForm}
-        questions={questions}
+        dataForm={state.dataForm}
       />
     </Wrapper>
   );

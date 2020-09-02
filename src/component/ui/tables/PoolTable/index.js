@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import { Tablestyle, TableHeader, EyeIcon, Details, SearchBar } from "./styled";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,8 +9,11 @@ import Paper from "@material-ui/core/Paper";
 import Spinner from "../../Spinner";
 import Error from "../../alerts/Error";
 import Eye from "../../../../assets/img/eye.svg";
-import api from "../../../../helpers/api";
+import { api } from "../../../../helpers/api";
 import { filterWithStatus, dataStatus } from "../../../../helpers";
+import { actions } from "./actions";
+import { initialState } from "./constants";
+import { reducer } from "./reducer";
 
 const fields = [
   "Id",
@@ -24,42 +27,30 @@ const fields = [
 ];
 
 const PoolTable = () => {
-  const [commitments, setCommitments] = useState([]);
-  const [status, setStatus] = useState({
-    loader: false,
-    isError: false,
-    message: "",
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
   const history = useHistory();
   const [searchString, setSearchString] = useState("");
 
-  const fetchCommitment = async () => {
-    setStatus({ loader: true });
-    try {
-      const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
-      const response = await api.get("/commitments", {
-        headers: { Authorization: token }
-      });
-
-      //filter commitments with status
-      let query = ["prevalidado", "validando", "correcion"];
-      setCommitments(filterWithStatus(response.data, query));
-      setStatus({
-        loader: false,
-        isError: false,
-      });
-    } catch (e) {
-      console.log(e);
-      setStatus({
-        loader: false,
-        isError: true,
-        message:
-          "Por el momento no se pueden obtener los datos, verifique su conexión",
-      });
-    }
-  };
-
   useEffect(() => {
+    const fetchCommitment = async () => {
+      dispatch({ type: actions.getCommitments });
+      try {
+        const { data } = await api.get("/commitments");
+
+        //filter commitments with status
+        let query = ["prevalidado", "validando", "correcion"];
+        dispatch({
+          type: actions.getCommitmentsSuccess,
+          payload: filterWithStatus(data, query),
+        });
+      } catch (e) {
+        dispatch({
+          type: actions.getCommitmentsError,
+          payload:
+            "Por el momento no se pueden obtener los datos, verifique su conexión",
+        });
+      }
+    };
     fetchCommitment();
   }, []);
 
@@ -74,7 +65,7 @@ const PoolTable = () => {
     if (!searchString) {
       return;
     }
-    const busqueda = commitments.filter((item) => {
+    const busqueda = state.commitments.filter((item) => {
       const payload = searchString.toLowerCase();
       const organization = item.organization.toLowerCase();
       const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
@@ -84,7 +75,10 @@ const PoolTable = () => {
       const state = item.state.toLowerCase();
 
       if (searchString === "") {
-        return commitments;
+        return dispatch({
+          type: actions.filterCommitments,
+          payload: state.commitments,
+        });
       } else if (
         organization.includes(payload) ||
         agent.includes(payload) ||
@@ -96,7 +90,7 @@ const PoolTable = () => {
         return item;
       }
     });
-    setCommitments(busqueda);
+    dispatch({ type: actions.filterCommitments, payload: busqueda });
   }, [searchString]);
 
   const search = (e) => {
@@ -119,12 +113,14 @@ const PoolTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {commitments.map((commitment) => (
+            {state.commitments.map((commitment) => (
               <TableRow key={commitment.id}>
                 <TableCell align="center">{commitment.id}</TableCell>
                 <TableCell align="center">{commitment.organization}</TableCell>
-                <TableCell align="center">{commitment.firstName} {commitment.lastName}</TableCell>
-                
+                <TableCell align="center">
+                  {commitment.firstName} {commitment.lastName}
+                </TableCell>
+
                 <TableCell align="center">{commitment.city}</TableCell>
                 <TableCell align="center">{commitment.state}</TableCell>
                 <TableCell align="center">{commitment.sector}</TableCell>
@@ -142,8 +138,8 @@ const PoolTable = () => {
           </TableBody>
         </Tablestyle>
       </TableContainer>
-      {status.loader ? <Spinner /> : null}
-      {status.isError ? <Error /> : null}
+      {state.commitmentsLoader ? <Spinner /> : null}
+      {state.commitmentsError ? <Error /> : null}
     </Fragment>
   );
 };

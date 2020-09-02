@@ -1,13 +1,16 @@
-import React from 'react';
-import './App.css';
-import Theme from './Theme'
-import Router from './router'
+import React from "react";
+import "./App.css";
+import Theme from "./Theme";
+import Router from "./router";
+import CommitmentProvider from "./component/context/CommitmentContext";
 
 function App() {
   return (
-    <Theme>
-      <Router/>
-    </Theme>
+    <CommitmentProvider>
+      <Theme>
+        <Router />
+      </Theme>
+    </CommitmentProvider>
   );
 }
 

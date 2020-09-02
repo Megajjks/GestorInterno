@@ -1,8 +1,10 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
+import { CommitmentContext } from "../../context/CommitmentContext";
+import { actions } from "../../context/CommitmentContext/actions";
 import AlertModal from "../modals/AlertModal";
 import DeletedIco from "../../../assets/img/delete.svg";
 import AvatarIco from "../../../assets/img/usercard.svg";
-import api from "../../../helpers/api";
+import { api } from "../../../helpers/api";
 import {
   Colaborator,
   ImgCollaborator,
@@ -10,7 +12,8 @@ import {
   BtnDeleteColaborator,
 } from "./styled";
 
-const CollaboratorCard = ({ collaborator, rolUser, reload, setReload }) => {
+const CollaboratorCard = ({ collaborator, rolUser }) => {
+  const { state, dispatch } = useContext(CommitmentContext);
   const [showModal, setShowColModal] = useState(false);
   const [deleted, setDeleted] = useState(false);
   const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
@@ -25,17 +28,23 @@ const CollaboratorCard = ({ collaborator, rolUser, reload, setReload }) => {
     //check if deleted is true, this behavior comes from the deleted status that is modified in the modal to deleted
     if (deleted) {
       const deletedCollaborator = async () => {
+        dispatch({ type: actions.deletedCollaborator });
         try {
           const response = await api.delete("/collaborators", {
             data: {
               userId: collaborator.id,
               commitmentId: collaborator.UsersCommitments.commitmentId,
             },
-            headers: { Authorization: token },
           });
-          setReload(!reload);
+          dispatch({
+            type: actions.deletedCollaboratorSuccess,
+            payload: !state.reload,
+          });
         } catch (e) {
-          console.log(e);
+          dispatch({
+            type: actions.deletedCollaboratorError,
+            payload: "Ocurrio un error",
+          });
         }
       };
       deletedCollaborator();

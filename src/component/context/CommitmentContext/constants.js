@@ -13,4 +13,13 @@ export const initialState = {
   reload: false,
   dropdownStatus: null,
   wrapperAddCollaborator: false,
+  loadingDeletedCollaborator: false,
+  errorDeletedCollaborator: null,
+  newTask: {
+    title: "",
+    description: "",
+    date: "",
+  },
+  newTaskLoading: false,
+  newTaskError: null,
 };
