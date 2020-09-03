@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Task from "../Task";
-import { api } from "../../../helpers/api";
+import api from "../../../helpers/api";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);

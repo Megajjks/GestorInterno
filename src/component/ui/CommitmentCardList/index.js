@@ -11,6 +11,7 @@ const CommitmentCardList = ({ commitments, btnTitle, btnUrlBase }) => {
       state: item.id,
     });
   };
+
   return (
     <Wraper>
       {commitments.map((commitment) => (

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useReducer } from "react";
-import CommitmentCardList from "../../../ui/CommitmentCardList";
-import Spinner from "../../../ui/Spinner";
-import Error from "../../../ui/alerts/Error";
-import WithoutData from "../../../ui/alerts/WithoutData";
+import CommitmentCardList from "../../ui/CommitmentCardList";
+import Spinner from "../../ui/Spinner";
+import Error from "../../ui/alerts/Error";
+import WithoutData from "../../ui/alerts/WithoutData";
 import { SearchBar } from "./styled";
-import { api } from "../../../../helpers/api";
-import { filterWithIdCollaboratorAndStatus } from "../../../../helpers";
+import api from "../../../helpers/api";
+import { filterWithIdCollaboratorAndStatus } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
@@ -82,7 +82,7 @@ const Management = () => {
       <CommitmentCardList
         commitments={state.commitments}
         btnTitle="Gestionar compromiso"
-        btnUrlBase="/traicing_commitment"
+        btnUrlBase="/panel/traicing_commitment"
       />
     );
   };

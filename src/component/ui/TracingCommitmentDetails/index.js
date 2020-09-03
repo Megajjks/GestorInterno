@@ -30,7 +30,7 @@ import {
   MenuItems,
   CircleStatus,
 } from "./styled";
-import { api } from "../../../helpers/api";
+import api from "../../../helpers/api";
 
 const TracingCommitmentDetails = ({ rol }) => {
   const { state, dispatch } = useContext(CommitmentContext);
@@ -156,7 +156,7 @@ const TracingCommitmentDetails = ({ rol }) => {
   //function to show details
   const showDetailCommitment = () => {
     history.push({
-      pathname: `/commitment_report/${state.commitment.id}`,
+      pathname: `/panel/commitment_report/${state.commitment.id}`,
       state: { id: state.commitment.id, isDetail: true },
     });
   };

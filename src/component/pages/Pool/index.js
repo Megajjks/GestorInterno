@@ -1,5 +1,5 @@
 import React from "react";
-import PoolTable from "../../../ui/tables/PoolTable";
+import PoolTable from "../../ui/tables/PoolTable";
 
 const Pool = () => {
   return (

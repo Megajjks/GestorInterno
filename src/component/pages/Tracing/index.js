@@ -1,5 +1,5 @@
 import React from "react";
-import TracingTable from "../../../ui/tables/TracingTable";
+import TracingTable from "../../ui/tables/TracingTable";
 
 const Tracing = () => {
   return (

@@ -110,3 +110,24 @@ export const filterWithIdCollaboratorAndStatus = (
   });
   return filterData;
 };
+
+//This function return the name of rol
+export const rolName = () => {
+  let rol = localStorage.getItem("login_data")
+    ? JSON.parse(localStorage.getItem("login_data")).role
+    : null;
+  switch (rol) {
+    case 1:
+      return "admin";
+    case 2:
+      return "collaborator";
+    case 3:
+      return "agent";
+    case 4:
+      return "superAdmin";
+    case 5:
+      return "assistant";
+    default:
+      return "notUser";
+  }
+};
