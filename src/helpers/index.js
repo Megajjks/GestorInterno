@@ -131,3 +131,15 @@ export const rolName = () => {
       return "notUser";
   }
 };
+
+//This function return if the userId is match with list of collaborators
+export const matchUser = (listCollaborators) => {
+  let userId = localStorage.getItem("login_data")
+    ? JSON.parse(localStorage.getItem("login_data")).userId
+    : null;
+  if (userId === null) return 0;
+  const isMatch = listCollaborators.some(function (collaborator) {
+    if (collaborator.id === userId) return true;
+  });
+  return isMatch;
+};

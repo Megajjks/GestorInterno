@@ -5,6 +5,7 @@ import AlertModal from "../modals/AlertModal";
 import DeletedIco from "../../../assets/img/delete.svg";
 import AvatarIco from "../../../assets/img/usercard.svg";
 import api from "../../../helpers/api";
+import { rolName } from "../../../helpers";
 import {
   Colaborator,
   ImgCollaborator,
@@ -12,7 +13,7 @@ import {
   BtnDeleteColaborator,
 } from "./styled";
 
-const CollaboratorCard = ({ collaborator, rolUser }) => {
+const CollaboratorCard = ({ collaborator }) => {
   const { state, dispatch } = useContext(CommitmentContext);
   const [showModal, setShowColModal] = useState(false);
   const [deleted, setDeleted] = useState(false);
@@ -61,7 +62,7 @@ const CollaboratorCard = ({ collaborator, rolUser }) => {
         <NameColaborator>
           {`${collaborator.firstName}  ${collaborator.lastName}`}{" "}
         </NameColaborator>
-        {rolUser === "3" ? null : (
+        {rolName() === "collaborator" ? null : (
           <BtnDeleteColaborator
             src={DeletedIco}
             alt="ico_deleted"

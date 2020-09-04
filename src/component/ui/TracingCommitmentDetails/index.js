@@ -7,7 +7,12 @@ import TaskList from "../TaskList";
 import CollaboratorCardList from "../CollaboratorCardList";
 import Spinner from "../Spinner";
 import Error from "../alerts/Error";
-import { dataStatus, filterWithRol } from "../../../helpers";
+import {
+  dataStatus,
+  filterWithRol,
+  rolName,
+  matchUser,
+} from "../../../helpers";
 
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
@@ -32,7 +37,7 @@ import {
 } from "./styled";
 import api from "../../../helpers/api";
 
-const TracingCommitmentDetails = ({ rol }) => {
+const TracingCommitmentDetails = (props) => {
   const { state, dispatch } = useContext(CommitmentContext);
   const history = useHistory();
   const [openCreateTask, setOpenCreateTask] = useState(false);
@@ -176,7 +181,7 @@ const TracingCommitmentDetails = ({ rol }) => {
   const handleNewColaborator = (item) => {
     dispatch({ type: actions.setColaborator, payload: item });
   };
-
+  console.log(matchUser(state.commitment.collaborators));
   const renderView = () => {
     return (
       <Fragment>
@@ -187,8 +192,11 @@ const TracingCommitmentDetails = ({ rol }) => {
           </WrapperTask>
           <WrapperOpc>
             <Options>
-              {/*this button (add task) will be hidden if  user_id not match with id collaborator*/}
-              <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
+              {/*this button (add task) will be hidden if  user_id not is not assigned how collaborator of commitment*/}
+              {matchUser(state.commitment.collaborators) ? (
+                <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
+              ) : null}
+
               <Button
                 title="Detalles"
                 type="secundary"
@@ -219,7 +227,7 @@ const TracingCommitmentDetails = ({ rol }) => {
                   <CircleStatus color={dataStatus("cumplido").background} />
                   Cumplido
                 </MenuItems>
-                {rol === "collaborator" ? null : (
+                {rolName() === "collaborator" ? null : (
                   <span>
                     <MenuItems onClick={() => changeStatus("validando")}>
                       <CircleStatus
@@ -250,7 +258,6 @@ const TracingCommitmentDetails = ({ rol }) => {
             <WrapperColaborators>
               <CollaboratorCardList
                 collaborators={state.commitment.collaborators}
-                rolUser="1"
               />
               {state.wrapperAddCollaborator ? (
                 <WrapperColaborators>
@@ -283,7 +290,7 @@ const TracingCommitmentDetails = ({ rol }) => {
                     </BtnSecundary>
                   </BtnGroup>
                 </WrapperColaborators>
-              ) : rol === "collaborator" ? null : (
+              ) : rolName() === "collaborator" ? null : (
                 <BtnAddColaborator onClick={handleWrapperAddColaborator}>
                   <img src={AddIco} alt="add-ico" style={{ width: "18px" }} />
                   <BtnSecundary primary>Agregar colaborador</BtnSecundary>
