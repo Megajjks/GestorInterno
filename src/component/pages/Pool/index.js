@@ -7,11 +7,24 @@ import IcoExport from "../../../assets/img/download.svg";
 
 const Pool = () => {
   const exportData = () => {
-    try {
-      const response = api.get("/commitments/get/excel");
-    } catch (e) {
-      console.log(e);
-    }
+    const { data } = api
+      .get("/commitments/get/excel/", {
+        responseType: "blob",
+      })
+      .then(({ data }) => {
+        const downloadUrl = window.URL.createObjectURL(new Blob([data]));
+        const link = document.createElement("a");
+        const date = new Date();
+        link.href = downloadUrl;
+        link.setAttribute(
+          "download",
+          `Compromisos-MDADC (${date.getDate()}-${date.getMonth()}-${date.getFullYear()}).xlsx`
+        ); //any other extension
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
