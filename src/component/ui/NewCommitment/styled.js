@@ -179,3 +179,88 @@ export const TxtRequired = styled.span`
   color: red;
   font-weight: 400;
 `;
+
+export const WrapperTextInput = styled.p`
+  margin: 1rem 0 1rem 0;
+  padding: 0 5em;
+  text-align: justify;
+  width: 80%;
+`;
+
+export const WrapperTextArea = styled.div`
+  margin: 1rem 0 1rem 0;
+  padding: 0 5em;
+  text-align: center;
+  width: 80%;
+`;
+
+export const WrapperTextSuggestion = styled.div`
+  margin: 0;
+  padding: 0 5em;
+  text-align: justify;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+`;
+
+export const SpanText = styled.p`
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.8em;
+`;
+
+export const WrapperSuggestion = styled.div`
+  width: 100%;
+`;
+
+export const WrapperSpan1 = styled.div`
+  width: 50%;
+  text-align: justify;
+  background-color: ${({ theme: { colors } }) => colors.primary};
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  display: none;
+`;
+
+export const WrapperSpan2 = styled.div`
+  width: 50%;
+  text-align: justify;
+  background-color: ${({ theme: { colors } }) => colors.primary};
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  display: none;
+`;
+
+export const WrapperSpan3 = styled.div`
+  width: 50%;
+  text-align: justify;
+  background-color: ${({ theme: { colors } }) => colors.primary};
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  display: none;
+`;
+
+export const WrapperSpan4 = styled.div`
+  width: 50%;
+  text-align: justify;
+  background-color: ${({ theme: { colors } }) => colors.primary};
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  display: none;
+`;
+
+export const WrapperSpan5 = styled.div`
+  width: 50%;
+  text-align: justify;
+  background-color: ${({ theme: { colors } }) => colors.primary};
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  display: none;
+`;
