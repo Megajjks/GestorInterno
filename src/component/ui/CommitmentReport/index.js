@@ -81,14 +81,14 @@ const CommitmentReport = (props) => {
   const acceptCommitment = async () => {
     try {
       const response = await api.put(
-        `/commitments/${state.dataForm.id}/proceso`,
+        `/commitments/${state.dataForm.id}/primer_contacto`,
         {},
         { headers: { Authorization: token } }
       );
     } catch (e) {
       console.log(e);
     }
-    history.push("/pool");
+    history.push("/panel/pool");
   };
 
   //functions modal feedback

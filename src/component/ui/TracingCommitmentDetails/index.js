@@ -219,9 +219,15 @@ const TracingCommitmentDetails = (props) => {
                 open={Boolean(state.dropdownStatus)}
                 onClose={handleCloseDropdownStatus}
               >
-                <MenuItems onClick={() => changeStatus("proceso")}>
-                  <CircleStatus color={dataStatus("proceso").background} />
-                  En proceso
+                <MenuItems onClick={() => changeStatus("primer_contacto")}>
+                  <CircleStatus
+                    color={dataStatus("primer_contacto").background}
+                  />
+                  Primer Contacto
+                </MenuItems>
+                <MenuItems onClick={() => changeStatus("articulando")}>
+                  <CircleStatus color={dataStatus("articulando").background} />
+                  Articulando
                 </MenuItems>
                 <MenuItems onClick={() => changeStatus("cumplido")}>
                   <CircleStatus color={dataStatus("cumplido").background} />
@@ -235,9 +241,11 @@ const TracingCommitmentDetails = (props) => {
                       />
                       Por validar
                     </MenuItems>
-                    <MenuItems onClick={() => changeStatus("oculto")}>
-                      <CircleStatus color={dataStatus("oculto").background} />
-                      Oculto
+                    <MenuItems onClick={() => changeStatus("archivado")}>
+                      <CircleStatus
+                        color={dataStatus("archivado").background}
+                      />
+                      Archivado
                     </MenuItems>
                     <MenuItems onClick={() => changeStatus("correcion")}>
                       <CircleStatus

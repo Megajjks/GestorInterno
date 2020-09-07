@@ -38,7 +38,12 @@ const TracingTable = () => {
         const { data } = await api.get("/commitments");
         dispatch({
           type: actions.getCommitmentsSuccess,
-          payload: filterWithStatus(data, ["proceso", "cumplido", "oculto"]),
+          payload: filterWithStatus(data, [
+            "primer_contacto",
+            "articulando",
+            "cumplido",
+            "archivado",
+          ]),
         });
       } catch (e) {
         dispatch({
