@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import Spinner from "../../Spinner";
 import Error from "../../alerts/Error";
 import Eye from "../../../../assets/img/eye.svg";
-import { api } from "../../../../helpers/api";
+import api from "../../../../helpers/api";
 import { filterWithStatus, dataStatus } from "../../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
@@ -56,7 +56,7 @@ const PoolTable = () => {
 
   const viewDetails = (item) => {
     history.push({
-      pathname: `/commitment_report/${item.id}`,
+      pathname: `/panel/commitment_report/${item.id}`,
       state: item,
     });
   };

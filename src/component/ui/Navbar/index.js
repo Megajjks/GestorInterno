@@ -4,7 +4,7 @@ import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
 import { Nav, MenuNav, AvatarBadge } from "./styled";
-import { api } from "../../../helpers/api";
+import api from "../../../helpers/api";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Badge from "@material-ui/core/Badge";
 import Menu from "@material-ui/core/Menu";

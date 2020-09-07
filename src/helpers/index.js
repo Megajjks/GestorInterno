@@ -110,3 +110,36 @@ export const filterWithIdCollaboratorAndStatus = (
   });
   return filterData;
 };
+
+//This function return the name of rol
+export const rolName = () => {
+  let rol = localStorage.getItem("login_data")
+    ? JSON.parse(localStorage.getItem("login_data")).role
+    : null;
+  switch (rol) {
+    case 1:
+      return "admin";
+    case 2:
+      return "collaborator";
+    case 3:
+      return "agent";
+    case 4:
+      return "superAdmin";
+    case 5:
+      return "assistant";
+    default:
+      return "notUser";
+  }
+};
+
+//This function return if the userId is match with list of collaborators
+export const matchUser = (listCollaborators) => {
+  let userId = localStorage.getItem("login_data")
+    ? JSON.parse(localStorage.getItem("login_data")).userId
+    : null;
+  if (userId === null) return 0;
+  const isMatch = listCollaborators.some(function (collaborator) {
+    if (collaborator.id === userId) return true;
+  });
+  return isMatch;
+};
