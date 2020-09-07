@@ -7,8 +7,9 @@ import {
   Ico,
   CircleStatus,
 } from "./styled";
+import SpinnerMin from "../SpinnerMin";
 
-const GeneralButton = ({ title, type, ico, color, onClick, size }) => {
+const GeneralButton = ({ title, type, ico, color, onClick, size, loader }) => {
   switch (type) {
     case "secundary":
       return (
@@ -30,6 +31,19 @@ const GeneralButton = ({ title, type, ico, color, onClick, size }) => {
           <CircleStatus color={color}> </CircleStatus>
           <Title>{title}</Title>
         </ButtonSecundary>
+      );
+    case "primary-loader":
+      return (
+        <ButtonPrimary onClick={onClick} size={size}>
+          {loader ? (
+            <SpinnerMin />
+          ) : (
+            <>
+              {ico ? <Ico src={ico} alt={`${title} ico`} /> : null}
+              <Title>{title}</Title>
+            </>
+          )}
+        </ButtonPrimary>
       );
     default:
       return (

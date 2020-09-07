@@ -107,7 +107,11 @@ const GenericLogin = () => {
               ),
             }}
           />
-          <GeneralButton title="Login" />
+          <GeneralButton
+            title="Login"
+            type="primary-loader"
+            loader={state.loginLoading}
+          />
         </Form>
         <SignIn>
           ¿Aun no tienes una cuenta?,{" "}

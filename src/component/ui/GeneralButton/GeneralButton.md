@@ -12,6 +12,7 @@ This component defines the style and structure of the buttons to use.
 | color   | string   | commitment status circle icon color                                                                                                                                             | no       |
 | type    | string   | button type; **secundary** = secundary button, **warning** = warning button, **status** = status button and if this prop is not placed the button by default is the **primary** | no       |
 | size    | string   | define the button size with css measurements if no exist the value for default is 100%                                                                                          | no       |
+| loader  | string   | props defining state of charge                                                                                                                                                  | no       |
 
 ## Implementation
 
@@ -56,5 +57,14 @@ This component defines the style and structure of the buttons to use.
 		ico={icono}
 		size="any size" //px,%,em any css measure
 	/>
+
+	//Button with Loader
+	<BtnSend
+    title="Comprometerme"
+    size="any size%"
+    type="primary-loader"
+    onClick={anyFunction}
+    loader={loader}
+  />
 
 ```
