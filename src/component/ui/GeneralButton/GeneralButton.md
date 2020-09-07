@@ -11,6 +11,8 @@ This component defines the style and structure of the buttons to use.
 | ico     | string   | button icon                                                                                                                                                                     | no       |
 | color   | string   | commitment status circle icon color                                                                                                                                             | no       |
 | type    | string   | button type; **secundary** = secundary button, **warning** = warning button, **status** = status button and if this prop is not placed the button by default is the **primary** | no       |
+| size    | string   | define the button size with css measurements if no exist the value for default is 100%                                                                                          | no       |
+| loader  | string   | props defining state of charge                                                                                                                                                  | no       |
 
 ## Implementation
 
@@ -19,6 +21,7 @@ This component defines the style and structure of the buttons to use.
 	<GeneralButton
 		title="any title"
 		onClick={anyFunction}
+		size="any size" //px,%,em any css measure
   />
 
   //Secundary button
@@ -26,6 +29,7 @@ This component defines the style and structure of the buttons to use.
 		title="any title"
 		onClick={anyFunction}
 		type="secundary"
+		size="any size" //px,%,em any css measure
   />
 
   //Warning button
@@ -33,6 +37,7 @@ This component defines the style and structure of the buttons to use.
 		title="any title"
 		onClick={anyFunction}
 		type="warning"
+		size="any size" //px,%,em any css measure
   />
 
   //Status button
@@ -41,6 +46,7 @@ This component defines the style and structure of the buttons to use.
 		onClick={anyFunction}
 		type="status"
 		color="any color of status"
+		size="any size" //px,%,em any css measure
   />
 
   //Button with ico
@@ -49,6 +55,16 @@ This component defines the style and structure of the buttons to use.
 		onClick={anyFunction}
 		type="any title"
 		ico={icono}
+		size="any size" //px,%,em any css measure
 	/>
+
+	//Button with Loader
+	<BtnSend
+    title="Comprometerme"
+    size="any size%"
+    type="primary-loader"
+    onClick={anyFunction}
+    loader={loader}
+  />
 
 ```

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ButtonPrimary = styled.button`
   background-color: ${(props) => props.theme.colors.primary};
-  width: 100%;
+  width: ${(props) => (props.size ? props.size : "100%")};
   padding: 0.5rem 1.5rem;
   color: #fff;
   border: none;

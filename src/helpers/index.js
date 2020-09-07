@@ -19,13 +19,20 @@ export const dataStatus = (status) => {
         color: "#FFFFFF",
         tag: "prevalidado",
       };
-    case "proceso":
-    case "En proceso":
+    case "primer_contacto":
+    case "Primer Contacto":
       return {
-        value: "En proceso",
+        value: "Primer Contacto",
+        background: "#B04480",
+        color: "#FFFFFF",
+        tag: "primer_contacto",
+      };
+    case "articulando":
+      return {
+        value: "Articulando",
         background: "#FF4F13",
         color: "#FFFFFF",
-        tag: "proceso",
+        tag: "articulando",
       };
     case "cumplido":
       return {
@@ -34,12 +41,12 @@ export const dataStatus = (status) => {
         color: "#FFFFFF",
         tag: "cumplido",
       };
-    case "oculto":
+    case "archivado":
       return {
-        value: "Oculto",
+        value: "Archivado",
         background: "#707070",
         color: "#FFFFFF",
-        tag: "oculto",
+        tag: "archivado",
       };
     case "correcion":
     case "En corrección":
@@ -57,6 +64,13 @@ export const dataStatus = (status) => {
         background: "#C0392B",
         color: "#FFFFFF",
         tag: "declinado",
+      };
+    case "falla":
+      return {
+        value: "falla",
+        background: "#C0392B",
+        color: "#FFFFFF",
+        tag: "falla",
       };
     default:
       return {

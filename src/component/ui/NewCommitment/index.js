@@ -30,6 +30,7 @@ import {
 } from "./styled";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import BtnSend from "../GeneralButton";
 import api from "../../../helpers/api";
 import {
   states,
@@ -101,6 +102,7 @@ const NewCommitment = () => {
 
   const history = useHistory();
 
+  const [isLoader, setIsLoader] = useState(false);
   const [error, setError] = useState({
     status: false,
     message: "",
@@ -153,7 +155,8 @@ const NewCommitment = () => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
-  const validateData = () => {
+  const validateData = (e) => {
+    e.preventDefault();
     if (
       commitment.firstName === "" ||
       commitment.lastName === "" ||
@@ -194,6 +197,7 @@ const NewCommitment = () => {
   };
 
   const sendData = async () => {
+    setIsLoader(true);
     try {
       let formdata = new FormData();
       setCommitment({
@@ -227,6 +231,7 @@ const NewCommitment = () => {
       formdata.append("sendEmails", commitment.sendEmails);
       const response = await api.post("/commitments", formdata);
       console.log("👉 Returned data:", response);
+      setIsLoader(false);
       setError({
         status: false,
         message: "",
@@ -234,6 +239,7 @@ const NewCommitment = () => {
       //redirection when the request has been correct
       history.push("/success_commitment");
     } catch (e) {
+      setIsLoader(false);
       setError({
         status: true,
         message:
@@ -884,9 +890,13 @@ const NewCommitment = () => {
             .
           </Information>
 
-          <Btn type="button" onClick={validateData}>
-            Comprometerme
-          </Btn>
+          <BtnSend
+            title="Comprometerme"
+            size="40%"
+            type="primary-loader"
+            onClick={validateData}
+            loader={isLoader}
+          />
 
           <Information>
             *Si tu compromiso es aprobado, la información que proporciones para

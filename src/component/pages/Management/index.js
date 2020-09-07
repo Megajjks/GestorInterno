@@ -22,7 +22,10 @@ const Management = () => {
         const { data } = await api.get("/commitments");
         dispatch({
           type: actions.getCommitmentsSuccess,
-          payload: filterWithIdCollaboratorAndStatus(data, userId, ["proceso"]),
+          payload: filterWithIdCollaboratorAndStatus(data, userId, [
+            "primer_contacto",
+            "articulando",
+          ]),
         });
       } catch (e) {
         dispatch({
