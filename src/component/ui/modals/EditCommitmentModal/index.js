@@ -11,10 +11,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { WrapperLogo, Logo } from "./styled";
 
-import states from '../../../../helpers/states';
-import sector from '../../../../helpers/sector';
-import commitmentImpact from '../../../../helpers/commitmentImpact';
-import socialNetworks from '../../../../helpers/socialNetworks';
+import { states, sector, commitmentImpact, socialNetworks } from '../../../../helpers/index';
 
 const EditCommitmentModal = ({ handleClose, open, dataForm }) =>{
   const [data, setData] = useState(dataForm);

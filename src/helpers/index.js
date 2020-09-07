@@ -111,6 +111,71 @@ export const filterWithIdCollaboratorAndStatus = (
   return filterData;
 };
 
+export const states = [
+  "Aguascalientes",
+  "Baja California",
+  "Baja California Sur",
+  "Campeche",
+  "Chihuahua",
+  "Chiapas",
+  "Ciudad de México",
+  "Coahuila",
+  "Colima",
+  "Durango",
+  "Estado de México",
+  "Guanajuato",
+  "Guerrero",
+  "Hidalgo",
+  "Jalisco",
+  "Michoacán",
+  "Morelos",
+  "Nayarit",
+  "Nuevo León",
+  "Oaxaca",
+  "Puebla",
+  "Querétaro",
+  "Quintana Roo",
+  "San Luis Potosí",
+  "Sinaloa",
+  "Sonora",
+  "Tabasco",
+  "Tamaulipas",
+  "Tlaxcala",
+  "Veracruz",
+  "Yucatán",
+  "Zacatecas",
+];
+
+export const sector = [
+  "Academia",
+  "Sector público",
+  "Sector privado",
+  "Organización de la sociedad civil",
+  "Ciudadanía",
+];
+
+export const commitmentImpact = [
+  "Vinculación con actores clave",
+  "Herramientas y metodologías para impulsar la innovación social y la agencia de cambio",
+  "Asesorías especializadas",
+  "Fondos para escalar la iniciativa",
+  "Difusión y comunicación",
+  "Otro",
+];
+
+export const socialNetworks = [
+  "Ashoka Staff",
+  "Aliados de Difusión",
+  "Facebook",
+  "Instagram",
+  "Twitter",
+  "LinkedIn",
+  "Sesión de Compromisos",
+  "Conector Ashoka",
+  "Embajador Ashoka",
+  "Sitio Web Ashoka",
+  "Otro",
+];
 //This function return the name of rol
 export const rolName = () => {
   let rol = localStorage.getItem("login_data")
