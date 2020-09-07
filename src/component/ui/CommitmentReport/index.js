@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Wrapper,
@@ -40,12 +40,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 import EditCommitmentModal from "../modals/EditCommitmentModal";
 import DynamicScrollToTop from "../../hooks/DynamicScrollToTop";
 import api from "../../../helpers/api";
+import { rolName } from "../../../helpers";
 
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
 
-const CommitmentReport = ({ rol }) => {
+const CommitmentReport = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const history = useHistory();
@@ -62,7 +63,6 @@ const CommitmentReport = ({ rol }) => {
         });
         dispatch({ type: actions.getDataFormSuccess, payload: data });
         dispatch({ type: actions.getQuestionsSuccess, payload: data.answers });
-        console.log(data);
       } catch (e) {
         dispatch({
           type: actions.getDataFormError,
@@ -85,7 +85,6 @@ const CommitmentReport = ({ rol }) => {
         {},
         { headers: { Authorization: token } }
       );
-      console.log(response);
     } catch (e) {
       console.log(e);
     }
@@ -129,6 +128,7 @@ const CommitmentReport = ({ rol }) => {
     dispatch({ type: actions.closeEditCommitmentModal, payload: false });
   };
   //no muevas el scroll jaja
+  //Tranqui no lo movere xD
   return (
     <Wrapper>
       <DynamicScrollToTop />
@@ -278,7 +278,7 @@ const CommitmentReport = ({ rol }) => {
           </WrapperButtons>
         )}
       </WrapperFormData>
-      {rol === "collaborator" ? null : (
+      {rolName() === "collaborator" ? null : (
         <WrapperIconEdit>
           <ImgEditCommitment src={IconEdit} onClick={openEditCommitmentModal} />
         </WrapperIconEdit>

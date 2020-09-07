@@ -19,7 +19,6 @@ import ImgCommitment from "../../../assets/img/meeting1.png";
 
 const Sidebar = ({ items, isAgent }) => {
   const [showSideBar, setShowSidebar] = useState(false);
-
   return (
     <Wrapper showSideBar={showSideBar}>
       <SideBar>
@@ -36,22 +35,29 @@ const Sidebar = ({ items, isAgent }) => {
           </HeaderSidebar>
         ) : null}
         <Menu>
-          {items.map((item) => (
-            <Link
-              to={item.url}
-              key={item.name}
-              style={{
-                textDecoration: "none",
-                color: "#ffffff",
-                marginBottom: "10px",
-              }}
-            >
-              <MenuItem>
-                <Img src={item.img} alt={item.name} showSideBar={showSideBar} />
-                {showSideBar ? item.label : null}
-              </MenuItem>
-            </Link>
-          ))}
+          {items.map((item, idx) =>
+            item.render ? (
+              <Link
+                to={item.path}
+                onClick={() => console.log(item.path)}
+                key={idx}
+                style={{
+                  textDecoration: "none",
+                  color: "#ffffff",
+                  marginBottom: "10px",
+                }}
+              >
+                <MenuItem>
+                  <Img
+                    src={item.img}
+                    alt={item.name}
+                    showSideBar={showSideBar}
+                  />
+                  {showSideBar ? item.label : null}
+                </MenuItem>
+              </Link>
+            ) : null
+          )}
           {isAgent ? (
             <Commitment showSideBar={showSideBar}>
               {showSideBar ? (

@@ -22,16 +22,21 @@ import {
   SpanText,
   WrapperTextSuggestion,
   WrapperSuggestion,
-  WrapperSpan1, 
+  WrapperSpan1,
   WrapperSpan2,
   WrapperSpan3,
   WrapperSpan4,
-  WrapperSpan5
+  WrapperSpan5,
 } from "./styled";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import { api } from "../../../helpers/api";
-import { states, sector, commitmentImpact, socialNetworks } from '../../../helpers/index';
+import api from "../../../helpers/api";
+import {
+  states,
+  sector,
+  commitmentImpact,
+  socialNetworks,
+} from "../../../helpers/index";
 
 const addStyle = (id1, id2, id3, id4, id5) => {
   document.getElementById(`${id1}`).style.display = "block";
@@ -39,7 +44,7 @@ const addStyle = (id1, id2, id3, id4, id5) => {
   document.getElementById(`${id3}`).style.display = "none";
   document.getElementById(`${id4}`).style.display = "none";
   document.getElementById(`${id5}`).style.display = "none";
-}
+};
 
 const removeStyle = (id1, id2, id3, id4, id5) => {
   document.getElementById(`${id1}`).style.display = "none";
@@ -47,7 +52,7 @@ const removeStyle = (id1, id2, id3, id4, id5) => {
   document.getElementById(`${id3}`).style.display = "none";
   document.getElementById(`${id4}`).style.display = "none";
   document.getElementById(`${id5}`).style.display = "none";
-}
+};
 
 const NewCommitment = () => {
   const [commitment, setCommitment] = useState({
@@ -84,15 +89,15 @@ const NewCommitment = () => {
     "8-3": false,
     "8-4": false,
     "8-5": false,
-    "8-6": false
+    "8-6": false,
   });
 
-  const handleOnChangeQuestion8 = e => {
+  const handleOnChangeQuestion8 = (e) => {
     setQuestion8Add({
       ...question8Add,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const history = useHistory();
 
@@ -123,26 +128,26 @@ const NewCommitment = () => {
     logo: null,
     logoName: "",
     img: null,
-    imgName: ""
+    imgName: "",
   });
 
-  const onChangeHandlerLogo = e => {
-    console.log(e.target.files[0])
+  const onChangeHandlerLogo = (e) => {
+    console.log(e.target.files[0]);
     setImages({
       ...images,
       [e.target.name]: e.target.files[0],
-      logoName: e.target.files[0].name
+      logoName: e.target.files[0].name,
     });
-  }
+  };
 
-  const onChangeHandlerImg = e => {
-    console.log(e.target.files[0])
+  const onChangeHandlerImg = (e) => {
+    console.log(e.target.files[0]);
     setImages({
       ...images,
       [e.target.name]: e.target.files[0],
-      imgName: e.target.files[0].name
+      imgName: e.target.files[0].name,
     });
-  }
+  };
 
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -193,8 +198,8 @@ const NewCommitment = () => {
       let formdata = new FormData();
       setCommitment({
         ...commitment,
-        question8: question8Add
-      })
+        question8: question8Add,
+      });
       formdata.append("firstName", commitment.firstName);
       formdata.append("lastName", commitment.lastName);
       formdata.append("organization", commitment.organization);
@@ -257,8 +262,15 @@ const NewCommitment = () => {
               <Input
                 type="text"
                 name="firstName"
-                onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={commitment.firstName}
                 onChange={handleOnChange}
               />
@@ -270,8 +282,15 @@ const NewCommitment = () => {
               <Input
                 type="text"
                 name="lastName"
-                onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={commitment.lastName}
                 onChange={handleOnChange}
               />
@@ -283,8 +302,15 @@ const NewCommitment = () => {
               <Input
                 type="text"
                 name="organization"
-                onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={commitment.organization}
                 onChange={handleOnChange}
               />
@@ -297,15 +323,24 @@ const NewCommitment = () => {
                 name="sector"
                 value={commitment.sector}
                 onChange={handleOnChange}
-                onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
               >
                 <option value="">-- Seleccione --</option>
-                {
-                  sector.map((item, idx)=>{
-                  return <option value={item} key={idx}>{item}</option>
-                  })
-                }
+                {sector.map((item, idx) => {
+                  return (
+                    <option value={item} key={idx}>
+                      {item}
+                    </option>
+                  );
+                })}
               </Select>
             </Field>
             <Field>
@@ -315,8 +350,15 @@ const NewCommitment = () => {
               <Input
                 type="text"
                 name="city"
-                onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={commitment.city}
                 onChange={handleOnChange}
               />
@@ -327,17 +369,26 @@ const NewCommitment = () => {
               </Label>
               <Select
                 name="state"
-                onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={commitment.state}
                 onChange={handleOnChange}
               >
                 <option value="">-- Seleccione --</option>
-                {
-                  states.map((item, idx) => {
-                  return <option value={item} key={idx}>{item}</option>
-                  })
-                }
+                {states.map((item, idx) => {
+                  return (
+                    <option value={item} key={idx}>
+                      {item}
+                    </option>
+                  );
+                })}
               </Select>
             </Field>
             <Field>
@@ -347,8 +398,15 @@ const NewCommitment = () => {
               <Input
                 type="text"
                 name="position"
-                onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={commitment.position}
                 onChange={handleOnChange}
               />
@@ -360,8 +418,15 @@ const NewCommitment = () => {
               <Input
                 type="email"
                 name="email"
-                onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={commitment.email}
                 onChange={handleOnChange}
               />
@@ -373,8 +438,15 @@ const NewCommitment = () => {
               <Input
                 type="text"
                 name="phone"
-                onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={commitment.phone}
                 onChange={handleOnChange}
               />
@@ -387,8 +459,15 @@ const NewCommitment = () => {
             </Label>
             <TextArea
               name="question1"
-              onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-              "suggestion3", "suggestion4", "suggestion5")} }
+              onFocus={() => {
+                removeStyle(
+                  "suggestion1",
+                  "suggestion2",
+                  "suggestion3",
+                  "suggestion4",
+                  "suggestion5"
+                );
+              }}
               value={commitment.question1}
               onChange={handleOnChange}
             />
@@ -400,8 +479,15 @@ const NewCommitment = () => {
             </Label>
             <TextArea
               name="question2"
-              onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-              "suggestion3", "suggestion4", "suggestion5")} }
+              onFocus={() => {
+                removeStyle(
+                  "suggestion1",
+                  "suggestion2",
+                  "suggestion3",
+                  "suggestion4",
+                  "suggestion5"
+                );
+              }}
               value={commitment.question2}
               onChange={handleOnChange}
             />
@@ -417,8 +503,7 @@ const NewCommitment = () => {
               onChange={onChangeHandlerLogo}
               style={{ display: "none" }}
             />
-            <LabelFile 
-              for="imglogo">
+            <LabelFile for="imglogo">
               {" "}
               {images.logoName ? images.logoName : "Selecciona una imagen"}{" "}
             </LabelFile>
@@ -455,105 +540,132 @@ const NewCommitment = () => {
                 type="text"
                 placeholder="La organización A,(junto a la B)"
                 name="question3"
-                onFocus={ () => {addStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  addStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={commitment.question3}
                 onChange={handleOnChange}
-              />
-              {" "}se compromete a impactar a{" "}
+              />{" "}
+              se compromete a impactar a{" "}
               <Input
                 type="text"
                 placeholder="# de agentes "
                 name="question7"
-                onFocus={ () => {addStyle("suggestion2", "suggestion1",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  addStyle(
+                    "suggestion2",
+                    "suggestion1",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={commitment.question7}
                 onChange={handleOnChange}
                 style={{ width: "130px" }}
-              />{" "}con su programa, durante{" "}
+              />{" "}
+              con su programa, durante{" "}
             </WrapperTextInput>
-          <WrapperTextSuggestion>
-            <WrapperSpan1
-              style={{ marginRight: "10px" }}
-              id="suggestion1"
-            >
-              <SpanText>
-                {"(Ejemplo: Ashoka México, Centroamérica y el Caribe, CEMEX y el Tecnológico de Monterrey)"}
-              </SpanText>
-            </WrapperSpan1>
-            <WrapperSpan2
-              style={{ marginLeft: "50%" }}
-              id="suggestion2"
-            >
-              <SpanText>
-                {"(Se va a impactar a 36 líderes agentes de cambio de manera directa)"}
-              </SpanText>
-            </WrapperSpan2>
-          </WrapperTextSuggestion>
-          <WrapperTextInput>
-            <Input
-              type="text"
-              placeholder="periodo de tiempo"
-              name="question5"
-              onFocus={ () => {addStyle("suggestion3", "suggestion2",
-              "suggestion1", "suggestion4", "suggestion5")} }
-              value={commitment.question5}
-              onChange={handleOnChange}
-              style={{ width: "150px" }}
-            />{" "}
-            para contribuir a la comunidad de Agentes de cambio, a través de{" "}
-          </WrapperTextInput>
-          <WrapperTextSuggestion>
-            <WrapperSpan3
-              style={{ width: "27%"}}
-              id="suggestion3"
-            >
-              <SpanText>
-                {"(Ejemplo: enero a octubre de 2020)"}
-              </SpanText>
-            </WrapperSpan3>
-          </WrapperTextSuggestion>
-          <WrapperTextArea>
-            <TextArea
-              placeholder="¿cómo el impacto esperado contribuye a los demás actores?"
-              name="question6"
-              onFocus={ () => {addStyle("suggestion4", "suggestion2",
-              "suggestion3", "suggestion1", "suggestion5")} }
-              value={commitment.question6}
-              onChange={handleOnChange}
-              style={{ width: "100%", height: "40px" }}
-            />
-          </WrapperTextArea>
-          <WrapperTextSuggestion>
-            <WrapperSpan4
-              style={{ width: "100%"}}
-              id="suggestion4"
-            >
-              <SpanText>
-                {"(Fortalecer y conectar a líderes innovadores sociales de todo el mundo, con la finalidad de aumentar su impacto y que ellos puedan replicar el conocimiento adquirido en sus contextos.)"}
-              </SpanText>
-            </WrapperSpan4>
-          </WrapperTextSuggestion>
-        </WrapperSuggestion>
+            <WrapperTextSuggestion>
+              <WrapperSpan1 style={{ marginRight: "10px" }} id="suggestion1">
+                <SpanText>
+                  {
+                    "(Ejemplo: Ashoka México, Centroamérica y el Caribe, CEMEX y el Tecnológico de Monterrey)"
+                  }
+                </SpanText>
+              </WrapperSpan1>
+              <WrapperSpan2 style={{ marginLeft: "50%" }} id="suggestion2">
+                <SpanText>
+                  {
+                    "(Se va a impactar a 36 líderes agentes de cambio de manera directa)"
+                  }
+                </SpanText>
+              </WrapperSpan2>
+            </WrapperTextSuggestion>
+            <WrapperTextInput>
+              <Input
+                type="text"
+                placeholder="periodo de tiempo"
+                name="question5"
+                onFocus={() => {
+                  addStyle(
+                    "suggestion3",
+                    "suggestion2",
+                    "suggestion1",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
+                value={commitment.question5}
+                onChange={handleOnChange}
+                style={{ width: "150px" }}
+              />{" "}
+              para contribuir a la comunidad de Agentes de cambio, a través de{" "}
+            </WrapperTextInput>
+            <WrapperTextSuggestion>
+              <WrapperSpan3 style={{ width: "27%" }} id="suggestion3">
+                <SpanText>{"(Ejemplo: enero a octubre de 2020)"}</SpanText>
+              </WrapperSpan3>
+            </WrapperTextSuggestion>
+            <WrapperTextArea>
+              <TextArea
+                placeholder="¿cómo el impacto esperado contribuye a los demás actores?"
+                name="question6"
+                onFocus={() => {
+                  addStyle(
+                    "suggestion4",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion1",
+                    "suggestion5"
+                  );
+                }}
+                value={commitment.question6}
+                onChange={handleOnChange}
+                style={{ width: "100%", height: "40px" }}
+              />
+            </WrapperTextArea>
+            <WrapperTextSuggestion>
+              <WrapperSpan4 style={{ width: "100%" }} id="suggestion4">
+                <SpanText>
+                  {
+                    "(Fortalecer y conectar a líderes innovadores sociales de todo el mundo, con la finalidad de aumentar su impacto y que ellos puedan replicar el conocimiento adquirido en sus contextos.)"
+                  }
+                </SpanText>
+              </WrapperSpan4>
+            </WrapperTextSuggestion>
+          </WrapperSuggestion>
           <Field>
             <Label>
               ¿Qué acción se va a implementar? <TxtRequired>*</TxtRequired>
             </Label>
             <TextArea
               name="question4"
-              onFocus={ () => {addStyle("suggestion5", "suggestion2",
-              "suggestion3", "suggestion4", "suggestion1")} }
+              onFocus={() => {
+                addStyle(
+                  "suggestion5",
+                  "suggestion2",
+                  "suggestion3",
+                  "suggestion4",
+                  "suggestion1"
+                );
+              }}
               value={commitment.question4}
               onChange={handleOnChange}
             />
           </Field>
           <WrapperTextSuggestion>
-            <WrapperSpan5
-              style={{ width: "100%"}}
-              id="suggestion5"
-            >
+            <WrapperSpan5 style={{ width: "100%" }} id="suggestion5">
               <SpanText>
-                {"(Ejemplo: Codiseño y lanzamiento de la convocatoria del Premio CEMEX-TEC con un Bootcamp de emprendimiento social y cambio sistémico para los ganadores)"}
+                {
+                  "(Ejemplo: Codiseño y lanzamiento de la convocatoria del Premio CEMEX-TEC con un Bootcamp de emprendimiento social y cambio sistémico para los ganadores)"
+                }
               </SpanText>
             </WrapperSpan5>
           </WrapperTextSuggestion>
@@ -566,8 +678,15 @@ const NewCommitment = () => {
               <InputRadio
                 type="checkbox"
                 name="8-1"
-                onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-                "suggestion3", "suggestion4", "suggestion5")} }
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={true}
                 onChange={handleOnChangeQuestion8}
               />{" "}
@@ -627,8 +746,15 @@ const NewCommitment = () => {
             </Label>
             <TextArea
               name="question9"
-              onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-              "suggestion3", "suggestion4", "suggestion5")} }
+              onFocus={() => {
+                removeStyle(
+                  "suggestion1",
+                  "suggestion2",
+                  "suggestion3",
+                  "suggestion4",
+                  "suggestion5"
+                );
+              }}
               value={commitment.question9}
               onChange={handleOnChange}
             />
@@ -640,18 +766,27 @@ const NewCommitment = () => {
             </Label>
             <Select
               name="question10"
-              onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-              "suggestion3", "suggestion4", "suggestion5")} }
+              onFocus={() => {
+                removeStyle(
+                  "suggestion1",
+                  "suggestion2",
+                  "suggestion3",
+                  "suggestion4",
+                  "suggestion5"
+                );
+              }}
               style={{ width: "37em" }}
               value={commitment.question10}
               onChange={handleOnChange}
             >
               <option value="">-- Seleccione --</option>
-              {
-                socialNetworks.map((item, idx)=>{
-                return <option value={item} key={idx}>{item}</option>
-                })
-              }
+              {socialNetworks.map((item, idx) => {
+                return (
+                  <option value={item} key={idx}>
+                    {item}
+                  </option>
+                );
+              })}
             </Select>
           </Field>
           <Field>
@@ -661,8 +796,15 @@ const NewCommitment = () => {
             </Label>
             <TextArea
               name="question11"
-              onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-              "suggestion3", "suggestion4", "suggestion5")} }
+              onFocus={() => {
+                removeStyle(
+                  "suggestion1",
+                  "suggestion2",
+                  "suggestion3",
+                  "suggestion4",
+                  "suggestion5"
+                );
+              }}
               value={commitment.question11}
               onChange={handleOnChange}
             />
@@ -671,8 +813,15 @@ const NewCommitment = () => {
             <Label>Comentario o Duda Adicional</Label>
             <TextArea
               name="question12"
-              onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-              "suggestion3", "suggestion4", "suggestion5")} }
+              onFocus={() => {
+                removeStyle(
+                  "suggestion1",
+                  "suggestion2",
+                  "suggestion3",
+                  "suggestion4",
+                  "suggestion5"
+                );
+              }}
               value={commitment.question12}
               onChange={handleOnChange}
             />
@@ -681,8 +830,15 @@ const NewCommitment = () => {
             <InputRadio
               type="checkbox"
               name="sendEmails"
-              onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-              "suggestion3", "suggestion4", "suggestion5")} }
+              onFocus={() => {
+                removeStyle(
+                  "suggestion1",
+                  "suggestion2",
+                  "suggestion3",
+                  "suggestion4",
+                  "suggestion5"
+                );
+              }}
               checked={commitment.sendEmails}
               onChange={() =>
                 setCommitment({
@@ -698,8 +854,15 @@ const NewCommitment = () => {
             <InputRadio
               type="checkbox"
               name="agree"
-              onFocus={ () => {removeStyle("suggestion1", "suggestion2",
-              "suggestion3", "suggestion4", "suggestion5")} }
+              onFocus={() => {
+                removeStyle(
+                  "suggestion1",
+                  "suggestion2",
+                  "suggestion3",
+                  "suggestion4",
+                  "suggestion5"
+                );
+              }}
               checked={commitment.agree}
               onChange={() =>
                 setCommitment({ ...commitment, agree: !commitment.agree })

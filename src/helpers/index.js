@@ -112,67 +112,99 @@ export const filterWithIdCollaboratorAndStatus = (
 };
 
 export const states = [
-  'Aguascalientes',
-  'Baja California',
-  'Baja California Sur',
-  'Campeche',
-  'Chihuahua',
-  'Chiapas',
-  'Ciudad de México',
-  'Coahuila',
-  'Colima',
-  'Durango',
-  'Estado de México',
-  'Guanajuato',
-  'Guerrero',
-  'Hidalgo',
-  'Jalisco',
-  'Michoacán',
-  'Morelos',
-  'Nayarit',
-  'Nuevo León',
-  'Oaxaca',
-  'Puebla',
-  'Querétaro',
-  'Quintana Roo',
-  'San Luis Potosí',
-  'Sinaloa',
-  'Sonora',
-  'Tabasco',
-  'Tamaulipas',
-  'Tlaxcala',
-  'Veracruz',
-  'Yucatán',
-  'Zacatecas'
-]
+  "Aguascalientes",
+  "Baja California",
+  "Baja California Sur",
+  "Campeche",
+  "Chihuahua",
+  "Chiapas",
+  "Ciudad de México",
+  "Coahuila",
+  "Colima",
+  "Durango",
+  "Estado de México",
+  "Guanajuato",
+  "Guerrero",
+  "Hidalgo",
+  "Jalisco",
+  "Michoacán",
+  "Morelos",
+  "Nayarit",
+  "Nuevo León",
+  "Oaxaca",
+  "Puebla",
+  "Querétaro",
+  "Quintana Roo",
+  "San Luis Potosí",
+  "Sinaloa",
+  "Sonora",
+  "Tabasco",
+  "Tamaulipas",
+  "Tlaxcala",
+  "Veracruz",
+  "Yucatán",
+  "Zacatecas",
+];
 
 export const sector = [
-  'Academia',
-  'Sector público',
-  'Sector privado',
-  'Organización de la sociedad civil',
-  'Ciudadanía'
-]
+  "Academia",
+  "Sector público",
+  "Sector privado",
+  "Organización de la sociedad civil",
+  "Ciudadanía",
+];
 
 export const commitmentImpact = [
-  'Vinculación con actores clave',
-  'Herramientas y metodologías para impulsar la innovación social y la agencia de cambio',
-  'Asesorías especializadas',
-  'Fondos para escalar la iniciativa',
-  'Difusión y comunicación',
-  'Otro'
-]
+  "Vinculación con actores clave",
+  "Herramientas y metodologías para impulsar la innovación social y la agencia de cambio",
+  "Asesorías especializadas",
+  "Fondos para escalar la iniciativa",
+  "Difusión y comunicación",
+  "Otro",
+];
 
 export const socialNetworks = [
-  'Ashoka Staff',
-  'Aliados de Difusión',
-  'Facebook',
-  'Instagram',
-  'Twitter',
-  'LinkedIn',
-  'Sesión de Compromisos',
-  'Conector Ashoka',
-  'Embajador Ashoka',
-  'Sitio Web Ashoka',
-  'Otro'
-]
+  "Ashoka Staff",
+  "Aliados de Difusión",
+  "Facebook",
+  "Instagram",
+  "Twitter",
+  "LinkedIn",
+  "Sesión de Compromisos",
+  "Conector Ashoka",
+  "Embajador Ashoka",
+  "Sitio Web Ashoka",
+  "Otro",
+];
+//This function return the name of rol
+export const rolName = () => {
+  let rol = localStorage.getItem("login_data")
+    ? JSON.parse(localStorage.getItem("login_data")).role
+    : null;
+  switch (rol) {
+    case 1:
+      return "admin";
+    case 2:
+      return "collaborator";
+    case 3:
+      return "agent";
+    case 4:
+      return "superAdmin";
+    case 5:
+      return "assistant";
+    default:
+      return "notUser";
+  }
+};
+
+//This function return if the userId is match with list of collaborators
+export const matchUser = (listCollaborators) => {
+  let userId = localStorage.getItem("login_data")
+    ? JSON.parse(localStorage.getItem("login_data")).userId
+    : null;
+  if (userId === null) return 0;
+  const isMatch = listCollaborators.some(function (collaborator) {
+    if (collaborator.id === userId) return true;
+  });
+  return isMatch;
+};

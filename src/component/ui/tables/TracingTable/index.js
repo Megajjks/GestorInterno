@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import Spinner from "../../Spinner";
 import Error from "../../alerts/Error";
 import Eye from "../../../../assets/img/eye.svg";
-import { api } from "../../../../helpers/api";
+import api from "../../../../helpers/api";
 import { filterWithStatus, dataStatus } from "../../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
@@ -87,7 +87,7 @@ const TracingTable = () => {
 
   const viewDetails = (item) => {
     history.push({
-      pathname: `/traicing_commitment/${item.id}`,
+      pathname: `/panel/traicing_commitment/${item.id}`,
       state: item.id,
     });
   };
