@@ -11,7 +11,7 @@ export const TableHeader = styled(TableHead)`
   font-family: airbnb-cerial;
 `;
 
-export const EyeIcon = styled.img`
+export const Icon = styled.img`
   width: 24px;
   margin-right: 5px;
 `;

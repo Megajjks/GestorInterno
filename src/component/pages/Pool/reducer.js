@@ -5,12 +5,14 @@ export const reducer = (state, action) => {
       return {
         ...state,
         commitmentsLoader: true,
+        showBtnSycn: false,
         commitmentsError: null,
       };
     case actions.getCommitmentsSuccess:
       return {
         ...state,
-        commitments: action.payload,
+        commitments: action.payload.commitments,
+        showBtnSycn: action.payload.existSync,
         commitmentsLoader: false,
       };
     case actions.getCommitmentsError:
@@ -40,6 +42,26 @@ export const reducer = (state, action) => {
         ...state,
         exportData: false,
         exportDataMessage: action.payload,
+      };
+    case actions.sync:
+      return {
+        ...state,
+        syncCommitmentsLoader: true,
+        syncCommitmentsError: null,
+      };
+    case actions.syncSucess:
+      return {
+        ...state,
+        showBtnSycn: false,
+        syncCommitmentsLoader: false,
+        reload: action.payload,
+      };
+    case actions.syncError:
+      return {
+        ...state,
+        showBtnSycn: true,
+        syncCommitmentsLoader: false,
+        syncCommitmentsError: action.payload,
       };
     default:
       return state;

@@ -66,8 +66,9 @@ export const dataStatus = (status) => {
         tag: "declinado",
       };
     case "falla":
+    case "falla al sincronizar":
       return {
-        value: "falla",
+        value: "falla al sincronizar",
         background: "#C0392B",
         color: "#FFFFFF",
         tag: "falla",
@@ -221,4 +222,11 @@ export const matchUser = (listCollaborators) => {
     if (collaborator.id === userId) return true;
   });
   return isMatch;
+};
+
+//This function return if there are unsynchronized commitments
+export const existSync = (commitments) => {
+  return commitments.some(function (commitment) {
+    if (commitment.status === "falla") return true;
+  });
 };

@@ -1,11 +1,12 @@
 import React from "react";
-import { Tablestyle, TableHeader, EyeIcon, Details, SearchBar } from "./styled";
+import { Tablestyle, TableHeader, Icon, Details, SearchBar } from "./styled";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Eye from "../../../../assets/img/eye.svg";
+import IcoError from "../../../../assets/img/error.svg";
 import { dataStatus } from "../../../../helpers";
 
 const fields = [
@@ -48,10 +49,14 @@ const PoolTable = ({ commitments, viewDetails }) => {
                 {dataStatus(commitment.status).value}
               </TableCell>
               <TableCell align="center">
-                <Details onClick={() => viewDetails(commitment)}>
-                  <EyeIcon src={Eye} alt="details" />
-                  Visualizar
-                </Details>
+                {commitment.status === "falla" ? (
+                  <Icon src={IcoError} alt="sycn error" />
+                ) : (
+                  <Details onClick={() => viewDetails(commitment)}>
+                    <Icon src={Eye} alt="details" />
+                    Visualizar
+                  </Details>
+                )}
               </TableCell>
             </TableRow>
           ))}

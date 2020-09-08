@@ -5,12 +5,13 @@ import Btn from "../../ui/GeneralButton";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import api from "../../../helpers/api";
-import { filterWithStatus, dataStatus } from "../../../helpers";
+import { filterWithStatus, dataStatus, existSync } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
-import { WrapperHeader, SearchBar } from "./styled";
+import { WrapperHeader, BtnGroup, SearchBar } from "./styled";
 import IcoExport from "../../../assets/img/download.svg";
+import IcoSync from "../../../assets/img/sync.svg";
 
 const Pool = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -25,10 +26,13 @@ const Pool = () => {
         const { data } = await api.get("/commitments");
 
         //filter commitments with status
-        let query = ["prevalidado", "validando", "correcion"];
+        let query = ["prevalidado", "validando", "correcion", "falla"];
         dispatch({
           type: actions.getCommitmentsSuccess,
-          payload: filterWithStatus(data, query),
+          payload: {
+            commitments: filterWithStatus(data, query),
+            existSync: existSync(data),
+          },
         });
       } catch (e) {
         dispatch({
@@ -39,7 +43,7 @@ const Pool = () => {
       }
     };
     fetchCommitment();
-  }, []);
+  }, [state.reload]);
 
   //Logic of search bar
   useEffect(() => {
@@ -116,18 +120,44 @@ const Pool = () => {
       });
   };
 
+  //function to Synchronization the commitments in the salesForce(
+  const syncCommitments = async () => {
+    dispatch({ type: actions.sync });
+    try {
+      const { data } = await api.post("/resendall");
+      dispatch({ type: actions.syncSucess, payload: !state.reload });
+    } catch {
+      dispatch({
+        type: actions.syncError,
+        payload: "Problemas al sincronizar los compromisos",
+      });
+    }
+  };
+
   return (
     <Fragment>
       <WrapperHeader>
         <h1>Pool de compromisos</h1>
-        <Btn
-          title="Exportar datos"
-          size="20%"
-          type="primary-loader"
-          ico={IcoExport}
-          onClick={exportData}
-          loader={state.exportData}
-        />
+        <BtnGroup showBtnSycn={state.showBtnSycn}>
+          {state.showBtnSycn ? (
+            <Btn
+              title="Sincronizar"
+              size="40%"
+              type="primary-loader"
+              ico={IcoSync}
+              onClick={syncCommitments}
+              loader={state.syncCommitmentsLoader}
+            />
+          ) : null}
+          <Btn
+            title="Exportar datos"
+            size="40%"
+            type="primary-loader"
+            ico={IcoExport}
+            onClick={exportData}
+            loader={state.exportData}
+          />
+        </BtnGroup>
       </WrapperHeader>
       <SearchBar value={searchString} onChange={search} />
       <PoolTable commitments={state.commitments} viewDetails={viewDetails} />

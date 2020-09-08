@@ -6,4 +6,7 @@ export const actions = {
   exportData: "EXPORT_DATA",
   exportDataSuccess: "EXPORT_DATA_SUCCESS",
   exportDataError: "EXPORT_DATA_ERROR",
+  sync: "SYNC",
+  syncSucess: "SYNC_SUCCESS",
+  syncError: "SYNC_ERROR",
 };
