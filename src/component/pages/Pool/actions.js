@@ -3,4 +3,7 @@ export const actions = {
   getCommitmentsSuccess: "GET_COMMITMENTS_SUCCESS",
   getCommitmentsError: "GET_COMMITMENTS_ERROR",
   filterCommitments: "FILTER_COMMITMENTS",
+  exportData: "EXPORT_DATA",
+  exportDataSuccess: "EXPORT_DATA_SUCCESS",
+  exportDataError: "EXPORT_DATA_ERROR",
 };

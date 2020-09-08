@@ -3,4 +3,6 @@ export const initialState = {
   commitmentsFilter: [],
   commitmentsLoader: false,
   commitmentsError: null,
+  exportData: false,
+  exportDataMessage: null,
 };

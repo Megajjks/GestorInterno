@@ -24,6 +24,23 @@ export const reducer = (state, action) => {
         ...state,
         commitmentsFilter: action.payload,
       };
+    case actions.exportData:
+      return {
+        ...state,
+        exportData: true,
+        exportDataMessage: null,
+      };
+    case actions.exportDataSuccess:
+      return {
+        ...state,
+        exportData: false,
+      };
+    case actions.exportDataError:
+      return {
+        ...state,
+        exportData: false,
+        exportDataMessage: action.payload,
+      };
     default:
       return state;
   }
