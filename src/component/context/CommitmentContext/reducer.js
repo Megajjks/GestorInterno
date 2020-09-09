@@ -125,6 +125,24 @@ export const reducer = (state, action) => {
           [action.payload.field]: action.payload.value,
         },
       };
+    case actions.getTasksList:
+      return {
+        ...state,
+        tasksLoading: true,
+        tasksError: null,
+      };
+    case actions.getTasksListSuccess:
+      return {
+        ...state,
+        tasks: action.payload,
+        tasksLoading: false,
+      };
+    case actions.getTasksListError:
+      return {
+        ...state,
+        tasksLoading: false,
+        tasksError: action.payload,
+      };
     case actions.addTask:
       return {
         ...state,
@@ -140,7 +158,7 @@ export const reducer = (state, action) => {
           date: "",
         },
         newTaskLoading: false,
-        reload: action.payload,
+        reloadTasks: action.payload,
       };
     case actions.addTaskError:
       return {

@@ -9,6 +9,7 @@ export const Wrapper = styled.div`
 
 export const WrapperTask = styled.div`
   place-self: start stretch;
+  height: 100%;
 `;
 
 export const WrapperOpc = styled.div`
