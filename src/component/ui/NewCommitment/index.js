@@ -35,8 +35,8 @@ import api from "../../../helpers/api";
 import {
   states,
   sector,
-  commitmentImpact,
   socialNetworks,
+  area
 } from "../../../helpers/index";
 
 const addStyle = (id1, id2, id3, id4, id5) => {
@@ -66,7 +66,10 @@ const NewCommitment = () => {
     position: "",
     email: "",
     phone: "",
+    logo: "",
+    img: "",
     categoryId: 0,
+    area: "",
     question1: "",
     question2: "",
     question3: "",
@@ -82,15 +85,13 @@ const NewCommitment = () => {
     sendEmails: false,
   });
 
-  const aqui = false;
-
   const [question8Add, setQuestion8Add] = useState({
-    "8-1": false,
-    "8-2": false,
-    "8-3": false,
-    "8-4": false,
-    "8-5": false,
-    "8-6": false,
+    "question8_1": false,
+    "question8_2": false,
+    "question8_3": false,
+    "question8_4": false,
+    "question8_5": false,
+    "question8_6": false,
   });
 
   const handleOnChangeQuestion8 = (e) => {
@@ -126,28 +127,31 @@ const NewCommitment = () => {
     });
   };
 
-  const [images, setImages] = useState({
-    logo: null,
-    logoName: "",
-    img: null,
-    imgName: "",
-  });
+  const [img, setImg] = useState([]);
 
-  const onChangeHandlerLogo = (e) => {
+  const [logo, setLogo] = useState([])
+
+  const onChangeHandlerLogo = e => {
+    console.log("Logo");
     console.log(e.target.files[0]);
-    setImages({
-      ...images,
-      [e.target.name]: e.target.files[0],
-      logoName: e.target.files[0].name,
+    setLogo({
+      selectedFile: e.target.files[0]
+    });
+    setCommitment({
+      ...commitment,
+      [e.target.name]: e.target.files[0].name
     });
   };
 
-  const onChangeHandlerImg = (e) => {
+  const onChangeHandlerImg = e => {
+    console.log("Img");
     console.log(e.target.files[0]);
-    setImages({
-      ...images,
-      [e.target.name]: e.target.files[0],
-      imgName: e.target.files[0].name,
+    setImg({
+      selectedFile: e.target.files[0]
+    });
+    setCommitment({
+      ...commitment,
+      [e.target.name]: e.target.files[0].name
     });
   };
 
@@ -162,6 +166,7 @@ const NewCommitment = () => {
       commitment.lastName === "" ||
       commitment.organization === "" ||
       commitment.sector === "" ||
+      commitment.area === "" ||
       commitment.city === "" ||
       commitment.state === "" ||
       commitment.position === "" ||
@@ -214,8 +219,9 @@ const NewCommitment = () => {
       formdata.append("phone", commitment.phone);
       formdata.append("email", commitment.email);
       formdata.append("categoryId", 0);
-      formdata.append("img", images.img, images.imgName);
-      formdata.append("logo", images.logo, images.logoName);
+      formdata.append("img", img.selectedFile);
+      formdata.append("logo", logo.selectedFile);
+      formdata.append("area", commitment.area);
       formdata.append("question1", commitment.question1);
       formdata.append("question2", commitment.question2);
       formdata.append("question3", commitment.question3);
@@ -223,13 +229,13 @@ const NewCommitment = () => {
       formdata.append("question5", commitment.question5);
       formdata.append("question6", commitment.question6);
       formdata.append("question7", commitment.question7);
-      formdata.append("question8", commitment.question8);
+      //formdata.append("question8", commitment.question8);
       formdata.append("question9", commitment.question9);
       formdata.append("question10", commitment.question10);
       formdata.append("question11", commitment.question11);
       formdata.append("question12", commitment.question12);
       formdata.append("sendEmails", commitment.sendEmails);
-      const response = await api.post("/commitments", formdata);
+      const response = await api.post("/commitment", formdata);
       console.log("👉 Returned data:", response);
       setIsLoader(false);
       setError({
@@ -511,7 +517,7 @@ const NewCommitment = () => {
             />
             <LabelFile for="imglogo">
               {" "}
-              {images.logoName ? images.logoName : "Selecciona una imagen"}{" "}
+              {commitment.logo ? commitment.logo : "Selecciona una imagen"}{" "}
             </LabelFile>
           </Field>
           <Field>
@@ -529,7 +535,7 @@ const NewCommitment = () => {
             />
             <LabelFile for="imgimpacto">
               {" "}
-              {images.imgName ? images.imgName : "Selecciona una imagen"}{" "}
+              {commitment.img ? commitment.img : "Selecciona una imagen"}{" "}
             </LabelFile>
           </Field>
           <h3>Construye tu compromiso</h3>
@@ -675,6 +681,62 @@ const NewCommitment = () => {
               </SpanText>
             </WrapperSpan5>
           </WrapperTextSuggestion>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <Field>
+            <Label>
+              Selecciona el área de tu compromiso{" "}
+              <TxtRequired>*</TxtRequired>
+            </Label>
+            <Select
+              name="area"
+              onFocus={() => {
+                removeStyle(
+                  "suggestion1",
+                  "suggestion2",
+                  "suggestion3",
+                  "suggestion4",
+                  "suggestion5"
+                );
+              }}
+              style={{ width: "61em" }}
+              value={commitment.area}
+              onChange={handleOnChange}
+            >
+              <option value="">-- Seleccione --</option>
+              {area.map((item, idx) => {
+                return (
+                  <option value={item} key={idx}>
+                    {item}
+                  </option>
+                );
+              })}
+            </Select>
+          </Field>
+
+
+
+
+
+
+
+
+
+
+
+
+
           <Field>
             <Label>
               ¿De qué manera Ashoka y su red pueden ayudarte a escalar el
@@ -781,7 +843,7 @@ const NewCommitment = () => {
                   "suggestion5"
                 );
               }}
-              style={{ width: "37em" }}
+              style={{ width: "61em" }}
               value={commitment.question10}
               onChange={handleOnChange}
             >

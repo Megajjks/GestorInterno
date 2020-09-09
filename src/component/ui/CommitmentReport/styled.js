@@ -139,27 +139,6 @@ export const TypeSector = styled.h1`
   margin-top: 0.8em;
 `;
 
-export const Position = styled.div`
-  width: 50%;
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 6px;
-`;
-
-export const TxtPosition = styled.h1`
-  color: ${(props) => props.theme.colors.black};
-  font-weight: 800;
-  font-size: 1em;
-`;
-
-export const TypePosition = styled.h1`
-  color: ${(props) => props.theme.colors.black};
-  font-weight: 500;
-  font-size: 0.9em;
-  margin-left: 7px;
-  margin-top: 0.8em;
-`;
-
 export const WrapperLocation = styled.div`
   width: 40%;
   display: flex;

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -10,11 +10,15 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { WrapperLogo, Logo } from "./styled";
+import api from "../../../../helpers/api"
 
-import { states, sector, commitmentImpact, socialNetworks } from '../../../../helpers/index';
+import { states, sector, commitmentImpact, socialNetworks, area } from '../../../../helpers/index';
 
 const EditCommitmentModal = ({ handleClose, open, dataForm }) =>{
   const [data, setData] = useState(dataForm);
+  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
+  const history = useHistory();
+  const [dataUpdate, setDataUpdate] = useState(null);
 
   useEffect(() => {
     setData(dataForm)
@@ -25,6 +29,12 @@ const EditCommitmentModal = ({ handleClose, open, dataForm }) =>{
       {
         ...data,
         [e.target.name]: e.target.value,
+      }
+    )
+    setDataUpdate(
+      {
+        ...dataUpdate,
+        [e.target.name]: e.target.value
       }
     )
   };
@@ -42,8 +52,15 @@ const EditCommitmentModal = ({ handleClose, open, dataForm }) =>{
     )
   }
 
-  const putCommitment = () => {
-    /* update data of commitment */
+  const putCommitment = async () => {
+    try {
+      const idCommitment = history.location.state.id;
+      const response = await api.put(`/commitmentsupdate/${idCommitment}`, dataUpdate);
+      console.log(response);
+      window.location.reload();
+    } catch(e) {
+      console.log(`Request failed: ${e}`);
+    }
     handleClose();
   };
   
@@ -106,7 +123,7 @@ const EditCommitmentModal = ({ handleClose, open, dataForm }) =>{
           color="secondary"
           fullWidth
           margin="dense"
-          style={{ marginTop: "10px", marginBottom: "30px" }}
+          style={{ marginTop: "10px", marginBottom: "15px" }}
         />
       
         <InputLabel id="sector-select-label">Sector</InputLabel>
@@ -125,6 +142,24 @@ const EditCommitmentModal = ({ handleClose, open, dataForm }) =>{
             })
           }
         </Select>
+        <InputLabel 
+          style={{ marginTop: "15px"}}
+          id="sector-select-label">Área</InputLabel>
+        <Select
+          labelId="area-select-label"
+          id="area-select"
+          name="area"
+          value={data.area}
+          onChange={handleOnChange}
+          fullWidth
+        >
+          <MenuItem value="">-- Seleccione --</MenuItem>
+          {
+            area.map((item, idx)=>{
+             return <MenuItem value={item} key={idx} >{item}</MenuItem>
+            })
+          }
+        </Select>
         <TextField
           type="text"
           name="city"
@@ -134,7 +169,7 @@ const EditCommitmentModal = ({ handleClose, open, dataForm }) =>{
           color="secondary"
           fullWidth
           margin="dense"
-          style={{ marginTop: "10px", marginBottom: "30px" }}
+          style={{ marginTop: "10px", marginBottom: "15px" }}
         />
         <InputLabel id="state-select-label">Estado</InputLabel>
         <Select

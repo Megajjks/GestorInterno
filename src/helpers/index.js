@@ -190,6 +190,16 @@ export const socialNetworks = [
   "Sitio Web Ashoka",
   "Otro",
 ];
+
+export const area = [
+  "Comunicaciones",
+  "Niñez y Juventud",
+  "Ecosistemas Sociales",
+  "Alianzas Estratégicas",
+  "Finanzas",
+  "Venture y Fellowship"
+];
+
 //This function return the name of rol
 export const rolName = () => {
   let rol = localStorage.getItem("login_data")
