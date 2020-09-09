@@ -218,10 +218,14 @@ export const matchUser = (listCollaborators) => {
     ? JSON.parse(localStorage.getItem("login_data")).userId
     : null;
   if (userId === null) return 0;
-  const isMatch = listCollaborators.some(function (collaborator) {
-    if (collaborator.id === userId) return true;
-  });
-  return isMatch;
+  try {
+    const isMatch = listCollaborators.some(function (collaborator) {
+      if (collaborator.id === userId) return true;
+    });
+    return isMatch;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 //This function return if there are unsynchronized commitments

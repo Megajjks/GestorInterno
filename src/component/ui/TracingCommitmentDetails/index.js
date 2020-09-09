@@ -7,6 +7,7 @@ import TaskList from "../TaskList";
 import CollaboratorCardList from "../CollaboratorCardList";
 import Spinner from "../Spinner";
 import Error from "../alerts/Error";
+import WithoutTasks from "../alerts/WithoutTasks";
 import {
   dataStatus,
   filterWithRol,
@@ -79,6 +80,24 @@ const TracingCommitmentDetails = (props) => {
     getCommitment();
     getListCollaborator();
   }, [state.reload]);
+
+  //get tasks
+  useEffect(() => {
+    const getTasks = async () => {
+      dispatch({ type: actions.getTasksList });
+      try {
+        const { data } = await api.get("/tasks");
+        dispatch({ type: actions.getTasksListSuccess, payload: data });
+      } catch {
+        dispatch({
+          type: actions.getTasksListError,
+          payload:
+            "ha ocurrido un problema al buscar las tareas de seguimiento. Verifica si tienes conexión a internet y vuelve a intentar",
+        });
+      }
+    };
+    getTasks();
+  }, [state.reload, state.reloadTasks]);
 
   //post to add colaborador in commitment
   const addCollaborator = () => {
@@ -181,14 +200,34 @@ const TracingCommitmentDetails = (props) => {
   const handleNewColaborator = (item) => {
     dispatch({ type: actions.setColaborator, payload: item });
   };
-  console.log(matchUser(state.commitment.collaborators));
+
+  const renderTasks = () => {
+    if (state.tasksError) {
+      return <Error content={state.tasksError} />;
+    }
+    if (state.tasks.length === 0) {
+      return (
+        <WithoutTasks
+          title="¡Oh! aun no se a levantando una tarea de seguimiento"
+          content="Puedes levantar una nueva tarea si eres un colaborador de este compromiso dando click en el botón de Nueva tarea para empezar a dar seguimiento a este proyecto"
+        />
+      );
+    }
+    return (
+      <TaskList
+        tasks={state.tasks}
+        isCollaborator={matchUser(state.commitment.collaborators)}
+      />
+    );
+  };
+
   const renderView = () => {
     return (
       <Fragment>
         <h1> {state.commitment.organization} </h1>
         <Wrapper>
           <WrapperTask>
-            <TaskList></TaskList>
+            {state.tasksLoading ? <Spinner /> : renderTasks()}
           </WrapperTask>
           <WrapperOpc>
             <Options>

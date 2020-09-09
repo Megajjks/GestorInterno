@@ -23,4 +23,7 @@ export const actions = {
   addTask: "ADD_TASK",
   addTaskSuccess: "ADD_TASK_SUCCESS",
   addTaskError: "ADD_TASK_ERROR",
+  getTasksList: "GET_TASKS_LIST",
+  getTasksListSuccess: "GET_TASKS_LIST_SUCCESS",
+  getTasksListError: "GET_TASKS_LIST_ERROR",
 };
