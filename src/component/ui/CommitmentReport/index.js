@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Wrapper,
@@ -16,9 +16,6 @@ import {
   Sector,
   TxtSector,
   TypeSector,
-  Position,
-  TxtPosition,
-  TypePosition,
   WrapperLocation,
   WrapperCheckbox,
   WrapperContact,
@@ -41,6 +38,8 @@ import EditCommitmentModal from "../modals/EditCommitmentModal";
 import DynamicScrollToTop from "../../hooks/DynamicScrollToTop";
 import api from "../../../helpers/api";
 import { rolName } from "../../../helpers";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 import { actions } from "./actions";
 import { initialState } from "./constants";
@@ -51,6 +50,34 @@ const CommitmentReport = (props) => {
 
   const history = useHistory();
   const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
+
+  //Alert commitment update status "primer_contacto" 
+  const [error, setError] = useState({
+    status: false,
+    message: "",
+    typeMessage: ""
+  });
+
+  function AlertError(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setError({
+      ...error,
+      status: false,
+      typeMessage: ""
+    });
+  };
+
+  //After executing the alert on informing that the commitment has been successfully
+  const successData = () => {
+    history.push("/panel/pool");
+  }
+
 
   useEffect(() => {
     const fetchCommitmentReport = async () => {
@@ -85,10 +112,23 @@ const CommitmentReport = (props) => {
         {},
         { headers: { Authorization: token } }
       );
+      setError({
+        status: true,
+        message:
+          "¡Excelente!, Su petición ha sido enviada exitosamente.", 
+        typeMessage: "success"
+      });
+      setTimeout(successData, 3000);
     } catch (e) {
+      setError({
+        status: true,
+        message:
+          "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo", 
+        typeMessage: "error"
+      });
       console.log(e);
+      setTimeout(successData, 3000);
     }
-    history.push("/panel/pool");
   };
 
   //functions modal feedback
@@ -152,10 +192,14 @@ const CommitmentReport = (props) => {
           <TxtSector>Sector: </TxtSector>
           <TypeSector>{state.dataForm.sector}</TypeSector>
         </Sector>
-        <Position>
-          <TxtPosition>Cargo: </TxtPosition>
-          <TypePosition>{state.dataForm.position}</TypePosition>
-        </Position>
+        <Sector>
+          <TxtSector>Area: </TxtSector>
+          <TypeSector>{state.dataForm.area}</TypeSector>
+        </Sector>
+        <Sector>
+          <TxtSector>Cargo: </TxtSector>
+          <TypeSector>{state.dataForm.position}</TypeSector>
+        </Sector>
         <WrapperLocation>
           <WrapperImgTxt>
             <Icon src={IconState} />
@@ -286,14 +330,22 @@ const CommitmentReport = (props) => {
       <FeedbackModal
         openModalFeedback={state.modalFeedback}
         closeModalFeedback={closeModalFeedback}
-        option={state.option}
-        idCommitmentReport={state.idCommitment}
+        optionFeedback={state.option}
       />
       <EditCommitmentModal
         open={state.showEditCommitmentModal}
         handleClose={closeEditCommitmentModal}
         dataForm={state.dataForm}
       />
+      <Snackbar
+        open={error.status}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <AlertError onClose={handleClose} severity={error.typeMessage}>
+          {error.message}
+        </AlertError>
+      </Snackbar>
     </Wrapper>
   );
 };
