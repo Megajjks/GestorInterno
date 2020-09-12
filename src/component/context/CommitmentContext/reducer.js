@@ -157,14 +157,61 @@ export const reducer = (state, action) => {
           description: "",
           date: "",
         },
+        showModalTask: false,
         newTaskLoading: false,
         reloadTasks: action.payload,
       };
     case actions.addTaskError:
       return {
         ...state,
+        showModalTask: false,
         newTaskLoading: false,
         newTaskError: action.payload,
+      };
+    case actions.changeTaskStatusSuccess:
+      return {
+        ...state,
+        reloadTasks: action.payload,
+        msgError: null,
+      };
+    case actions.changeTaskStatusError:
+      return {
+        ...state,
+        msgError: action.payload,
+      };
+    case actions.removeTaskSuccess:
+      return {
+        ...state,
+        reloadTasks: action.payload,
+        msgError: null,
+      };
+    case actions.removeTaskError:
+      return {
+        ...state,
+        msgError: action.payload,
+      };
+    case actions.showModalAddTask:
+      return {
+        ...state,
+        showModalTask: action.payload,
+        isEditModalTask: false,
+      };
+    case actions.showModalEditTask:
+      return {
+        ...state,
+        newTask: action.payload.task,
+        showModalTask: action.payload.isShow,
+        isEditModalTask: true,
+      };
+    case actions.closeModalEditTask:
+      return {
+        ...state,
+        newTask: {
+          title: "",
+          description: "",
+          date: "",
+        },
+        showModalTask: action.payload.isShow,
       };
     default:
       return state;

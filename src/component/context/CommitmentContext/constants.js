@@ -26,4 +26,7 @@ export const initialState = {
   },
   newTaskLoading: false,
   newTaskError: null,
+  showModalTask: false,
+  isEditModalTask: false,
+  msgError: null,
 };

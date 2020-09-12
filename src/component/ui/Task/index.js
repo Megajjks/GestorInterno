@@ -61,20 +61,28 @@ const Task = ({
   date,
   user,
   isCollaborator,
+  changeStatusTask,
+  removeTask,
+  editTask,
 }) => {
   return (
     <Wrapper isCollaborator={isCollaborator}>
       {isCollaborator && (
         <WrapperCheckTask>
           {status ? (
-            <CheckTask src={IconCompleteTask} />
+            <CheckTask src={IconCompleteTask} onClick={changeStatusTask} />
           ) : (
-            <CheckTask src={IconIncompleteTask} />
+            <CheckTask src={IconIncompleteTask} onClick={changeStatusTask} />
           )}
         </WrapperCheckTask>
       )}
       <TaskData>
-        <TitleTask>{title}</TitleTask>
+        <SectionEditTask>
+          <TitleTask>{title}</TitleTask>
+          {isCollaborator && (
+            <ImgEditTask src={IconEdit} alt="edit" onClick={editTask} />
+          )}
+        </SectionEditTask>
         <WrapperInfo>
           <ImgProfile src={user.image} />
           <TxtIcon>{`${user.firstName} ${user.lastName}`}</TxtIcon>
@@ -88,7 +96,7 @@ const Task = ({
       <WrapperPriority>
         {isCollaborator ? (
           <>
-            <CloseTask src={IconCloseTask} />
+            <CloseTask src={IconCloseTask} onClick={removeTask} />
             <Priority priority={priority} />
           </>
         ) : (

@@ -162,19 +162,16 @@ const TracingCommitmentDetails = (props) => {
     });
   };
 
-  //functions to open, close, add Task
+  //Behavior of tasks
 
-  const ClickOpenModalCreateTask = () => {
-    setOpenCreateTask(true);
+  //functions to open, close
+  const showModalAddTask = () => {
+    dispatch({ type: actions.showModalAddTask, payload: !state.showModalTask });
   };
 
-  const closeModalCreateTask = () => {
-    setOpenCreateTask(false);
-  };
-
+  //functions to add task
   const addTask = () => {
-    console.log("add task");
-    ClickOpenModalCreateTask();
+    showModalAddTask();
   };
 
   //function to show details
@@ -358,8 +355,9 @@ const TracingCommitmentDetails = (props) => {
     <Fragment>
       {state.commitmentLoading ? <Spinner /> : renderError()}
       <ModalCreateTask
-        openNewTask={openCreateTask}
-        closeModalNewTask={closeModalCreateTask}
+        openNewTask={state.showModalTask}
+        closeModalNewTask={showModalAddTask}
+        isEdit={state.isEditModalTask}
       />
     </Fragment>
   );

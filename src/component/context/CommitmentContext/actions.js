@@ -26,4 +26,13 @@ export const actions = {
   getTasksList: "GET_TASKS_LIST",
   getTasksListSuccess: "GET_TASKS_LIST_SUCCESS",
   getTasksListError: "GET_TASKS_LIST_ERROR",
+  changeTaskStatus: "CHANGE_TASK_STATUS",
+  changeTaskStatusSuccess: "CHANGE_TASK_STATUS_SUCCESS",
+  changeTaskStatusError: "CHANGE_TASK_STATUS_ERROR",
+  removeTask: "REMOVE_TASK",
+  removeTaskSuccess: "REMOVE_TASK_SUCCESS",
+  removeTaskError: "REMOVE_TASK_ERROR",
+  showModalAddTask: "SHOW_MODAL_ADD_TASK",
+  showModalEditTask: "SHOW_MODAL_EDIT_TASK",
+  closeModalEditTask: "CLOSE_MODAL_EDIT_TASK",
 };

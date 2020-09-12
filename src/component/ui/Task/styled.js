@@ -84,7 +84,8 @@ export const TaskPriority = styled.div`
 export const SectionEditTask = styled.div`
   width: 80%;
   display: flex;
-  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 export const WrapperCollaborator = styled.div`
@@ -107,9 +108,9 @@ export const WrapperEditTask = styled.div`
 `;
 
 export const ImgEditTask = styled.img`
-  width: 16px;
-  height: 16px;
-  margin-top: 18px;
+  width: 1em;
+  height: 1em;
+  padding-left: 1em;
   &:hover {
     cursor: pointer;
   }

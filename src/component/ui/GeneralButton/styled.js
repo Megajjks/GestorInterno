@@ -5,7 +5,7 @@ export const ButtonPrimary = styled.button`
   width: ${(props) => (props.size ? props.size : "100%")};
   padding: 0.5rem 1.5rem;
   color: #fff;
-  border: none;
+  border: 2px solid ${(props) => props.theme.colors.primary};
   transition: background-color 0.3s ease;
   margin-top: 1rem;
   box-shadow: 2px 2px 5px #999;
