@@ -124,7 +124,7 @@ const Pool = () => {
   const syncCommitments = async () => {
     dispatch({ type: actions.sync });
     try {
-      const { data } = await api.post("/resendall");
+      const { data } = await api.post("/resendall/");
       dispatch({ type: actions.syncSucess, payload: !state.reload });
     } catch {
       dispatch({
