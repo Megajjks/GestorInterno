@@ -28,19 +28,15 @@ import IconClock from "../../../assets/img/clock.svg";
 import IconEdit from "../../../assets/img/editar.svg";
 
 function StatusTaskComplete({ status }) {
-  if (status) {
-    return (
-      <WrapperStatusTask>
-        <StatusTask>Completada</StatusTask>
-      </WrapperStatusTask>
-    );
-  } else {
-    return (
-      <WrapperStatusTask style={{ backgroundColor: "#E73D3A" }}>
-        <StatusTask style={{ color: "#FFFFFF" }}>Sin Completar</StatusTask>
-      </WrapperStatusTask>
-    );
-  }
+  return status === "true" ? (
+    <WrapperStatusTask>
+      <StatusTask>Completada</StatusTask>
+    </WrapperStatusTask>
+  ) : (
+    <WrapperStatusTask style={{ backgroundColor: "#E73D3A" }}>
+      <StatusTask style={{ color: "#FFFFFF" }}>Sin Completar</StatusTask>
+    </WrapperStatusTask>
+  );
 }
 
 function Priority({ priority }) {
@@ -69,7 +65,7 @@ const Task = ({
     <Wrapper isCollaborator={isCollaborator}>
       {isCollaborator && (
         <WrapperCheckTask>
-          {status ? (
+          {status === "true" ? (
             <CheckTask src={IconCompleteTask} onClick={changeStatusTask} />
           ) : (
             <CheckTask src={IconIncompleteTask} onClick={changeStatusTask} />

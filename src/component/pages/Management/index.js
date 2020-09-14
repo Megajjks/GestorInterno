@@ -19,13 +19,11 @@ const Management = () => {
     const fetchCommitments = async () => {
       dispatch({ type: actions.getCommitments });
       try {
-        const { data } = await api.get("/commitments");
+        const { data } = await api.get("/commitments/filter/management/");
+        //const response = await api.get("/commitments/filter/management/");
         dispatch({
           type: actions.getCommitmentsSuccess,
-          payload: filterWithIdCollaboratorAndStatus(data, userId, [
-            "primer_contacto",
-            "articulando",
-          ]),
+          payload: data,
         });
       } catch (e) {
         dispatch({

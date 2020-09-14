@@ -168,16 +168,18 @@ export const reducer = (state, action) => {
         newTaskLoading: false,
         newTaskError: action.payload,
       };
-    case actions.changeTaskStatusSuccess:
+    case actions.updateTaskSuccess:
       return {
         ...state,
         reloadTasks: action.payload,
         msgError: null,
+        showModalTask: false,
       };
-    case actions.changeTaskStatusError:
+    case actions.updateTaskError:
       return {
         ...state,
         msgError: action.payload,
+        showModalTask: false,
       };
     case actions.removeTaskSuccess:
       return {

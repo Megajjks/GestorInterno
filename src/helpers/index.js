@@ -198,7 +198,7 @@ export const area = [
   "Ecosistemas Sociales",
   "Alianzas Estratégicas",
   "Finanzas",
-  "Venture y Fellowship"
+  "Venture y Fellowship",
 ];
 
 //This function return the name of rol
@@ -243,4 +243,13 @@ export const existSync = (commitments) => {
   return commitments.some(function (commitment) {
     if (commitment.status === "falla") return true;
   });
+};
+
+//This funcition change the string of status
+export const changeStatus = (status) => {
+  if (status === "true") {
+    return "false";
+  } else {
+    return "true";
+  }
 };

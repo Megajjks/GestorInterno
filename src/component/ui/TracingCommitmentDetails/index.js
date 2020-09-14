@@ -64,11 +64,11 @@ const TracingCommitmentDetails = (props) => {
     const getListCollaborator = async () => {
       dispatch({ type: actions.getCollaboratorsList });
       try {
-        const url = `/users`;
+        const url = `/missingCollaborators/${history.location.state}`;
         const { data } = await api.get(url);
         dispatch({
           type: actions.getCollaboratorsListSuccess,
-          payload: filterWithRol(data, ["1", "2"]),
+          payload: data,
         });
       } catch (e) {
         dispatch({

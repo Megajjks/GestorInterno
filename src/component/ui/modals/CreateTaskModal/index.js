@@ -44,7 +44,7 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
           date: state.newTask.date,
           collaboratorId: id,
         });
-        dispatch({ type: actions.addTaskSuccess, payload: !state.reload });
+        dispatch({ type: actions.addTaskSuccess, payload: !state.reloadTasks });
       };
       fetchTask();
     } catch (e) {
@@ -53,9 +53,24 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
   };
 
   //save data after edit the task
-  const saveTask = () => {
+  const saveTask = async () => {
     console.log("guardando la tarea");
     //request to save change of task
+    try {
+      const response = await api.put(
+        `/tasks/${state.newTask.id}`,
+        state.newTask
+      );
+      dispatch({
+        type: actions.updateTaskSuccess,
+        payload: !state.reloadTasks,
+      });
+    } catch {
+      dispatch({
+        type: actions.updateTaskError,
+        payload: "Ocurrió un error al momento de actulizar la tarea",
+      });
+    }
   };
 
   //close task and clean data when modal is edit Task
