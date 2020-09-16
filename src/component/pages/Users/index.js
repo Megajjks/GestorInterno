@@ -1,8 +1,8 @@
-import React, { Fragment, useReducer, useEffect } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { WrapperHeader } from "./styled";
-import { actions } from "./actions";
-import { initialState } from "./constants";
-import { reducer } from "./reducer";
+import { StoreContext } from "../../context/StoreContext";
+import { actions } from "../../context/StoreContext/actions";
+import UserModal from "../../ui/modals/UserModal";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import UserTable from "../../ui/tables/UserTable";
@@ -11,7 +11,7 @@ import Btn from "../../ui/GeneralButton";
 import AddIcon from "../../../assets/img/add.svg";
 
 const Users = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useContext(StoreContext);
 
   //get users
   useEffect(() => {
@@ -30,6 +30,20 @@ const Users = () => {
     getUsers();
   }, [state.reload]);
 
+  //Behaviors modals
+  //functions to open, close to modal add user
+  const showModalAddUser = () => {
+    dispatch({ type: actions.showModalAddUser, payload: !state.showModal });
+  };
+  // //functions to open, close to modal edit user
+  const showModalEditUser = () => {
+    dispatch({ type: actions.showModalEditUser, payload: !state.showModal });
+  };
+  //functions to close to modal add user and clean the modal.
+  const closeModalEditUser = () => {
+    dispatch({ type: actions.closeModalEditUser });
+  };
+
   return (
     <Fragment>
       <WrapperHeader>
@@ -39,9 +53,11 @@ const Users = () => {
           size="20%"
           type="primary-loader"
           ico={AddIcon}
+          onClick={showModalAddUser}
         />
       </WrapperHeader>
       <UserTable users={state.users} />
+      <UserModal closeModalUser={showModalAddUser} />
       {state.usersLoader ? <Spinner /> : null}
       {state.msgError ? <Error /> : null}
     </Fragment>

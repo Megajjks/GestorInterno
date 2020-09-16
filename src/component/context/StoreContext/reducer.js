@@ -19,6 +19,24 @@ export const reducer = (state, action) => {
         usersLoader: false,
         msgError: action.payload,
       };
+    case actions.showModalAddUser:
+      return {
+        ...state,
+        showModal: action.payload,
+        isEditModal: false,
+      };
+    case actions.showModalEditUser:
+      return {
+        ...state,
+        showModal: action.payload,
+        isEditModal: true,
+      };
+    case actions.closeModalEditUser:
+      return {
+        ...state,
+        showModal: false,
+        user: {},
+      };
     default:
       return state;
   }

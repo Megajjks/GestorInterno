@@ -201,6 +201,14 @@ export const area = [
   "Venture y Fellowship",
 ];
 
+export const roles = [
+  { value: 4, tag: "Super Admin" },
+  { value: 1, tag: "Admin" },
+  { value: 5, tag: "Asistente" },
+  { value: 2, tag: "Colaborador" },
+  { value: 3, tag: "Agente" },
+];
+
 //This function return the name of rol take in localStorage
 export const rolName = () => {
   let rol = localStorage.getItem("login_data")
