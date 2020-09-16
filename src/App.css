@@ -1,42 +1,42 @@
 /* fonts settings */
-@font-face{
+@font-face {
   font-family: airbnb-cerial;
   src: url(./assets/fonts/AirbnbCerealBook.ttf);
   font-style: normal;
   font-weight: 400;
 }
-@font-face{
+@font-face {
   font-family: airbnb-cerial;
   src: url(./assets/fonts/AirbnbCerealMedium.ttf);
   font-style: normal;
-  font-weight:500;
+  font-weight: 500;
 }
-@font-face{
+@font-face {
   font-family: airbnb-cerial;
   src: url(./assets/fonts/AirbnbCerealLight.ttf);
   font-style: normal;
-  font-weight:300;
+  font-weight: 300;
 }
-@font-face{
+@font-face {
   font-family: airbnb-cerial;
   src: url(./assets/fonts/AirbnbCerealBold.ttf);
-  font-style:bold;
-  font-weight:600;
+  font-style: bold;
+  font-weight: 600;
 }
-@font-face{
+@font-face {
   font-family: airbnb-cerial;
   src: url(./assets/fonts/AirbnbCerealExtraBold.ttf);
   font-style: bold;
-  font-weight:700;
+  font-weight: 700;
 }
-@font-face{
+@font-face {
   font-family: airbnb-cerial;
   src: url(./assets/fonts/AirbnbCerealBlack.ttf);
   font-style: bold;
-  font-weight:800;
+  font-weight: 800;
 }
 
-body{
+body {
   font-family: airbnb-cerial;
-  background-color: #F3F4F8;
+  background-color: #f5f5f5;
 }

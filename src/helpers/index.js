@@ -201,7 +201,7 @@ export const area = [
   "Venture y Fellowship",
 ];
 
-//This function return the name of rol
+//This function return the name of rol take in localStorage
 export const rolName = () => {
   let rol = localStorage.getItem("login_data")
     ? JSON.parse(localStorage.getItem("login_data")).role
@@ -219,6 +219,54 @@ export const rolName = () => {
       return "assistant";
     default:
       return "notUser";
+  }
+};
+
+//This function return the name of rol by parameter
+export const rolNameUser = (rol) => {
+  switch (rol) {
+    case 1:
+      return {
+        value: "Admin",
+        tag: "admin",
+        background: "#E64A19",
+        color: "#FFFFFF",
+      };
+    case 2:
+      return {
+        value: "Colaborador",
+        tag: "collaborator",
+        background: "#01579b",
+        color: "#FFFFFF",
+      };
+    case 3:
+      return {
+        value: "Agente",
+        tag: "agent",
+        background: "#00796B",
+        color: "#FFFFFF",
+      };
+    case 4:
+      return {
+        value: "Super Admin",
+        tag: "superAdmin",
+        background: "#0D0D0D",
+        color: "#FFFFFF",
+      };
+    case 5:
+      return {
+        value: "Asistente",
+        tag: "assistant",
+        background: "#FFA000",
+        color: "#212121",
+      };
+    default:
+      return {
+        value: "Not User",
+        tag: "notUser",
+        background: "#D32F2F",
+        color: "#FFFFFF",
+      };
   }
 };
 
