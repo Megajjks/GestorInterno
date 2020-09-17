@@ -270,8 +270,8 @@ export const rolNameUser = (rol) => {
       };
     default:
       return {
-        value: "Not User",
-        tag: "notUser",
+        value: "sin rol",
+        tag: "notRol",
         background: "#D32F2F",
         color: "#FFFFFF",
       };

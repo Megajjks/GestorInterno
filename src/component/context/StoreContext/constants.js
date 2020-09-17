@@ -14,5 +14,7 @@ export const initialState = {
     phone: "",
     image: "",
     roleId: "",
+    isActive: null,
   },
+  addUserLoader: false,
 };

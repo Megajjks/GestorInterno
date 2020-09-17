@@ -15,20 +15,52 @@ import { WrapperLogo, Logo } from "./styled";
 import { roles } from "../../../../helpers";
 import api from "../../../../helpers/api";
 
-const UserModal = ({ closeModalUser }) => {
+const UserModal = ({ closeModalUser, closeModalClean }) => {
   const { state, dispatch } = useContext(StoreContext);
+
+  const handleupdateUser = (field, value) => {
+    dispatch({ type: actions.updateUser, payload: { field, value } });
+  };
+
+  //Add new User
+  const addUser = async () => {
+    dispatch({ type: actions.addUser });
+    try {
+      const response = await api.post("/users", state.user);
+      dispatch({ type: actions.addUserSuccess, payload: !state.reload });
+    } catch {
+      dispatch({
+        type: actions.addUserError,
+        payload: "Ocurrió un problema al registrar un nuevo usuario",
+      });
+    }
+  };
+
+  //Edit user
+  const saveUser = async () => {
+    dispatch({ type: actions.saveUpdateUser });
+    try {
+      const response = await api.put(`/users/${state.user.id}`, state.user);
+      dispatch({ type: actions.saveUpdateUserSuccess, payload: !state.reload });
+    } catch {
+      dispatch({
+        type: actions.saveUpdateUserError,
+        payload: "Ocurrió un problema al actualizar un usuario",
+      });
+    }
+  };
 
   return (
     <Dialog
       open={state.showModal}
-      onClose={closeModalUser}
+      onClose={state.isEditModal ? closeModalClean : closeModalUser}
       fullWidth={true}
       maxWidth="sm"
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title" style={{ textAlign: "left" }}>
-        {"Crear Tarea"}
+        {state.isEditModal ? "Editar Usuario" : "Agregar Usuario"}
       </DialogTitle>
       <DialogContent style={{ margin: "0 1em" }}>
         <WrapperLogo>
@@ -40,6 +72,7 @@ const UserModal = ({ closeModalUser }) => {
             multiple
             type="file"
             name="image"
+            onChange={(e) => handleupdateUser(e.target.name, e.target.value)}
           />
           <label htmlFor="contained-button-file">
             <Button variant="outlined" component="span">
@@ -55,6 +88,7 @@ const UserModal = ({ closeModalUser }) => {
           margin="dense"
           name="firstName"
           value={state.user.firstName}
+          onChange={(e) => handleupdateUser(e.target.name, e.target.value)}
         />
         <TextField
           type="text"
@@ -64,6 +98,7 @@ const UserModal = ({ closeModalUser }) => {
           margin="dense"
           name="lastName"
           value={state.user.lastName}
+          onChange={(e) => handleupdateUser(e.target.name, e.target.value)}
           style={{ marginBottom: "1.5em" }}
         />
         <InputLabel id="select-rol">Rol</InputLabel>
@@ -75,6 +110,7 @@ const UserModal = ({ closeModalUser }) => {
           color="secondary"
           margin="dense"
           name="roleId"
+          onChange={(e) => handleupdateUser(e.target.name, e.target.value)}
         >
           {roles.map((rol, idx) => {
             return (
@@ -92,15 +128,17 @@ const UserModal = ({ closeModalUser }) => {
           margin="dense"
           name="email"
           value={state.user.email}
+          onChange={(e) => handleupdateUser(e.target.name, e.target.value)}
         />
         <TextField
-          type="text"
+          type="password"
           label="Contraseña"
           color="secondary"
           fullWidth
           margin="dense"
           name="password"
           value={state.user.password}
+          onChange={(e) => handleupdateUser(e.target.name, e.target.value)}
         />
         <TextField
           type="text"
@@ -110,16 +148,21 @@ const UserModal = ({ closeModalUser }) => {
           margin="dense"
           name="phone"
           value={state.user.phone}
+          onChange={(e) => handleupdateUser(e.target.name, e.target.value)}
         />
       </DialogContent>
       <DialogActions>
         <Btn
-          onClick={closeModalUser}
-          title="Cerrar"
+          onClick={closeModalClean}
+          title="Cancelar"
           type="secundary"
           size="30%"
         />
-        <Btn title="Agregar usuario" size="40%" />
+        {state.isEditModal ? (
+          <Btn onClick={saveUser} title="Guardar cambios" size="40%" />
+        ) : (
+          <Btn onClick={addUser} title="Agregar usuario" size="40%" />
+        )}
       </DialogActions>
     </Dialog>
   );

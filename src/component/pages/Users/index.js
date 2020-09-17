@@ -30,18 +30,41 @@ const Users = () => {
     getUsers();
   }, [state.reload]);
 
-  //Behaviors modals
   //functions to open, close to modal add user
   const showModalAddUser = () => {
     dispatch({ type: actions.showModalAddUser, payload: !state.showModal });
   };
-  // //functions to open, close to modal edit user
-  const showModalEditUser = () => {
-    dispatch({ type: actions.showModalEditUser, payload: !state.showModal });
+
+  //functions to open, close to modal edit user
+  const showModalEditUser = (user) => {
+    dispatch({
+      type: actions.showModalEditUser,
+      payload: { isShow: !state.showModal, user: user },
+    });
   };
+
   //functions to close to modal add user and clean the modal.
-  const closeModalEditUser = () => {
+  const closeModalUser = () => {
     dispatch({ type: actions.closeModalEditUser });
+  };
+
+  //function to update a user to remove
+  const prepareRemoveUser = (user) =>
+    dispatch({ type: actions.removeUser, payload: user });
+
+  //function to remove user
+  const removeUser = async () => {
+    const newUser = { ...state.user, isActive: false };
+    //const newUser = user;
+    try {
+      const response = await api.put(`/users/${state.user.id}`, newUser);
+      dispatch({ type: actions.removeUserSuccess, payload: !state.reload });
+    } catch {
+      dispatch({
+        type: actions.removeUserError,
+        payload: "Ocurrió un problema al eliminar al usuario",
+      });
+    }
   };
 
   return (
@@ -56,8 +79,16 @@ const Users = () => {
           onClick={showModalAddUser}
         />
       </WrapperHeader>
-      <UserTable users={state.users} />
-      <UserModal closeModalUser={showModalAddUser} />
+      <UserTable
+        users={state.users}
+        showModalEditUser={showModalEditUser}
+        removeUser={removeUser}
+        prepareRemoveUser={prepareRemoveUser}
+      />
+      <UserModal
+        closeModalUser={showModalAddUser}
+        closeModalClean={closeModalUser}
+      />
       {state.usersLoader ? <Spinner /> : null}
       {state.msgError ? <Error /> : null}
     </Fragment>

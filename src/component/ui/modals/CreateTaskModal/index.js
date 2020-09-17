@@ -54,7 +54,6 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
 
   //save data after edit the task
   const saveTask = async () => {
-    console.log("guardando la tarea");
     //request to save change of task
     try {
       const response = await api.put(
