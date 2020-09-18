@@ -140,8 +140,8 @@ const TracingCommitmentDetails = (props) => {
     //Put request that change the status of commitment
     dispatch({ type: actions.updateStatusCommitment });
     try {
-      const url = `/commitments/${state.commitment.id}/${status}`;
-      const response = await api.put(url);
+      const url = `/commitments/${state.commitment.id}`;
+      const response = await api.put(url, { ...state.commitment, status });
       dispatch({
         type: actions.updateStatusCommitmentSuccess,
         payload: !state.reload,
