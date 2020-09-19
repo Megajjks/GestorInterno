@@ -9,4 +9,7 @@ export const actions = {
   sync: "SYNC",
   syncSucess: "SYNC_SUCCESS",
   syncError: "SYNC_ERROR",
+  setSearchFilter: "GET_SEARCH_FILTER",
+  getCommitmentsTracing: "GET_COMMITMENTS_TRACING",
+  getCommitmentsSuccessTracing: "GET_COMMITMENTS_SUCCESS_TRACING",
 };

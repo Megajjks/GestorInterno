@@ -9,4 +9,12 @@ export const initialState = {
   syncCommitmentsLoader: false,
   syncCommitmentsError: null,
   reload: false,
+  searchFilter: {
+      agent: "",
+      collaborator: "",
+      state: "",
+      sector: "",
+      status: "",
+      searchIn: "",
+  }
 };

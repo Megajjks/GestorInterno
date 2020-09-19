@@ -1,5 +1,5 @@
 import React from "react";
-import { Tablestyle, TableHeader, Icon, Details, SearchBar } from "./styled";
+import { Tablestyle, TableHeader, Icon, Details } from "./styled";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";

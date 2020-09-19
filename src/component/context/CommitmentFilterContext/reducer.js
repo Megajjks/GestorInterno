@@ -1,6 +1,8 @@
 import { actions } from "./actions";
+
 export const reducer = (state, action) => {
   switch (action.type) {
+    //Pool Table
     case actions.getCommitments:
       return {
         ...state,
@@ -62,6 +64,28 @@ export const reducer = (state, action) => {
         showBtnSycn: true,
         syncCommitmentsLoader: false,
         syncCommitmentsError: action.payload,
+      };
+    case actions.setSearchFilter:
+      return {
+        ...state,
+        searchFilter: {
+          ...state.searchFilter,
+          [action.payload.field]: action.payload.value,
+          searchIn: action.payload.field
+        },
+      };
+    //Tracing Table
+    case actions.getCommitmentsTracing:
+      return {
+        ...state,
+        commitmentsLoader: true,
+        commitmentsError: null,
+      };
+    case actions.getCommitmentsSuccessTracing:
+      return {
+        ...state,
+        commitments: action.payload,
+        commitmentsLoader: false,
       };
     default:
       return state;

@@ -1,22 +1,22 @@
-import React, { Fragment, useState, useEffect, useReducer } from "react";
+import React, { Fragment, useEffect, useContext } from "react";
+import { CommitmentFilterContext } from "../../context/CommitmentFilterContext";
+import { actions } from "../../context/CommitmentFilterContext/actions";
 import { useHistory } from "react-router-dom";
 import PoolTable from "../../ui/tables/PoolTable";
 import Btn from "../../ui/GeneralButton";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import api from "../../../helpers/api";
-import { filterWithStatus, dataStatus, existSync } from "../../../helpers";
-import { actions } from "./actions";
-import { initialState } from "./constants";
-import { reducer } from "./reducer";
-import { WrapperHeader, BtnGroup, SearchBar } from "./styled";
+import { filterWithStatus, existSync } from "../../../helpers";
+import { WrapperHeader, BtnGroup } from "./styled";
 import IcoExport from "../../../assets/img/download.svg";
 import IcoSync from "../../../assets/img/sync.svg";
+import FilterBar from "../../ui/FilterBar";
 
 const Pool = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useContext(CommitmentFilterContext);
+  const query = ["prevalidado", "validando", "correcion", "falla"];
   const history = useHistory();
-  const [searchString, setSearchString] = useState("");
 
   //get commitments
   useEffect(() => {
@@ -24,15 +24,17 @@ const Pool = () => {
       dispatch({ type: actions.getCommitments });
       try {
         const { data } = await api.get("/commitments");
-
         //filter commitments with status
-        let query = ["prevalidado", "validando", "correcion", "falla"];
         dispatch({
           type: actions.getCommitmentsSuccess,
           payload: {
             commitments: filterWithStatus(data, query),
             existSync: existSync(data),
           },
+        });
+        dispatch({
+          type: actions.filterCommitments,
+          payload: filterWithStatus(data, query)
         });
       } catch (e) {
         dispatch({
@@ -44,44 +46,6 @@ const Pool = () => {
     };
     fetchCommitment();
   }, [state.reload]);
-
-  //Logic of search bar
-  useEffect(() => {
-    if (!searchString) {
-      return;
-    }
-    const busqueda = state.commitments.filter((item) => {
-      const payload = searchString.toLowerCase();
-      const organization = item.organization.toLowerCase();
-      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
-      const city = item.city.toLowerCase();
-      const status = item.status.toLowerCase();
-      const sector = item.sector.toLowerCase();
-      const state = item.state.toLowerCase();
-
-      if (searchString === "") {
-        return dispatch({
-          type: actions.filterCommitments,
-          payload: state.commitments,
-        });
-      } else if (
-        organization.includes(payload) ||
-        agent.includes(payload) ||
-        city.includes(payload) ||
-        state.includes(payload) ||
-        sector.includes(payload) ||
-        status.includes(dataStatus(payload).tag)
-      ) {
-        return item;
-      }
-    });
-    dispatch({ type: actions.filterCommitments, payload: busqueda });
-  }, [searchString]);
-
-  const search = (e) => {
-    const { value } = e.target;
-    setSearchString(value);
-  };
 
   //View details of one commitment
   const viewDetails = (item) => {
@@ -159,8 +123,8 @@ const Pool = () => {
           />
         </BtnGroup>
       </WrapperHeader>
-      <SearchBar value={searchString} onChange={search} />
-      <PoolTable commitments={state.commitments} viewDetails={viewDetails} />
+      <FilterBar status={query} typeTable={"pool"}/>
+      <PoolTable commitments={state.commitmentsFilter} viewDetails={viewDetails} />
       {state.commitmentsLoader ? <Spinner /> : null}
       {state.commitmentsError ? <Error /> : null}
     </Fragment>

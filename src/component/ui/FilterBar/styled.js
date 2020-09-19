@@ -1,4 +1,22 @@
 import styled from "styled-components";
+import Select from '@material-ui/core/Select';
+
+export const WrapperFilter = styled.div`
+  display:flex;
+  justify-content:space-around;
+  align-items: center;
+  width: 100%;
+  margin-top: 2em;
+  margin-bottom: 2em;
+`;
+
+export const WrapperSelect = styled.div`
+    width: 13em;
+`;
+
+export const SelectFilter = styled(Select)`
+  width: 100%;
+`;
 
 export const SearchBar = styled.input`
   outline: none;
@@ -10,7 +28,6 @@ export const SearchBar = styled.input`
   border: solid 1px #ccc;
   padding: 9px 10px 9px 32px;
   width: 1em;
-  margin-bottom: 1em;
 
   -webkit-border-radius: 10em;
   -moz-border-radius: 10em;

@@ -1,33 +1,37 @@
-import React, { Fragment, useState, useEffect, useReducer } from "react";
+import React, { Fragment, useEffect, useContext } from "react";
+import { CommitmentFilterContext } from "../../context/CommitmentFilterContext";
+import { actions } from "../../context/CommitmentFilterContext/actions";
 import { useHistory } from "react-router-dom";
-import { SearchBar } from "./styled";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import api from "../../../helpers/api";
 import TracingTable from "../../ui/tables/TracingTable";
-import { filterWithStatus, dataStatus } from "../../../helpers";
-import { actions } from "./actions";
-import { initialState } from "./constants";
-import { reducer } from "./reducer";
+import { filterWithStatus } from "../../../helpers";
+import FilterBar from "../../ui/FilterBar";
 
 const Tracing = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useContext(CommitmentFilterContext);
+  const query = [
+    "primer_contacto",
+    "articulando",
+    "cumplido",
+    "archivado",
+  ]
   const history = useHistory();
-  const [searchString, setSearchString] = useState("");
 
   useEffect(() => {
     const fetchCommitment = async () => {
-      dispatch({ type: actions.getCommitments });
+      dispatch({ type: actions.getCommitmentsTracing });
       try {
         const { data } = await api.get("/commitments");
+        //filter commitments with status
         dispatch({
-          type: actions.getCommitmentsSuccess,
-          payload: filterWithStatus(data, [
-            "primer_contacto",
-            "articulando",
-            "cumplido",
-            "archivado",
-          ]),
+          type: actions.getCommitmentsSuccessTracing,
+          payload: filterWithStatus(data, query),
+        });
+        dispatch({
+          type: actions.filterCommitments,
+          payload: filterWithStatus(data, query)
         });
       } catch (e) {
         dispatch({
@@ -38,41 +42,7 @@ const Tracing = () => {
       }
     };
     fetchCommitment();
-  }, []);
-
-  useEffect(() => {
-    if (!searchString) {
-      return;
-    }
-    //const commitmentsBefore = [...commitments];
-    const busqueda = state.commitments.filter((item) => {
-      console.log(item);
-      const payload = searchString.toLowerCase();
-      const organization = item.organization.toLowerCase();
-      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
-      const city = item.city.toLowerCase();
-      const status = item.status.toLowerCase();
-      const sector = item.sector.toLowerCase();
-      const state = item.state.toLowerCase();
-
-      if (searchString === "") {
-        return dispatch({
-          type: actions.filterCommitments,
-          payload: state.commitments,
-        });
-      } else if (
-        organization.includes(payload) ||
-        agent.includes(payload) ||
-        city.includes(payload) ||
-        state.includes(payload) ||
-        sector.includes(payload) ||
-        status.includes(dataStatus(payload).tag)
-      ) {
-        return item;
-      }
-    });
-    dispatch({ type: actions.filterCommitments, payload: busqueda });
-  }, [searchString]);
+  }, [state.reload]);
 
   const viewDetails = (item) => {
     history.push({
@@ -81,16 +51,11 @@ const Tracing = () => {
     });
   };
 
-  const search = (e) => {
-    const { value } = e.target;
-    setSearchString(value);
-  };
-
   return (
     <Fragment>
       <h1>Seguimiento de los compromisos</h1>
-      <SearchBar value={searchString} onChange={search} />
-      <TracingTable commitments={state.commitments} viewDetails={viewDetails} />
+      <FilterBar status={query} typeTable={"tracing"}/>
+      <TracingTable commitments={state.commitmentsFilter} viewDetails={viewDetails} />
       {state.commitmentsLoader ? <Spinner /> : null}
       {state.commitmentsError ? <Error /> : null}
     </Fragment>
