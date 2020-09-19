@@ -1,8 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  //baseURL: "http://ec2-18-207-233-79.compute-1.amazonaws.com:5050/api",
-  baseURL: "https://api.ashoka.hackademy.mx/api/",
+  baseURL: "http://ec2-18-207-233-79.compute-1.amazonaws.com:5050/api",
 });
 
 api.interceptors.request.use(
