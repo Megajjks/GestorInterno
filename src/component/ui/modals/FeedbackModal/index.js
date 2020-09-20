@@ -16,23 +16,29 @@ const FeedbackModal = ({
   openModalFeedback,
   closeModalFeedback,
   optionFeedback,
+  commitment,
 }) => {
   const [commitmentFeedback, setCommitmentFeedback] = useState({
     titleFeedback: "",
     descriptionFeedback: "",
   });
+  const [error, setError] = useState({
+    status: false,
+    message: "",
+    typeMessage: "",
+  });
+  const { titleFeedback, descriptionFeedback } = commitmentFeedback;
+  const history = useHistory();
+
+  //Handle change of form
   const updateCommitmentFeedback = (e) => {
     setCommitmentFeedback({
       ...commitmentFeedback,
       [e.target.name]: e.target.value,
     });
   };
-  const history = useHistory();
-  const [error, setError] = useState({
-    status: false,
-    message: "",
-    typeMessage: ""
-  });
+
+  //Close the modal
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -40,10 +46,52 @@ const FeedbackModal = ({
     setError({
       ...error,
       status: false,
-      typeMessage: ""
+      typeMessage: "",
     });
   };
-  const { titleFeedback, descriptionFeedback } = commitmentFeedback;
+
+  //function that validates that a fields is not empty
+  const validateFeedback = (e) => {
+    e.preventDefault();
+    if (
+      commitmentFeedback.titleFeedback === "" ||
+      commitmentFeedback.descriptionFeedback === ""
+    ) {
+      setError({
+        status: true,
+        message: "¡Ups!, parace que tienes campos sin rellenar.",
+        typeMessage: "error",
+      });
+    } else {
+      setError({
+        status: false,
+        message: "",
+        typeMessage: "",
+      });
+      fetchUpdateState();
+    }
+  };
+
+  //function to update the status
+  const fetchUpdateState = async () => {
+    try {
+      if (optionFeedback === "aceptar") {
+        const response = await api.put(`/commitments/${commitment.id}`, {
+          ...commitment,
+          status: "correcion",
+        });
+      } else {
+        const response = await api.put(`/commitments/${commitment.id}`, {
+          ...commitment,
+          status: "declinado",
+        });
+      }
+      successData();
+    } catch (e) {
+      console.log(e);
+      closeModalFeedback();
+    }
+  };
 
   function AlertError(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -52,77 +100,7 @@ const FeedbackModal = ({
   const successData = () => {
     closeModalFeedback();
     history.push("/panel/pool");
-  }
-
-  const fetchUpdateFeedback = async idCommitment => {
-    try {
-      let response = "";
-      response = await api.put(
-        `/commitmentsupdate/${idCommitment}`, {
-          feedback: descriptionFeedback
-        }
-      );
-      console.log(response);
-      setError({
-        status: true,
-        message:
-          "¡Excelente!, Su petición ha sido enviada exitosamente.", 
-        typeMessage: "success"
-      });
-      setTimeout(successData, 3000);
-    } catch (e) {
-      setError({
-        status: true,
-        message:
-          "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo", 
-        typeMessage: "error"
-      });
-      console.log(e);
-    }
-  }
-
-  const fetchUpdateState = async () => {
-    try {
-      let response = "";
-      const idCommitment = history.location.state.id;
-      if (optionFeedback === "aceptar") {
-        response = await api.put(
-          `/commitments/${idCommitment}/correcion`
-        );
-      } else {
-        response = await api.put(
-          `/commitments/${idCommitment}/declinado`
-        );
-      }
-      console.log(response);
-      if (response.status === 200) {
-        fetchUpdateFeedback(idCommitment);
-      } 
-    } catch (e) {
-      console.log(e);
-    }
   };
-
-  const validateFeedback = e => {
-    e.preventDefault(); 
-    if (
-      commitmentFeedback.titleFeedback === "" ||
-      commitmentFeedback.descriptionFeedback === ""
-    ) {
-      setError({
-        status: true,
-        message: "¡Ups!, parace que tienes campos sin rellenar.",
-        typeMessage: "error"
-      });
-    } else {
-      setError({
-        status: false,
-        message: "",
-        typeMessage: ""
-      });
-      fetchUpdateState()
-    }
-  }
 
   return (
     <>

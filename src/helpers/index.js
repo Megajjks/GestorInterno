@@ -198,10 +198,18 @@ export const area = [
   "Ecosistemas Sociales",
   "Alianzas Estratégicas",
   "Finanzas",
-  "Venture y Fellowship"
+  "Venture y Fellowship",
 ];
 
-//This function return the name of rol
+export const roles = [
+  { value: 4, tag: "Super Admin" },
+  { value: 1, tag: "Admin" },
+  { value: 5, tag: "Asistente" },
+  { value: 2, tag: "Colaborador" },
+  { value: 3, tag: "Agente" },
+];
+
+//This function return the name of rol take in localStorage
 export const rolName = () => {
   let rol = localStorage.getItem("login_data")
     ? JSON.parse(localStorage.getItem("login_data")).role
@@ -222,16 +230,68 @@ export const rolName = () => {
   }
 };
 
+//This function return the name of rol by parameter
+export const rolNameUser = (rol) => {
+  switch (rol) {
+    case 1:
+      return {
+        value: "Admin",
+        tag: "admin",
+        background: "#E64A19",
+        color: "#FFFFFF",
+      };
+    case 2:
+      return {
+        value: "Colaborador",
+        tag: "collaborator",
+        background: "#01579b",
+        color: "#FFFFFF",
+      };
+    case 3:
+      return {
+        value: "Agente",
+        tag: "agent",
+        background: "#00796B",
+        color: "#FFFFFF",
+      };
+    case 4:
+      return {
+        value: "Super Admin",
+        tag: "superAdmin",
+        background: "#0D0D0D",
+        color: "#FFFFFF",
+      };
+    case 5:
+      return {
+        value: "Asistente",
+        tag: "assistant",
+        background: "#FFA000",
+        color: "#212121",
+      };
+    default:
+      return {
+        value: "sin rol",
+        tag: "notRol",
+        background: "#D32F2F",
+        color: "#FFFFFF",
+      };
+  }
+};
+
 //This function return if the userId is match with list of collaborators
 export const matchUser = (listCollaborators) => {
   let userId = localStorage.getItem("login_data")
     ? JSON.parse(localStorage.getItem("login_data")).userId
     : null;
   if (userId === null) return 0;
-  const isMatch = listCollaborators.some(function (collaborator) {
-    if (collaborator.id === userId) return true;
-  });
-  return isMatch;
+  try {
+    const isMatch = listCollaborators.some(function (collaborator) {
+      if (collaborator.id === userId) return true;
+    });
+    return isMatch;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 //This function return if there are unsynchronized commitments
@@ -239,4 +299,13 @@ export const existSync = (commitments) => {
   return commitments.some(function (commitment) {
     if (commitment.status === "falla") return true;
   });
+};
+
+//This funcition change the string of status
+export const changeStatus = (status) => {
+  if (status === "true") {
+    return "false";
+  } else {
+    return "true";
+  }
 };

@@ -7,6 +7,7 @@ import TaskList from "../TaskList";
 import CollaboratorCardList from "../CollaboratorCardList";
 import Spinner from "../Spinner";
 import Error from "../alerts/Error";
+import WithoutTasks from "../alerts/WithoutTasks";
 import {
   dataStatus,
   filterWithRol,
@@ -63,11 +64,11 @@ const TracingCommitmentDetails = (props) => {
     const getListCollaborator = async () => {
       dispatch({ type: actions.getCollaboratorsList });
       try {
-        const url = `/users`;
+        const url = `/missingCollaborators/${history.location.state}`;
         const { data } = await api.get(url);
         dispatch({
           type: actions.getCollaboratorsListSuccess,
-          payload: filterWithRol(data, ["1", "2"]),
+          payload: data,
         });
       } catch (e) {
         dispatch({
@@ -79,6 +80,24 @@ const TracingCommitmentDetails = (props) => {
     getCommitment();
     getListCollaborator();
   }, [state.reload]);
+
+  //get tasks
+  useEffect(() => {
+    const getTasks = async () => {
+      dispatch({ type: actions.getTasksList });
+      try {
+        const { data } = await api.get("/tasks");
+        dispatch({ type: actions.getTasksListSuccess, payload: data });
+      } catch {
+        dispatch({
+          type: actions.getTasksListError,
+          payload:
+            "ha ocurrido un problema al buscar las tareas de seguimiento. Verifica si tienes conexión a internet y vuelve a intentar",
+        });
+      }
+    };
+    getTasks();
+  }, [state.reload, state.reloadTasks]);
 
   //post to add colaborador in commitment
   const addCollaborator = () => {
@@ -121,8 +140,8 @@ const TracingCommitmentDetails = (props) => {
     //Put request that change the status of commitment
     dispatch({ type: actions.updateStatusCommitment });
     try {
-      const url = `/commitments/${state.commitment.id}/${status}`;
-      const response = await api.put(url);
+      const url = `/commitments/${state.commitment.id}`;
+      const response = await api.put(url, { ...state.commitment, status });
       dispatch({
         type: actions.updateStatusCommitmentSuccess,
         payload: !state.reload,
@@ -143,19 +162,16 @@ const TracingCommitmentDetails = (props) => {
     });
   };
 
-  //functions to open, close, add Task
+  //Behavior of tasks
 
-  const ClickOpenModalCreateTask = () => {
-    setOpenCreateTask(true);
+  //functions to open, close
+  const showModalAddTask = () => {
+    dispatch({ type: actions.showModalAddTask, payload: !state.showModalTask });
   };
 
-  const closeModalCreateTask = () => {
-    setOpenCreateTask(false);
-  };
-
+  //functions to add task
   const addTask = () => {
-    console.log("add task");
-    ClickOpenModalCreateTask();
+    showModalAddTask();
   };
 
   //function to show details
@@ -181,14 +197,34 @@ const TracingCommitmentDetails = (props) => {
   const handleNewColaborator = (item) => {
     dispatch({ type: actions.setColaborator, payload: item });
   };
-  console.log(matchUser(state.commitment.collaborators));
+
+  const renderTasks = () => {
+    if (state.tasksError) {
+      return <Error content={state.tasksError} />;
+    }
+    if (state.tasks.length === 0) {
+      return (
+        <WithoutTasks
+          title="¡Oh! aun no se a levantando una tarea de seguimiento"
+          content="Puedes levantar una nueva tarea si eres un colaborador de este compromiso dando click en el botón de Nueva tarea para empezar a dar seguimiento a este proyecto"
+        />
+      );
+    }
+    return (
+      <TaskList
+        tasks={state.tasks}
+        isCollaborator={matchUser(state.commitment.collaborators)}
+      />
+    );
+  };
+
   const renderView = () => {
     return (
       <Fragment>
         <h1> {state.commitment.organization} </h1>
         <Wrapper>
           <WrapperTask>
-            <TaskList></TaskList>
+            {state.tasksLoading ? <Spinner /> : renderTasks()}
           </WrapperTask>
           <WrapperOpc>
             <Options>
@@ -319,8 +355,9 @@ const TracingCommitmentDetails = (props) => {
     <Fragment>
       {state.commitmentLoading ? <Spinner /> : renderError()}
       <ModalCreateTask
-        openNewTask={openCreateTask}
-        closeModalNewTask={closeModalCreateTask}
+        openNewTask={state.showModalTask}
+        closeModalNewTask={showModalAddTask}
+        isEdit={state.isEditModalTask}
       />
     </Fragment>
   );

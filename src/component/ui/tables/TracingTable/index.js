@@ -1,6 +1,7 @@
 import React from "react";
-import { Tablestyle, TableHeader, EyeIcon, Details, SearchBar } from "./styled";
+import { Tablestyle, EyeIcon, Details, SearchBar } from "./styled";
 import TableBody from "@material-ui/core/TableBody";
+import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
@@ -23,15 +24,19 @@ const TracingTable = ({ commitments, viewDetails }) => {
   return (
     <TableContainer component={Paper}>
       <Tablestyle aria-label="simple table">
-        <TableHeader>
+        <TableHead>
           <TableRow>
             {fields.map((field) => (
-              <TableCell align="center" key={field}>
+              <TableCell
+                align="center"
+                key={field}
+                style={{ fontWeight: "bold", color: "#000a12" }}
+              >
                 {field}
               </TableCell>
             ))}
           </TableRow>
-        </TableHeader>
+        </TableHead>
         <TableBody>
           {commitments.map((commitment) => (
             <TableRow key={commitment.id}>

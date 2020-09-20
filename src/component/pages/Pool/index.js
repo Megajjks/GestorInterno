@@ -5,7 +5,7 @@ import Btn from "../../ui/GeneralButton";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import api from "../../../helpers/api";
-import { filterWithStatus, dataStatus, existSync } from "../../../helpers";
+import { dataStatus, existSync } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
@@ -23,14 +23,11 @@ const Pool = () => {
     const fetchCommitment = async () => {
       dispatch({ type: actions.getCommitments });
       try {
-        const { data } = await api.get("/commitments");
-
-        //filter commitments with status
-        let query = ["prevalidado", "validando", "correcion", "falla"];
+        const { data } = await api.get("/commitments/filter/pool/");
         dispatch({
           type: actions.getCommitmentsSuccess,
           payload: {
-            commitments: filterWithStatus(data, query),
+            commitments: data,
             existSync: existSync(data),
           },
         });
@@ -124,7 +121,7 @@ const Pool = () => {
   const syncCommitments = async () => {
     dispatch({ type: actions.sync });
     try {
-      const { data } = await api.post("/resendall");
+      const { data } = await api.post("/resendall/");
       dispatch({ type: actions.syncSucess, payload: !state.reload });
     } catch {
       dispatch({

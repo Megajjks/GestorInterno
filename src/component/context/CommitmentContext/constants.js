@@ -15,6 +15,10 @@ export const initialState = {
   wrapperAddCollaborator: false,
   loadingDeletedCollaborator: false,
   errorDeletedCollaborator: null,
+  tasks: [],
+  tasksLoading: false,
+  tasksError: null,
+  reloadTasks: false,
   newTask: {
     title: "",
     description: "",
@@ -22,4 +26,7 @@ export const initialState = {
   },
   newTaskLoading: false,
   newTaskError: null,
+  showModalTask: false,
+  isEditModalTask: false,
+  msgError: null,
 };

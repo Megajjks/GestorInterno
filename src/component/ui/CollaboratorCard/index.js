@@ -76,7 +76,7 @@ const CollaboratorCard = ({ collaborator }) => {
         message="Estas seguro de eliminar al colaborador"
         open={showModal}
         handleClose={handlecloseModal}
-        callback={setDeleted}
+        callback={() => setDeleted(true)}
       />
     </Fragment>
   );

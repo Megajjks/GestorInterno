@@ -7,7 +7,9 @@ export const Wrapper = styled.div`
   border-radius: 4px;
   box-shadow: 0 4px 8px 0 #ddd;
   transition: transform 0.2s ease-out;
+  padding: 0.8em 0;
   margin-bottom: 1em;
+  padding-left: ${(props) => (props.isCollaborator ? 0 : "2em")};
   &:hover {
     transform: translateY(-0.125rem);
     box-shadow: 0 0.25rem 0.5rem 0.25rem rgba(0, 0, 0, 0.16);
@@ -82,7 +84,8 @@ export const TaskPriority = styled.div`
 export const SectionEditTask = styled.div`
   width: 80%;
   display: flex;
-  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 export const WrapperCollaborator = styled.div`
@@ -105,29 +108,37 @@ export const WrapperEditTask = styled.div`
 `;
 
 export const ImgEditTask = styled.img`
-  width: 16px;
-  height: 16px;
-  margin-top: 18px;
+  width: 1em;
+  height: 1em;
+  padding-left: 1em;
   &:hover {
     cursor: pointer;
   }
 `;
 
-export const WrapperExpiration = styled.div`
+export const WrapperInfo = styled.div`
   width: 50%;
   display: flex;
-  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.2em 0;
 `;
 
 export const Icon = styled.img`
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
+`;
+
+export const ImgProfile = styled(Icon)`
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
 `;
 
 export const TxtIcon = styled.h1`
   color: ${(props) => props.theme.colors.greyTitle};
   font-weight: 200;
-  font-size: 12px;
+  font-size: 0.9em;
   margin-top: 0;
   margin-left: 7px;
   margin-bottom: 3px;
@@ -136,15 +147,16 @@ export const TxtIcon = styled.h1`
 export const TitleTask = styled.h1`
   color: ${(props) => props.theme.colors.black};
   font-weight: 600;
-  font-size: 1.2em;
+  font-size: 1.4em;
   margin-top: 0;
   margin-bottom: 2px;
 `;
 
-export const TxtDescriptionTask = styled.h1`
+export const TxtDescriptionTask = styled.p`
   width: 100%;
-  color: ${(props) => props.theme.colors.greyTitle};
+  color: ${(props) => props.theme.colors.black};
   font-weight: 200;
-  font-size: 15px;
-  margin-top: 0;
+  font-size: 1em;
+  margin: 0;
+  padding: 0.4em 0;
 `;

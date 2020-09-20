@@ -5,7 +5,7 @@ import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import api from "../../../helpers/api";
 import TracingTable from "../../ui/tables/TracingTable";
-import { filterWithStatus, dataStatus } from "../../../helpers";
+import { dataStatus } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
@@ -19,15 +19,10 @@ const Tracing = () => {
     const fetchCommitment = async () => {
       dispatch({ type: actions.getCommitments });
       try {
-        const { data } = await api.get("/commitments");
+        const { data } = await api.get("/commitments/filter/tracing/");
         dispatch({
           type: actions.getCommitmentsSuccess,
-          payload: filterWithStatus(data, [
-            "primer_contacto",
-            "articulando",
-            "cumplido",
-            "archivado",
-          ]),
+          payload: data,
         });
       } catch (e) {
         dispatch({

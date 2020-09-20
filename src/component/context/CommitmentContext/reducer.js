@@ -125,6 +125,24 @@ export const reducer = (state, action) => {
           [action.payload.field]: action.payload.value,
         },
       };
+    case actions.getTasksList:
+      return {
+        ...state,
+        tasksLoading: true,
+        tasksError: null,
+      };
+    case actions.getTasksListSuccess:
+      return {
+        ...state,
+        tasks: action.payload,
+        tasksLoading: false,
+      };
+    case actions.getTasksListError:
+      return {
+        ...state,
+        tasksLoading: false,
+        tasksError: action.payload,
+      };
     case actions.addTask:
       return {
         ...state,
@@ -139,14 +157,63 @@ export const reducer = (state, action) => {
           description: "",
           date: "",
         },
+        showModalTask: false,
         newTaskLoading: false,
-        reload: action.payload,
+        reloadTasks: action.payload,
       };
     case actions.addTaskError:
       return {
         ...state,
+        showModalTask: false,
         newTaskLoading: false,
         newTaskError: action.payload,
+      };
+    case actions.updateTaskSuccess:
+      return {
+        ...state,
+        reloadTasks: action.payload,
+        msgError: null,
+        showModalTask: false,
+      };
+    case actions.updateTaskError:
+      return {
+        ...state,
+        msgError: action.payload,
+        showModalTask: false,
+      };
+    case actions.removeTaskSuccess:
+      return {
+        ...state,
+        reloadTasks: action.payload,
+        msgError: null,
+      };
+    case actions.removeTaskError:
+      return {
+        ...state,
+        msgError: action.payload,
+      };
+    case actions.showModalAddTask:
+      return {
+        ...state,
+        showModalTask: action.payload,
+        isEditModalTask: false,
+      };
+    case actions.showModalEditTask:
+      return {
+        ...state,
+        newTask: action.payload.task,
+        showModalTask: action.payload.isShow,
+        isEditModalTask: true,
+      };
+    case actions.closeModalEditTask:
+      return {
+        ...state,
+        newTask: {
+          title: "",
+          description: "",
+          date: "",
+        },
+        showModalTask: action.payload.isShow,
       };
     default:
       return state;

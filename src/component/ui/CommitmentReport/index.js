@@ -49,13 +49,12 @@ const CommitmentReport = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const history = useHistory();
-  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
-  //Alert commitment update status "primer_contacto" 
+  //Alert commitment update status "primer_contacto"
   const [error, setError] = useState({
     status: false,
     message: "",
-    typeMessage: ""
+    typeMessage: "",
   });
 
   function AlertError(props) {
@@ -69,15 +68,14 @@ const CommitmentReport = (props) => {
     setError({
       ...error,
       status: false,
-      typeMessage: ""
+      typeMessage: "",
     });
   };
 
   //After executing the alert on informing that the commitment has been successfully
   const successData = () => {
     history.push("/panel/pool");
-  }
-
+  };
 
   useEffect(() => {
     const fetchCommitmentReport = async () => {
@@ -85,9 +83,7 @@ const CommitmentReport = (props) => {
       dispatch({ type: actions.getQuestions });
       try {
         const idCommitment = history.location.state.id;
-        const { data } = await api.get(`/commitments/${idCommitment}`, {
-          headers: { Authorization: token },
-        });
+        const { data } = await api.get(`/commitments/${idCommitment}`);
         dispatch({ type: actions.getDataFormSuccess, payload: data });
         dispatch({ type: actions.getQuestionsSuccess, payload: data.answers });
       } catch (e) {
@@ -107,24 +103,22 @@ const CommitmentReport = (props) => {
 
   const acceptCommitment = async () => {
     try {
-      const response = await api.put(
-        `/commitments/${state.dataForm.id}/primer_contacto`,
-        {},
-        { headers: { Authorization: token } }
-      );
+      const response = await api.put(`/commitments/${state.dataForm.id}`, {
+        ...state.dataForm,
+        status: "primer_contacto",
+      });
       setError({
         status: true,
-        message:
-          "¡Excelente!, Su petición ha sido enviada exitosamente.", 
-        typeMessage: "success"
+        message: "¡Excelente!, Su petición ha sido enviada exitosamente.",
+        typeMessage: "success",
       });
       setTimeout(successData, 3000);
     } catch (e) {
       setError({
         status: true,
         message:
-          "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo", 
-        typeMessage: "error"
+          "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo",
+        typeMessage: "error",
       });
       console.log(e);
       setTimeout(successData, 3000);
@@ -331,6 +325,7 @@ const CommitmentReport = (props) => {
         openModalFeedback={state.modalFeedback}
         closeModalFeedback={closeModalFeedback}
         optionFeedback={state.option}
+        commitment={state.dataForm}
       />
       <EditCommitmentModal
         open={state.showEditCommitmentModal}
