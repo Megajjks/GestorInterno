@@ -82,11 +82,13 @@ const FeedbackModal = ({
             ...commitment,
             status: "prevalidado",
             feedback: "correcion",
+            message: commitmentFeedback.descriptionFeedback,
           });
         } else {
           const response = await api.put(`/commitments/${commitment.id}`, {
             ...commitment,
             status: "correcion",
+            message: commitmentFeedback.descriptionFeedback,
           });
         }
       } else {
@@ -95,11 +97,13 @@ const FeedbackModal = ({
             ...commitment,
             status: "prevalidado",
             feedback: "declinado",
+            message: commitmentFeedback.descriptionFeedback,
           });
         } else {
           const response = await api.put(`/commitments/${commitment.id}`, {
             ...commitment,
             status: "declinado",
+            message: commitmentFeedback.descriptionFeedback,
           });
         }
       }

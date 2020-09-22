@@ -110,11 +110,13 @@ const CommitmentReport = (props) => {
           ...state.dataForm,
           status: "prevalidado",
           feedback: "validando",
+          message: "",
         });
       } else {
         const response = await api.put(`/commitments/${state.dataForm.id}`, {
           ...state.dataForm,
           status: "primer_contacto",
+          message: "",
         });
       }
       setError({
@@ -177,6 +179,13 @@ const CommitmentReport = (props) => {
     <Fragment>
       {state.dataForm.status === "prevalidado" && (
         <AlertInformation preRol={state.dataForm.feedback} />
+      )}
+      {state.dataForm.message && (
+        <AlertInformation
+          type="message"
+          title="Aviso del compromiso"
+          msg={state.dataForm.message}
+        />
       )}
       <Wrapper>
         <DynamicScrollToTop />
