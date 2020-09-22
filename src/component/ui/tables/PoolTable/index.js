@@ -13,6 +13,7 @@ const fields = [
   "Id",
   "Organización",
   "Agente",
+  "Area",
   "Lugar",
   "Sede",
   "Categoria",
@@ -42,6 +43,7 @@ const PoolTable = ({ commitments, viewDetails }) => {
                 {commitment.firstName} {commitment.lastName}
               </TableCell>
 
+              <TableCell align="center">{commitment.area}</TableCell>
               <TableCell align="center">{commitment.city}</TableCell>
               <TableCell align="center">{commitment.state}</TableCell>
               <TableCell align="center">{commitment.sector}</TableCell>
