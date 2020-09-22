@@ -39,7 +39,7 @@ const Users = () => {
   const showModalEditUser = (user) => {
     dispatch({
       type: actions.showModalEditUser,
-      payload: { isShow: !state.showModal, user: user },
+      payload: { isShow: !state.showModal, user: { ...user, password: "" } },
     });
   };
 

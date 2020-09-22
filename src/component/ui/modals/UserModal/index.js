@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { StoreContext } from "../../../context/StoreContext";
 import { actions } from "../../../context/StoreContext/actions";
 import Btn from "../../GeneralButton";
@@ -8,6 +8,10 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -17,6 +21,7 @@ import api from "../../../../helpers/api";
 
 const UserModal = ({ closeModalUser, closeModalClean }) => {
   const { state, dispatch } = useContext(StoreContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleupdateUser = (field, value) => {
     dispatch({ type: actions.updateUser, payload: { field, value } });
@@ -131,14 +136,27 @@ const UserModal = ({ closeModalUser, closeModalClean }) => {
           onChange={(e) => handleupdateUser(e.target.name, e.target.value)}
         />
         <TextField
-          type="password"
+          type={showPassword ? "text" : "password"}
           label="Contraseña"
           color="secondary"
+          placeholder="Restablece la contraseña introduciendo una nueva contraseña"
           fullWidth
+          value={state.user.password}
           margin="dense"
           name="password"
-          value={state.user.password}
           onChange={(e) => handleupdateUser(e.target.name, e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           type="text"
