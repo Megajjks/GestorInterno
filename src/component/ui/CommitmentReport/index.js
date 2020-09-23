@@ -110,13 +110,13 @@ const CommitmentReport = (props) => {
           ...state.dataForm,
           status: "prevalidado",
           feedback: "validando",
-          message: "",
+          message: null,
         });
       } else {
         const response = await api.put(`/commitments/${state.dataForm.id}`, {
           ...state.dataForm,
           status: "primer_contacto",
-          message: "",
+          message: null,
         });
       }
       setError({
@@ -183,13 +183,13 @@ const CommitmentReport = (props) => {
       {state.dataForm.message && (
         <AlertInformation
           type="message"
-          title="Aviso del compromiso"
-          msg={state.dataForm.message}
+          title={state.dataForm.message.title}
+          msg={state.dataForm.message.msg}
         />
       )}
       <Wrapper>
         <DynamicScrollToTop />
-        <Img src={state.dataForm.img} />
+        <Img src={`https://api.ashoka.hackademy.mx/${state.dataForm.img}`} />
         <WrapperFormData>
           <TxtTitleOrganization>
             {state.dataForm.organization}

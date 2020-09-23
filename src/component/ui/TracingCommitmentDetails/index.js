@@ -283,9 +283,9 @@ const TracingCommitmentDetails = (props) => {
                       />
                       Archivado
                     </MenuItems>
-                    <MenuItems onClick={() => changeStatus("correcion")}>
+                    <MenuItems onClick={() => changeStatus("correccion")}>
                       <CircleStatus
-                        color={dataStatus("correcion").background}
+                        color={dataStatus("correccion").background}
                       />
                       En correcion
                     </MenuItems>

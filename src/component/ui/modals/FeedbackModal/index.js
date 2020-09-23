@@ -81,13 +81,13 @@ const FeedbackModal = ({
           const response = await api.put(`/commitments/${commitment.id}`, {
             ...commitment,
             status: "prevalidado",
-            feedback: "correcion",
+            feedback: "correccion",
             message: commitmentFeedback.descriptionFeedback,
           });
         } else {
           const response = await api.put(`/commitments/${commitment.id}`, {
             ...commitment,
-            status: "correcion",
+            status: "correccion",
             message: commitmentFeedback.descriptionFeedback,
           });
         }
