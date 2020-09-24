@@ -215,6 +215,75 @@ export const reducer = (state, action) => {
         },
         showModalTask: action.payload.isShow,
       };
+    case actions.updateFieldMilestone:
+      return {
+        ...state,
+        milestone: {
+          ...state.milestone,
+          [action.payload.field]: action.payload.value,
+        },
+      };
+    case actions.addMilestone:
+      return {
+        ...state,
+        milestoneLoading: true,
+        milestonesError: null,
+      };
+    case actions.addMilestoneSuccess:
+      return {
+        ...state,
+        milestone: {
+          title: "",
+          description: "",
+          date: "",
+        },
+        showModalMilestone: false,
+        milestonesLoading: false,
+        reloadMilestones: action.payload,
+      };
+    case actions.addMilestoneError:
+      return {
+        ...state,
+        showModalMilestone: false,
+        milestonesLoading: false,
+        milestonesError: action.payload,
+      };
+    case actions.updateMilestoneSuccess:
+      return {
+        ...state,
+        reloadMilestones: action.payload,
+        msgError: null,
+        showModalMilestone: false,
+      };
+    case actions.updateMilestoneError:
+      return {
+        ...state,
+        msgError: action.payload,
+        showModalMilestone: false,
+      };
+    case actions.showModalAddMilestone:
+      return {
+        ...state,
+        showModalMilestone: action.payload,
+        isEditModalMilestone: false,
+      };
+    case actions.showModalEditMilestone:
+      return {
+        ...state,
+        milestone: action.payload.milestone,
+        showModalMilestone: action.payload.isShow,
+        isEditModalMilestone: true,
+      };
+    case actions.closeModalEditMilestone:
+      return {
+        ...state,
+        milestone: {
+          title: "",
+          description: "",
+          date: "",
+        },
+        showModalMilestone: action.payload,
+      };
     default:
       return state;
   }

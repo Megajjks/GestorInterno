@@ -5,6 +5,7 @@ import Tracing from "../../component/pages/Tracing";
 import Management from "../../component/pages/Management";
 import CommitmentReport from "../../component/ui/CommitmentReport";
 import TracingCommitmentDetails from "../../component/ui/TracingCommitmentDetails";
+import Milestones from "../../component/pages/Milestones";
 
 import M1 from "../../assets/img/dashboard.svg";
 import M2 from "../../assets/img/gestion.svg";
@@ -19,6 +20,7 @@ import {
   POOL_COMMITMENTS,
   TRACING_COMMITMENTS,
   TRACING_COMMITMENT_DETAILS,
+  MILESTONES,
   MANAGEMENT_COMMITMENTS,
 } from "../paths";
 
@@ -77,6 +79,7 @@ export const commitmentReportSuperAdmin = {
   path: COMMITMENT_REPORT_DETAILS,
   isPrivate: true,
   render: false,
+  exact: true,
 };
 
 export const tracingCommitmentDetailsSuperAdmin = {
@@ -84,6 +87,14 @@ export const tracingCommitmentDetailsSuperAdmin = {
   path: TRACING_COMMITMENT_DETAILS,
   isPrivate: true,
   render: false,
+  exact: true,
+};
+export const milestonesCommitmentSuperAdmin = {
+  component: Milestones,
+  path: MILESTONES,
+  isPrivate: true,
+  render: false,
+  exact: true,
 };
 
 export default [
@@ -94,4 +105,5 @@ export default [
   managementSuperAdmin,
   commitmentReportSuperAdmin,
   tracingCommitmentDetailsSuperAdmin,
+  milestonesCommitmentSuperAdmin,
 ];

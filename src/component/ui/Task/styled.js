@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   background-color: ${({ theme: { colors } }) => colors.white};
   justify-content: space-between;
   display: flex;
-  border-radius: 4px;
+  border-radius: 10px;
   box-shadow: 0 4px 8px 0 #ddd;
   transition: transform 0.2s ease-out;
   padding: 0.8em 0;

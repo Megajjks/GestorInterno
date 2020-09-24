@@ -2,6 +2,7 @@ export const actions = {
   getCommitment: "GET_COMMITMENT",
   getCommitmentSuccess: "GET_COMMITMENT_SUCCESS",
   getCommitmentError: "GET_COMMITMENT_ERROR",
+
   getCollaboratorsList: "GET_COLABORATORS",
   getCollaboratorsListSuccess: "GET_COLABORATORS_SUCCESS",
   getCollaboratorsListError: "GET_COLABORATORS_ERROR",
@@ -19,6 +20,7 @@ export const actions = {
   deletedCollaborator: "DELETED_COLLABORATOR",
   deletedCollaboratorSuccess: "DELETED_COLLABORATOR_SUCCESS",
   deletedCollaboratorError: "DELETED_COLLABORATOR_ERROR",
+
   updateFieldAddTask: "UPDATE_FIELD_ADD_TASK",
   addTask: "ADD_TASK",
   addTaskSuccess: "ADD_TASK_SUCCESS",
@@ -35,4 +37,15 @@ export const actions = {
   showModalAddTask: "SHOW_MODAL_ADD_TASK",
   showModalEditTask: "SHOW_MODAL_EDIT_TASK",
   closeModalEditTask: "CLOSE_MODAL_EDIT_TASK",
+
+  addMilestone: "ADD_MILESTONE",
+  addMilestoneSuccess: "ADD_MILESTONE_SUCCESS",
+  addMilestoneError: "ADD_MILESTONE_ERROR",
+  updateFieldMilestone: "UPDATE_FIELD_MILESTONE",
+  updateMilestone: "UPDATE_MILESTONE",
+  updateMilestoneSuccess: "UPDATE_MILESTONE_SUCCESS",
+  updateMilestoneError: "UPDATE_MILESTONE_ERROR",
+  showModalAddMilestone: "SHOW_MODAL_ADD_MILESTONE",
+  showModalEditMilestone: "SHOW_MODAL_EDIT_MILESTONE",
+  closeModalEditMilestone: "CLOSE_MODAL_EDIT_MILESTONE",
 };

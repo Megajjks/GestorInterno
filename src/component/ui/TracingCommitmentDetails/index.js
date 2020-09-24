@@ -4,10 +4,12 @@ import { actions } from "../../context/CommitmentContext/actions";
 import { useHistory } from "react-router-dom";
 import Button from "../GeneralButton";
 import TaskList from "../TaskList";
+import MilestoneCardList from "../MilestoneCardList";
 import CollaboratorCardList from "../CollaboratorCardList";
 import Spinner from "../Spinner";
 import Error from "../alerts/Error";
 import WithoutTasks from "../alerts/WithoutTasks";
+import WithoutMilestones from "../alerts/WithoutMilestones";
 import {
   dataStatus,
   filterWithRol,
@@ -22,7 +24,9 @@ import Menu from "@material-ui/core/Menu";
 import AddIco from "../../../assets/img/add.svg";
 import TaskIco from "../../../assets/img/gestion.svg";
 import EyeIco from "../../../assets/img/eye.svg";
+import MilestoneIco from "../../../assets/img/milestone.svg";
 import StatusIco from "../../../assets/img/point.svg";
+import TasksIco from "../../../assets/img/tasks.svg";
 import ModalCreateTask from "../modals/CreateTaskModal";
 import {
   Wrapper,
@@ -182,6 +186,23 @@ const TracingCommitmentDetails = (props) => {
     });
   };
 
+  //function to show milestones
+  const showMilestonesCommitment = () => {
+    history.push({
+      pathname: `${history.location.pathname}/milestones`,
+      state: {
+        id: state.commitment.id,
+        isCollaborator: matchUser(state.commitment.collaborators),
+        organization: state.commitment.organization,
+      },
+    });
+  };
+
+  //function to show tasks
+  const showTasksCommitment = () => {
+    console.log("tasks page");
+  };
+
   //function to view and edit status
   const handleDropdownStatus = (event) => {
     dispatch({
@@ -218,18 +239,52 @@ const TracingCommitmentDetails = (props) => {
     );
   };
 
+  const renderMilestones = () => {
+    if (state.milestonesError) {
+      return <Error content={state.milestonesError} />;
+    }
+    if (state.milestones.length === 0) {
+      return (
+        <WithoutMilestones
+          title="¡Oh! no se tienen logros en este compromiso"
+          content="Este compromiso no cuenta con logros a pesar que ha finalizado"
+        />
+      );
+    }
+    return (
+      <MilestoneCardList milestones={state.milestones} isCollaborator={false} />
+    );
+  };
+
+  const renderFinishCommitment = () => {
+    //validate if empty commitment
+    if (Object.entries(state.commitment).length <= 1) {
+      return <Error />;
+    }
+    //validate if is complete commitment
+    if (state.commitment.status === "cumplido") {
+      return renderMilestones();
+    }
+    return renderTasks();
+  };
+
   const renderView = () => {
     return (
       <Fragment>
         <h1> {state.commitment.organization} </h1>
         <Wrapper>
           <WrapperTask>
-            {state.tasksLoading ? <Spinner /> : renderTasks()}
+            {state.tasksLoading || state.milestonesLoading ? (
+              <Spinner />
+            ) : (
+              renderFinishCommitment()
+            )}
           </WrapperTask>
           <WrapperOpc>
             <Options>
               {/*this button (add task) will be hidden if  user_id not is not assigned how collaborator of commitment*/}
-              {matchUser(state.commitment.collaborators) ? (
+              {matchUser(state.commitment.collaborators) ||
+              state.commitment.status !== "cumplido" ? (
                 <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
               ) : null}
 
@@ -248,6 +303,21 @@ const TracingCommitmentDetails = (props) => {
                 ico={StatusIco}
                 onClick={handleDropdownStatus}
               />
+              {state.commitment.status === "cumplido" ? (
+                <Button
+                  title="Tareas"
+                  type="secundary"
+                  ico={TasksIco}
+                  onClick={showTasksCommitment}
+                />
+              ) : (
+                <Button
+                  title="Logros"
+                  type="secundary"
+                  ico={MilestoneIco}
+                  onClick={showMilestonesCommitment}
+                />
+              )}
               <Menu
                 id="simple-menu"
                 anchorEl={state.dropdownStatus}
