@@ -12,4 +12,5 @@ export const actions = {
   setSearchFilter: "GET_SEARCH_FILTER",
   getCommitmentsTracing: "GET_COMMITMENTS_TRACING",
   getCommitmentsSuccessTracing: "GET_COMMITMENTS_SUCCESS_TRACING",
+  clearSearchFilter: "CLEAN_SEARCH_FILTER",
 };

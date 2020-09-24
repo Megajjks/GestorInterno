@@ -35,6 +35,10 @@ const Tracing = () => {
           type: actions.filterCommitments,
           payload: filterWithStatus(data, query)
         });
+        dispatch({
+          type: actions.clearSearchFilter,
+          payload: { reset: "" }
+        })
       } catch (e) {
         dispatch({
           type: actions.getCommitmentsError,

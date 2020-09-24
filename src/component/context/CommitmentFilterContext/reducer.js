@@ -87,6 +87,19 @@ export const reducer = (state, action) => {
         commitments: action.payload,
         commitmentsLoader: false,
       };
+    case actions.clearSearchFilter:
+      return {
+        ...state,
+        searchFilter: {
+          ...state.searchFilter,
+          agent: action.payload.reset,
+          collaborator: action.payload.reset,
+          state: action.payload.reset,
+          sector: action.payload.reset,
+          status: action.payload.reset,
+          searchIn: action.payload.reset,
+        }
+      }
     default:
       return state;
   }
