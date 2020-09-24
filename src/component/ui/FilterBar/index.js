@@ -23,53 +23,75 @@ const FilterBar = ({ status, typeTable }) =>{
     let arrayFiltred = state.commitments;
     switch(searchIn){
       case "agent":
-        arrayFiltred = arrayFiltred.filter((item) => {
-          const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
-          const payloadAgent = state.searchFilter.agent.toLowerCase();
-          if(agent.startsWith(payloadAgent)){
-            return item;
-          }
-        })
+        if (state.searchFilter.agent !== "") {
+          arrayFiltred = arrayFiltred.filter((item) => {
+            const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
+            const payloadAgent = state.searchFilter.agent.toLowerCase();
+            if(agent.startsWith(payloadAgent)){
+              return item;
+            }
+          })
+        }
+        if(state.searchFilter.state !== ""){
+          arrayFiltred = arrayFiltred.filter((item, idx) => {
+            let payloadSede = state.searchFilter.state.toLowerCase();
+            let sede = item.state.toLowerCase();
+            if(sede.startsWith(payloadSede)){
+              return item;
+            }
+          })
+        }
+        if(state.searchFilter.sector !== ""){
+          arrayFiltred = arrayFiltred.filter(item => {
+            let category = item.sector.toLowerCase();
+            let payloadCategory = state.searchFilter.sector.toLowerCase();
+            if (category.startsWith(payloadCategory)) {
+              return item;
+            }
+          })
+        }
+        if(state.searchFilter.status !== ""){
+          arrayFiltred = arrayFiltred.filter(item => {
+            let status = item.status.toLowerCase();
+            let payloadStatus = state.searchFilter.status.toLowerCase(); 
+            if(status.startsWith(dataStatus(payloadStatus).tag)){
+              return item;
+            }
+          })
+        }
         break;
-      case "collaborator":
-        
-        let payloadCategory = state.searchFilter.sector.toLowerCase();
-        let payloadStatus = state.searchFilter.status.toLowerCase(); 
-          if(state.searchFilter.collaborator !== ""){
-            console.log("entra aquí")
-            arrayFiltred = arrayFiltred.filter((item) => {
-              const payloadCollaborator = state.searchFilter.collaborator.toLowerCase();
-              let user = "";
-              for (let i = 0; i < item.collaborators.length; i++) {
-                user = `${item.collaborators[i].firstName.toLowerCase()}  ${item.collaborators[i].lastName.toLowerCase()}`;
-                if (user.startsWith(payloadCollaborator)) {
-                  return item;
-                }
+      case "collaborator": 
+        if(state.searchFilter.collaborator !== ""){
+          arrayFiltred = arrayFiltred.filter((item) => {
+            const payloadCollaborator = state.searchFilter.collaborator.toLowerCase();
+            let user = "";
+            for (let i = 0; i < item.collaborators.length; i++) {
+              user = `${item.collaborators[i].firstName.toLowerCase()}  ${item.collaborators[i].lastName.toLowerCase()}`;
+              if (user.startsWith(payloadCollaborator)) {
+                return item;
               }
-            })
-          }
-          if(state.searchFilter.state !== ""){
-            console.log(arrayFiltred)
-            arrayFiltred = arrayFiltred.filter((item, idx) => {
-              let payloadSede = state.searchFilter.state.toLowerCase();
-              let sede = item.state.toLowerCase();
-              if(sede.startsWith(payloadSede)){
+            }
+          })
+        }
+        if(state.searchFilter.state !== ""){
+          arrayFiltred = arrayFiltred.filter((item, idx) => {
+            let payloadSede = state.searchFilter.state.toLowerCase();
+            let sede = item.state.toLowerCase();
+            if(sede.startsWith(payloadSede)){
+              return item;
+            }
+          })
+        }
+        if(state.searchFilter.sector !== ""){
+            arrayFiltred = arrayFiltred.filter(item => {
+              let category = item.sector.toLowerCase();
+              let payloadCategory = state.searchFilter.sector.toLowerCase();
+              if (category.startsWith(payloadCategory)) {
                 return item;
               }
             })
-          }
-          if(state.searchFilter.sector !== ""){
-              arrayFiltred = arrayFiltred.filter(item => {
-                let category = item.sector.toLowerCase();
-                let payloadCategory = state.searchFilter.sector.toLowerCase();
-                if (category.startsWith(payloadCategory)) {
-                  return item;
-                }
-              })
-          }
+        }
         if(state.searchFilter.status !== ""){
-          console.log("esta entrando a status")
-          console.log("status", state.searchFilter.status)
           arrayFiltred = arrayFiltred.filter(item => {
             let status = item.status.toLowerCase();
             let payloadStatus = state.searchFilter.status.toLowerCase(); 
@@ -87,7 +109,7 @@ const FilterBar = ({ status, typeTable }) =>{
   }, [state.searchFilter]);
 
   const search = (field, value) => {
-    if (typeTable === "Pool") {
+    if (typeTable === "pool") {
       dispatch({ type: actions.setSearchFilter, payload: { field, value, searchIn: "agent" } });
     } else {
       dispatch({ type: actions.setSearchFilter, payload: { field, value, searchIn: "collaborator" } });
