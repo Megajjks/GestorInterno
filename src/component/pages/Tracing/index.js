@@ -8,6 +8,8 @@ import api from "../../../helpers/api";
 import TracingTable from "../../ui/tables/TracingTable";
 import { filterWithStatus } from "../../../helpers";
 import FilterBar from "../../ui/FilterBar";
+import Btn from "../../ui/GeneralButton";
+import { BtnGroup } from "./styled";
 
 const Tracing = () => {
   const { state, dispatch } = useContext(CommitmentFilterContext);
@@ -51,9 +53,26 @@ const Tracing = () => {
     });
   };
 
+  const sendEmail = async () => {
+    try {
+      const { data } = await api.get("/commitments");
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <Fragment>
-      <h1>Seguimiento de los compromisos</h1>
+      
+      <BtnGroup>
+        <h1>Seguimiento de los compromisos</h1>
+        <Btn
+          title="Enviar Correo"
+          size="40%"
+          type="primary-loader"
+          onClick={sendEmail}
+        />
+        </BtnGroup>
       <FilterBar status={query} typeTable={"tracing"}/>
       <TracingTable commitments={state.commitmentsFilter} viewDetails={viewDetails} />
       {state.commitmentsLoader ? <Spinner /> : null}

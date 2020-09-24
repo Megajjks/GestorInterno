@@ -71,7 +71,7 @@ export const reducer = (state, action) => {
         searchFilter: {
           ...state.searchFilter,
           [action.payload.field]: action.payload.value,
-          searchIn: action.payload.field
+          searchIn: action.payload.searchIn
         },
       };
     //Tracing Table

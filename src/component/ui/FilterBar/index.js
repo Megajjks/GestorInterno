@@ -19,47 +19,80 @@ const FilterBar = ({ status, typeTable }) =>{
     if (!state.searchFilter) {
       return;
     }
-    const busqueda = state.commitments.filter((item) => {
-      const option = state.searchFilter.searchIn.toLowerCase();
-      const payloadSede = state.searchFilter.state.toLowerCase();
-      const payloadCategory = state.searchFilter.sector.toLowerCase();
-      const payloadStatus = state.searchFilter.status.toLowerCase();
-      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
-      const sede = item.state.toLowerCase();
-      const category = item.sector.toLowerCase();
-      const status = item.status.toLowerCase();
-      if (state.searchFilter === "") {
-        return dispatch({
-          type: actions.filterCommitments,
-          payload: state.commitments,
-        });
-      } else if (option === "agent") {
-        const payloadAgent = state.searchFilter.agent.toLowerCase();
-        if (agent.startsWith(payloadAgent)) {
-          return item;
-        }
-      } else if (option === "collaborator") {
-        const payloadCollaborator = state.searchFilter.collaborator.toLowerCase();
-        let user = "";
-        for (let i = 0; i < item.collaborators.length; i++) {
-          user = `${item.collaborators[i].firstName.toLowerCase()}  ${item.collaborators[i].lastName.toLowerCase()}`;
-          if (user.startsWith(payloadCollaborator)) {
+    const searchIn = state.searchFilter.searchIn.toLowerCase();
+    let arrayFiltred = state.commitments;
+    switch(searchIn){
+      case "agent":
+        arrayFiltred = arrayFiltred.filter((item) => {
+          const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
+          const payloadAgent = state.searchFilter.agent.toLowerCase();
+          if(agent.startsWith(payloadAgent)){
             return item;
           }
+        })
+        break;
+      case "collaborator":
+        
+        let payloadCategory = state.searchFilter.sector.toLowerCase();
+        let payloadStatus = state.searchFilter.status.toLowerCase(); 
+          if(state.searchFilter.collaborator !== ""){
+            console.log("entra aquí")
+            arrayFiltred = arrayFiltred.filter((item) => {
+              const payloadCollaborator = state.searchFilter.collaborator.toLowerCase();
+              let user = "";
+              for (let i = 0; i < item.collaborators.length; i++) {
+                user = `${item.collaborators[i].firstName.toLowerCase()}  ${item.collaborators[i].lastName.toLowerCase()}`;
+                if (user.startsWith(payloadCollaborator)) {
+                  return item;
+                }
+              }
+            })
+          }
+          if(state.searchFilter.state !== ""){
+            console.log(arrayFiltred)
+            arrayFiltred = arrayFiltred.filter((item, idx) => {
+              let payloadSede = state.searchFilter.state.toLowerCase();
+              let sede = item.state.toLowerCase();
+              if(sede.startsWith(payloadSede)){
+                return item;
+              }
+            })
+          }
+          if(state.searchFilter.sector !== ""){
+              arrayFiltred = arrayFiltred.filter(item => {
+                let category = item.sector.toLowerCase();
+                let payloadCategory = state.searchFilter.sector.toLowerCase();
+                if (category.startsWith(payloadCategory)) {
+                  return item;
+                }
+              })
+          }
+        if(state.searchFilter.status !== ""){
+          console.log("esta entrando a status")
+          console.log("status", state.searchFilter.status)
+          arrayFiltred = arrayFiltred.filter(item => {
+            let status = item.status.toLowerCase();
+            let payloadStatus = state.searchFilter.status.toLowerCase(); 
+            if(status.startsWith(dataStatus(payloadStatus).tag)){
+              return item;
+            }
+          })
         }
-      } else if (sede.startsWith(payloadSede) && option === "state") {
-        return item;
-      } else if (category.startsWith(payloadCategory) && option === "sector") {
-        return item;
-      } else if (status.startsWith(dataStatus(payloadStatus).tag) && option === "status") {
-        return item;
-      }
-    });
-    dispatch({ type: actions.filterCommitments, payload: busqueda });
+        break;
+      default:
+        break;
+    }
+
+    dispatch({ type: actions.filterCommitments, payload: arrayFiltred });
   }, [state.searchFilter]);
 
   const search = (field, value) => {
-    dispatch({ type: actions.setSearchFilter, payload: { field, value } });
+    if (typeTable === "Pool") {
+      dispatch({ type: actions.setSearchFilter, payload: { field, value, searchIn: "agent" } });
+    } else {
+      dispatch({ type: actions.setSearchFilter, payload: { field, value, searchIn: "collaborator" } });
+    }
+    
   };
 
   return(

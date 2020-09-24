@@ -8,9 +8,9 @@ import Paper from "@material-ui/core/Paper";
 import Eye from "../../../../assets/img/eye.svg";
 import IcoError from "../../../../assets/img/error.svg";
 import { dataStatus } from "../../../../helpers";
+import MessageIcon from "../../../../assets/img/message-commitment.svg";
 
 const fields = [
-  "Id",
   "Organización",
   "Agente",
   "Area",
@@ -37,7 +37,6 @@ const PoolTable = ({ commitments, viewDetails }) => {
         <TableBody>
           {commitments.map((commitment) => (
             <TableRow key={commitment.id}>
-              <TableCell align="center">{commitment.id}</TableCell>
               <TableCell align="center">{commitment.organization}</TableCell>
               <TableCell align="center">
                 {commitment.firstName} {commitment.lastName}

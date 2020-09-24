@@ -681,19 +681,6 @@ const NewCommitment = () => {
               </SpanText>
             </WrapperSpan5>
           </WrapperTextSuggestion>
-
-
-
-
-
-
-
-
-
-
-
-
-
           <Field>
             <Label>
               Selecciona el área de tu compromiso{" "}
@@ -724,19 +711,6 @@ const NewCommitment = () => {
               })}
             </Select>
           </Field>
-
-
-
-
-
-
-
-
-
-
-
-
-
           <Field>
             <Label>
               ¿De qué manera Ashoka y su red pueden ayudarte a escalar el

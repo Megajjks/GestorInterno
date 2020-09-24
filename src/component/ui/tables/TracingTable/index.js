@@ -1,5 +1,11 @@
 import React from "react";
-import { Tablestyle, TableHeader, EyeIcon, Details, SearchBar } from "./styled";
+import { Tablestyle, 
+  TableHeader, 
+  EyeIcon, 
+  Details,
+  WrapperInputRadio,
+  InputRadio
+} from "./styled";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -9,6 +15,7 @@ import Eye from "../../../../assets/img/eye.svg";
 import { dataStatus } from "../../../../helpers";
 
 const fields = [
+  "",
   "Organización",
   "Colaboradores",
   "Agente",
@@ -35,6 +42,15 @@ const TracingTable = ({ commitments, viewDetails }) => {
         <TableBody>
           {commitments.map((commitment) => (
             <TableRow key={commitment.id}>
+              <TableCell align="center">
+                <WrapperInputRadio>
+                  <InputRadio
+                    type="checkbox"
+                    name="selectCommitment"
+                    value={true}
+                  />{" "}
+                </WrapperInputRadio>
+              </TableCell>
               <TableCell align="center">{commitment.organization}</TableCell>
               <TableCell align="center" style={{ width: "10em" }}>
                 <ul>
