@@ -15,10 +15,10 @@ import Eye from "../../../../assets/img/eye.svg";
 import { dataStatus } from "../../../../helpers";
 
 const fields = [
-  "",
   "Organización",
   "Colaboradores",
   "Agente",
+  "Area",
   "Lugar",
   "Sede",
   "Categoria",
@@ -42,15 +42,6 @@ const TracingTable = ({ commitments, viewDetails }) => {
         <TableBody>
           {commitments.map((commitment) => (
             <TableRow key={commitment.id}>
-              <TableCell align="center">
-                <WrapperInputRadio>
-                  <InputRadio
-                    type="checkbox"
-                    name="selectCommitment"
-                    value={true}
-                  />{" "}
-                </WrapperInputRadio>
-              </TableCell>
               <TableCell align="center">{commitment.organization}</TableCell>
               <TableCell align="center" style={{ width: "10em" }}>
                 <ul>
@@ -65,6 +56,7 @@ const TracingTable = ({ commitments, viewDetails }) => {
                 </ul>
               </TableCell>
               <TableCell align="center">{`${commitment.firstName} ${commitment.lastName}`}</TableCell>
+              <TableCell align="center">{commitment.area}</TableCell>
               <TableCell align="center">{commitment.city}</TableCell>
               <TableCell align="center">{commitment.state}</TableCell>
               <TableCell align="center">{commitment.sector}</TableCell>

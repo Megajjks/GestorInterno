@@ -57,26 +57,11 @@ const Tracing = () => {
     });
   };
 
-  const sendEmail = async () => {
-    try {
-      const { data } = await api.get("/commitments");
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
   return (
     <Fragment>
-      
       <BtnGroup>
         <h1>Seguimiento de los compromisos</h1>
-        <Btn
-          title="Enviar Correo"
-          size="40%"
-          type="primary-loader"
-          onClick={sendEmail}
-        />
-        </BtnGroup>
+      </BtnGroup>
       <FilterBar status={query} typeTable={"tracing"}/>
       <TracingTable commitments={state.commitmentsFilter} viewDetails={viewDetails} />
       {state.commitmentsLoader ? <Spinner /> : null}

@@ -10,11 +10,14 @@ export const initialState = {
   syncCommitmentsError: null,
   reload: false,
   searchFilter: {
-      agent: "",
-      collaborator: "",
-      state: "",
-      sector: "",
-      status: "",
-      searchIn: "",
+    agent: "",
+    collaborator: "",
+    userManagement: "",
+    user: "",
+    area: "",
+    state: "",
+    sector: "",
+    status: "",
+    searchIn: "",
   }
 };
