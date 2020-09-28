@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { CommitmentContext } from "../../context/CommitmentContext";
 import { actions } from "../../context/CommitmentContext/actions";
 import { useHistory } from "react-router-dom";
@@ -6,13 +6,34 @@ import { WrapperHeader, WrapperBody } from "./styled";
 import MilestoneCardList from "../../ui/MilestoneCardList";
 import MilestoneModal from "../../ui/modals/MilestoneModal";
 import WithoutMilestones from "../../ui/alerts/WithoutMilestones";
+import Spinner from "../../ui/Spinner";
+import Error from "../../ui/alerts/Error";
 import Btn from "../../ui/GeneralButton";
 import AddIcon from "../../../assets/img/add.svg";
+import api from "../../../helpers/api";
 
 const Milestones = () => {
   const { state, dispatch } = useContext(CommitmentContext);
   const isCollaborator = useHistory().location.state.isCollaborator;
   const organization = useHistory().location.state.organization;
+  const collaboratorId = useHistory().location.state.id;
+
+  //get Milestones
+  useEffect(() => {
+    const getMilestones = async () => {
+      dispatch({ type: actions.getMilestones });
+      try {
+        const { data } = await api.get(`/milestones/${collaboratorId}`);
+        dispatch({ type: actions.getMilestonesSuccess, payload: data });
+      } catch {
+        dispatch({
+          type: actions.getMilestonesError,
+          payload: "Ocurrió un error al momento de traer la lista de logros",
+        });
+      }
+    };
+    getMilestones();
+  }, [state.reloadMilestones]);
 
   //functions to open or close the MilestoneModal
   const showModalMilestone = () => {
@@ -31,6 +52,9 @@ const Milestones = () => {
   };
 
   const renderMilestones = () => {
+    if (state.milestonesError) {
+      return <Error />;
+    }
     if (state.milestones.length === 0) {
       return (
         <WithoutMilestones
@@ -43,6 +67,7 @@ const Milestones = () => {
       <MilestoneCardList
         milestones={state.milestones}
         isCollaborator={isCollaborator}
+        isPage={true}
         showModalMilestone={showModalEditMilestone}
       />
     );
@@ -61,7 +86,9 @@ const Milestones = () => {
           />
         )}
       </WrapperHeader>
-      <WrapperBody>{renderMilestones()}</WrapperBody>
+      <WrapperBody>
+        {state.milestonesLoading ? <Spinner /> : renderMilestones()}
+      </WrapperBody>
       <MilestoneModal />
     </Fragment>
   );

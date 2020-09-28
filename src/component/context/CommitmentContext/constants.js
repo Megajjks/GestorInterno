@@ -29,26 +29,8 @@ export const initialState = {
   showModalTask: false,
   isEditModalTask: false,
   msgError: null,
-  milestones: [
-    {
-      id: 1,
-      commitmentId: 1,
-      title: "Se abrieron 100 lugares para escalar mipymes",
-      date: "24/sep/2020",
-      description:
-        "La empresa junto a los agentes de cambio proveidos por ashoka lograron conseguir una finaciación para ayudar a 100 empresas a escalar.",
-      organization: "empresas22",
-    },
-    {
-      id: 2,
-      commitmentId: 1,
-      title: "Se consigui la 2da ronda de inversión",
-      date: "10/sep/2020",
-      description:
-        "La empresa junto a los agentes de cambio proveidos por ashoka lograron conseguir una finaciación para ayudar a 100 empresas a escalar.",
-      organization: "empresas22",
-    },
-  ],
+
+  milestones: [],
   milestonesLoading: false,
   milestonesError: null,
   reloadMilestones: false,

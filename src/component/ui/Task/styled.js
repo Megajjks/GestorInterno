@@ -9,6 +9,7 @@ export const Wrapper = styled.div`
   transition: transform 0.2s ease-out;
   padding: 0.8em 0;
   margin-bottom: 1em;
+  width: inherit;
   padding-left: ${(props) => (props.isCollaborator ? 0 : "2em")};
   &:hover {
     transform: translateY(-0.125rem);

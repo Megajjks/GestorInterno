@@ -64,7 +64,7 @@ const TracingCommitmentDetails = (props) => {
         });
       }
     };
-
+    //getListCollaborator
     const getListCollaborator = async () => {
       dispatch({ type: actions.getCollaboratorsList });
       try {
@@ -102,6 +102,23 @@ const TracingCommitmentDetails = (props) => {
     };
     getTasks();
   }, [state.reload, state.reloadTasks]);
+
+  //get Milestones
+  useEffect(() => {
+    const getMilestones = async () => {
+      dispatch({ type: actions.getMilestones });
+      try {
+        const { data } = await api.get(`/milestones/${history.location.state}`);
+        dispatch({ type: actions.getMilestonesSuccess, payload: data });
+      } catch {
+        dispatch({
+          type: actions.getMilestonesError,
+          payload: "Ocurrió un error al momento de traer la lista de logros",
+        });
+      }
+    };
+    getMilestones();
+  }, [state.reload]);
 
   //post to add colaborador in commitment
   const addCollaborator = () => {
@@ -200,7 +217,13 @@ const TracingCommitmentDetails = (props) => {
 
   //function to show tasks
   const showTasksCommitment = () => {
-    console.log("tasks page");
+    history.push({
+      pathname: `${history.location.pathname}/tasks`,
+      state: {
+        id: state.commitment.id,
+        organization: state.commitment.organization,
+      },
+    });
   };
 
   //function to view and edit status
@@ -252,7 +275,11 @@ const TracingCommitmentDetails = (props) => {
       );
     }
     return (
-      <MilestoneCardList milestones={state.milestones} isCollaborator={false} />
+      <MilestoneCardList
+        milestones={state.milestones}
+        isCollaborator={false}
+        isPage={false}
+      />
     );
   };
 

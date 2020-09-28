@@ -215,6 +215,24 @@ export const reducer = (state, action) => {
         },
         showModalTask: action.payload.isShow,
       };
+    case actions.getMilestones:
+      return {
+        ...state,
+        milestonesLoading: true,
+        milestonesError: null,
+      };
+    case actions.getMilestonesSuccess:
+      return {
+        ...state,
+        milestonesLoading: false,
+        milestones: action.payload,
+      };
+    case actions.getMilestonesError:
+      return {
+        ...state,
+        milestonesLoading: false,
+        milestonesError: action.payload,
+      };
     case actions.updateFieldMilestone:
       return {
         ...state,

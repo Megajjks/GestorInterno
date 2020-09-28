@@ -38,6 +38,9 @@ export const actions = {
   showModalEditTask: "SHOW_MODAL_EDIT_TASK",
   closeModalEditTask: "CLOSE_MODAL_EDIT_TASK",
 
+  getMilestones: "GET_MILESTONES",
+  getMilestonesSuccess: "GET_MILESTONES_SUCCESS",
+  getMilestonesError: "GET_MILESTONES_ERROR",
   addMilestone: "ADD_MILESTONE",
   addMilestoneSuccess: "ADD_MILESTONE_SUCCESS",
   addMilestoneError: "ADD_MILESTONE_ERROR",

@@ -1,7 +1,7 @@
 import React, { useContext, Fragment } from "react";
+import { useHistory } from "react-router-dom";
 import { CommitmentContext } from "../../../context/CommitmentContext";
 import { actions } from "../../../context/CommitmentContext/actions";
-
 import Button from "../../GeneralButton";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -13,6 +13,7 @@ import api from "../../../../helpers/api";
 
 const MilestoneModal = (isEdit) => {
   const { state, dispatch } = useContext(CommitmentContext);
+  const history = useHistory();
   const classes = useStyles();
 
   //handle to change any input of modal
@@ -21,7 +22,7 @@ const MilestoneModal = (isEdit) => {
   };
 
   //add new milestone
-  const addMilestone = (e) => {
+  const addMilestone = async (e) => {
     e.preventDefault();
     //validate if field is empty
     if (
@@ -35,7 +36,22 @@ const MilestoneModal = (isEdit) => {
       });
       return;
     }
-    console.log("guarde datos");
+    //request to send a new milestone
+    try {
+      const response = await api.post("/milestones", {
+        ...state.milestone,
+        commitmentId: history.location.state.id,
+      });
+      dispatch({
+        type: actions.addMilestoneSuccess,
+        payload: !state.reloadMilestones,
+      });
+    } catch {
+      dispatch({
+        type: actions.addMilestoneError,
+        payload: "Ocurrió un error al momento de agregar un logro",
+      });
+    }
   };
 
   //save data after edit the milestone

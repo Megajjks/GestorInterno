@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
   box-shadow: 0 4px 8px 0 #ddd;
   transition: transform 0.2s ease-out;
   padding: 0.8em 2em;
+  width: inherit;
   margin-bottom: 1em;
   &:hover {
     transform: translateY(-0.125rem);

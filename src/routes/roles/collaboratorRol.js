@@ -3,6 +3,7 @@ import Management from "../../component/pages/Management";
 import CommitmentReport from "../../component/ui/CommitmentReport";
 import TracingCommitmentDetails from "../../component/ui/TracingCommitmentDetails";
 import Milestones from "../../component/pages/Milestones";
+import Tasks from "../../component/pages/Tasks";
 import M1 from "../../assets/img/dashboard.svg";
 import M2 from "../../assets/img/gestion.svg";
 import M3 from "../../assets/img/gps.svg";
@@ -13,7 +14,9 @@ import {
   COMMITMENT_REPORT_DETAILS,
   TRACING_COMMITMENT_DETAILS,
   MILESTONES,
+  TASKS,
 } from "../paths";
+import Task from "../../component/ui/Task";
 
 export const dasboardCollaborator = {
   component: Dashboard,
@@ -56,6 +59,13 @@ export const milestonesCommitmentCollaborator = {
   render: false,
   exact: true,
 };
+export const tasksCommitmentCollaborator = {
+  component: Tasks,
+  path: TASKS,
+  isPrivate: true,
+  render: false,
+  exact: true,
+};
 
 export default [
   dasboardCollaborator,
@@ -63,4 +73,5 @@ export default [
   commitmentReportCollaborator,
   tracingCommitmentDetailsCollaborator,
   milestonesCommitmentCollaborator,
+  tasksCommitmentCollaborator,
 ];
