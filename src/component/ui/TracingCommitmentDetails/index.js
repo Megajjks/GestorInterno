@@ -86,7 +86,9 @@ const TracingCommitmentDetails = (props) => {
     const getTasks = async () => {
       dispatch({ type: actions.getTasksList });
       try {
-        const { data } = await api.get("/tasks");
+        const { data } = await api.get(
+          `/tasks/commitment/${history.location.state}`
+        );
         dispatch({ type: actions.getTasksListSuccess, payload: data });
       } catch {
         dispatch({

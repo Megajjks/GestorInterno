@@ -17,7 +17,6 @@ const CollaboratorCard = ({ collaborator }) => {
   const { state, dispatch } = useContext(CommitmentContext);
   const [showModal, setShowColModal] = useState(false);
   const [deleted, setDeleted] = useState(false);
-  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   //Alert modal functions
   const handleShowModal = () => setShowColModal(true);
