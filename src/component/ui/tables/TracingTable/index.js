@@ -1,5 +1,5 @@
 import React from "react";
-import { Tablestyle, EyeIcon, Details, SearchBar } from "./styled";
+import { Tablestyle, EyeIcon, Details, SearchBar, Chip } from "./styled";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
@@ -58,7 +58,12 @@ const TracingTable = ({ commitments, viewDetails }) => {
               <TableCell align="center">{commitment.state}</TableCell>
               <TableCell align="center">{commitment.sector}</TableCell>
               <TableCell align="center">
-                {dataStatus(commitment.status).value}
+                <Chip
+                  background={dataStatus(commitment.status).background}
+                  txtColor={dataStatus(commitment.status).color}
+                >
+                  {dataStatus(commitment.status).value}
+                </Chip>
               </TableCell>
               <TableCell align="center">
                 <Details onClick={() => viewDetails(commitment)}>

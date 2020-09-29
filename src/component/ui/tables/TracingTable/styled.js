@@ -56,3 +56,14 @@ export const SearchBar = styled.input`
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   }
 `;
+
+export const Chip = styled.div`
+  border-radius: 2em;
+  display: inline-block;
+  font-size: 0.8em;
+  line-height: 1em;
+  font-weight: bold;
+  padding: 0.25em 0.75em;
+  background: ${(props) => props.background};
+  color: ${(props) => props.txtColor};
+`;
