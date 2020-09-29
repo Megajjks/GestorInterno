@@ -86,7 +86,9 @@ const TracingCommitmentDetails = (props) => {
     const getTasks = async () => {
       dispatch({ type: actions.getTasksList });
       try {
-        const { data } = await api.get("/tasks");
+        const { data } = await api.get(
+          `/tasks/commitment/${history.location.state}`
+        );
         dispatch({ type: actions.getTasksListSuccess, payload: data });
       } catch {
         dispatch({
@@ -283,9 +285,9 @@ const TracingCommitmentDetails = (props) => {
                       />
                       Archivado
                     </MenuItems>
-                    <MenuItems onClick={() => changeStatus("correcion")}>
+                    <MenuItems onClick={() => changeStatus("correccion")}>
                       <CircleStatus
-                        color={dataStatus("correcion").background}
+                        color={dataStatus("correccion").background}
                       />
                       En correcion
                     </MenuItems>

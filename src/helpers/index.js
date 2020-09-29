@@ -48,14 +48,14 @@ export const dataStatus = (status) => {
         color: "#FFFFFF",
         tag: "archivado",
       };
-    case "correcion":
+    case "correccion":
     case "En corrección":
     case "En correccion":
       return {
         value: "En corrección",
         background: "#FFE110",
         color: "#000000",
-        tag: "correcion",
+        tag: "correccion",
       };
     case "declinado":
     case "rechazado":

@@ -32,12 +32,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import BtnSend from "../GeneralButton";
 import api from "../../../helpers/api";
-import {
-  states,
-  sector,
-  socialNetworks,
-  area
-} from "../../../helpers/index";
+import { states, sector, socialNetworks, area } from "../../../helpers/index";
 
 const addStyle = (id1, id2, id3, id4, id5) => {
   document.getElementById(`${id1}`).style.display = "block";
@@ -86,12 +81,12 @@ const NewCommitment = () => {
   });
 
   const [question8Add, setQuestion8Add] = useState({
-    "question8_1": false,
-    "question8_2": false,
-    "question8_3": false,
-    "question8_4": false,
-    "question8_5": false,
-    "question8_6": false,
+    question8_1: false,
+    question8_2: false,
+    question8_3: false,
+    question8_4: false,
+    question8_5: false,
+    question8_6: false,
   });
 
   const handleOnChangeQuestion8 = (e) => {
@@ -129,29 +124,29 @@ const NewCommitment = () => {
 
   const [img, setImg] = useState([]);
 
-  const [logo, setLogo] = useState([])
+  const [logo, setLogo] = useState([]);
 
-  const onChangeHandlerLogo = e => {
+  const onChangeHandlerLogo = (e) => {
     console.log("Logo");
     console.log(e.target.files[0]);
     setLogo({
-      selectedFile: e.target.files[0]
+      selectedFile: e.target.files[0],
     });
     setCommitment({
       ...commitment,
-      [e.target.name]: e.target.files[0].name
+      [e.target.name]: e.target.files[0].name,
     });
   };
 
-  const onChangeHandlerImg = e => {
+  const onChangeHandlerImg = (e) => {
     console.log("Img");
     console.log(e.target.files[0]);
     setImg({
-      selectedFile: e.target.files[0]
+      selectedFile: e.target.files[0],
     });
     setCommitment({
       ...commitment,
-      [e.target.name]: e.target.files[0].name
+      [e.target.name]: e.target.files[0].name,
     });
   };
 
@@ -682,22 +677,9 @@ const NewCommitment = () => {
             </WrapperSpan5>
           </WrapperTextSuggestion>
 
-
-
-
-
-
-
-
-
-
-
-
-
           <Field>
             <Label>
-              Selecciona el área de tu compromiso{" "}
-              <TxtRequired>*</TxtRequired>
+              Selecciona el área de tu compromiso <TxtRequired>*</TxtRequired>
             </Label>
             <Select
               name="area"
@@ -724,18 +706,6 @@ const NewCommitment = () => {
               })}
             </Select>
           </Field>
-
-
-
-
-
-
-
-
-
-
-
-
 
           <Field>
             <Label>

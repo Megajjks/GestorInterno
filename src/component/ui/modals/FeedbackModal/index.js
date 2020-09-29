@@ -8,6 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import api from "../../../../helpers/api";
+import { rolName } from "../../../../helpers";
 import { ButtonAccept } from "./styled";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -76,15 +77,35 @@ const FeedbackModal = ({
   const fetchUpdateState = async () => {
     try {
       if (optionFeedback === "aceptar") {
-        const response = await api.put(`/commitments/${commitment.id}`, {
-          ...commitment,
-          status: "correcion",
-        });
+        if (rolName() === "assistant") {
+          const response = await api.put(`/commitments/${commitment.id}`, {
+            ...commitment,
+            status: "prevalidado",
+            feedback: "correccion",
+            message: commitmentFeedback.descriptionFeedback,
+          });
+        } else {
+          const response = await api.put(`/commitments/${commitment.id}`, {
+            ...commitment,
+            status: "correccion",
+            message: commitmentFeedback.descriptionFeedback,
+          });
+        }
       } else {
-        const response = await api.put(`/commitments/${commitment.id}`, {
-          ...commitment,
-          status: "declinado",
-        });
+        if (rolName() === "assistant") {
+          const response = await api.put(`/commitments/${commitment.id}`, {
+            ...commitment,
+            status: "prevalidado",
+            feedback: "declinado",
+            message: commitmentFeedback.descriptionFeedback,
+          });
+        } else {
+          const response = await api.put(`/commitments/${commitment.id}`, {
+            ...commitment,
+            status: "declinado",
+            message: commitmentFeedback.descriptionFeedback,
+          });
+        }
       }
       successData();
     } catch (e) {
