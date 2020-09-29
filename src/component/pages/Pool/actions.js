@@ -9,4 +9,5 @@ export const actions = {
   sync: "SYNC",
   syncSucess: "SYNC_SUCCESS",
   syncError: "SYNC_ERROR",
+  setPage: "SET_PAGE",
 };

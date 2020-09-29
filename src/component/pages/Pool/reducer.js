@@ -56,12 +56,10 @@ export const reducer = (state, action) => {
         syncCommitmentsLoader: false,
         reload: action.payload,
       };
-    case actions.syncError:
+    case actions.setPage:
       return {
         ...state,
-        showBtnSycn: true,
-        syncCommitmentsLoader: false,
-        syncCommitmentsError: action.payload,
+        page: action.payload,
       };
     default:
       return state;

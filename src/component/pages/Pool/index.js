@@ -4,6 +4,7 @@ import PoolTable from "../../ui/tables/PoolTable";
 import Btn from "../../ui/GeneralButton";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
+import Pagination from "../../ui/Pagination";
 import api from "../../../helpers/api";
 import { dataStatus, existSync } from "../../../helpers";
 import { actions } from "./actions";
@@ -131,6 +132,25 @@ const Pool = () => {
     }
   };
 
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
+  };
+
+  const renderPoolTable = () => {
+    if (state.commitmentsError) return <Error />;
+    return (
+      <>
+        <PoolTable commitments={state.commitments} viewDetails={viewDetails} />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
+    );
+  };
+
   return (
     <Fragment>
       <WrapperHeader>
@@ -157,9 +177,7 @@ const Pool = () => {
         </BtnGroup>
       </WrapperHeader>
       <SearchBar value={searchString} onChange={search} />
-      <PoolTable commitments={state.commitments} viewDetails={viewDetails} />
-      {state.commitmentsLoader ? <Spinner /> : null}
-      {state.commitmentsError ? <Error /> : null}
+      {state.commitmentsLoader ? <Spinner /> : renderPoolTable()}
     </Fragment>
   );
 };
