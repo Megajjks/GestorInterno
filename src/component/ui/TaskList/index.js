@@ -30,17 +30,35 @@ const TaskList = ({ tasks, isCollaborator }) => {
     }
   };
 
+  //function to update the task to remove
+  const prepareRemoveTask = (task) => {
+    dispatch({ type: actions.removeTask, payload: task });
+  };
+
   //function to deleted a task
-  const removeTask = (id) => {
-    console.log(`estoy eleminando la task ${id}`);
-    //request to remove a task
+  const removeTask = async () => {
+    try {
+      const response = await api.delete(`/tasks/${state.newTask.id}`);
+      dispatch({
+        type: actions.removeTaskSuccess,
+        payload: !state.reloadTasks,
+      });
+    } catch {
+      dispatch({
+        type: actions.removeTaskError,
+        payload: "Ocurrió un problema al momento de eliminar la tarea",
+      });
+    }
   };
 
   //function to edit a task
   const editTask = (task) => {
     dispatch({
       type: actions.showModalEditTask,
-      payload: { task: task, isShow: !state.showModalTask },
+      payload: {
+        task: task,
+        isShow: !state.showModalTask,
+      },
     });
   };
 
@@ -49,15 +67,11 @@ const TaskList = ({ tasks, isCollaborator }) => {
       {tasks.map((task, idx) => (
         <Task
           key={idx}
-          title={task.title}
-          description={task.description}
-          status={task.status}
-          priority={task.priority}
-          date={task.date}
-          user={task.user}
+          task={task}
           isCollaborator={isCollaborator}
           changeStatusTask={() => changeStatusTask(task)}
-          removeTask={() => removeTask(task.id)}
+          prepareRemoveTask={() => prepareRemoveTask(task)}
+          removeTask={removeTask}
           editTask={() => editTask(task)}
         ></Task>
       ))}

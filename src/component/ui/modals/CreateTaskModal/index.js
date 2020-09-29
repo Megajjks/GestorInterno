@@ -37,11 +37,10 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
       dispatch({ type: actions.addTask });
       const fetchTask = async () => {
         const response = await api.post("/tasks", {
-          title: state.newTask.title,
-          description: state.newTask.description,
-          status: true,
+          ...state.newTask,
+          status: false,
           priority: "low",
-          date: state.newTask.date,
+          commitmentId: state.commitment.id,
           collaboratorId: id,
         });
         dispatch({ type: actions.addTaskSuccess, payload: !state.reloadTasks });

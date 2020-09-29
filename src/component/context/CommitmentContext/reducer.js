@@ -181,6 +181,11 @@ export const reducer = (state, action) => {
         msgError: action.payload,
         showModalTask: false,
       };
+    case actions.removeTask:
+      return {
+        ...state,
+        newTask: action.payload,
+      };
     case actions.removeTaskSuccess:
       return {
         ...state,

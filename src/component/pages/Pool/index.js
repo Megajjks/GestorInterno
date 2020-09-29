@@ -24,7 +24,6 @@ const Pool = () => {
       dispatch({ type: actions.getCommitments });
       try {
         const { data } = await api.get("/commitments/filter/pool/");
-        //const { data } = await api.get("/commitments");
         dispatch({
           type: actions.getCommitmentsSuccess,
           payload: {
