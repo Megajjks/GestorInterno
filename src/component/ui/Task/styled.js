@@ -109,9 +109,9 @@ export const WrapperEditTask = styled.div`
 `;
 
 export const ImgEditTask = styled.img`
-  width: 1em;
-  height: 1em;
-  padding-left: 1em;
+  width: 0.8em;
+  height: 0.8em;
+  padding-left: 0.4em;
   &:hover {
     cursor: pointer;
   }

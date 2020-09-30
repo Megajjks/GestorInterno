@@ -20,7 +20,6 @@ const Management = () => {
       dispatch({ type: actions.getCommitments });
       try {
         const { data } = await api.get("/commitments/filter/management/");
-        //const response = await api.get("/commitments/filter/management/");
         dispatch({
           type: actions.getCommitmentsSuccess,
           payload: data,

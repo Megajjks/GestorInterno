@@ -55,8 +55,22 @@ const MilestoneModal = (isEdit) => {
   };
 
   //save data after edit the milestone
-  const saveMilestone = () => {
-    console.log("save milestone");
+  const saveMilestone = async () => {
+    try {
+      const response = await api.put(
+        `/milestone/${state.milestone.id}`,
+        state.milestone
+      );
+      dispatch({
+        type: actions.updateMilestoneSuccess,
+        payload: !state.reloadMilestones,
+      });
+    } catch {
+      dispatch({
+        type: actions.updateMilestoneError,
+        payload: "Ocurrió un error al momento de actualizar un logro",
+      });
+    }
   };
 
   //close milestone and clean data when modal is edit milestone

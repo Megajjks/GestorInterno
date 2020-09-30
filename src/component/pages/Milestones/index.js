@@ -51,6 +51,28 @@ const Milestones = () => {
     });
   };
 
+  //function to update the milestone to remove
+  const prepareRemoveMilestone = (milestone) => {
+    dispatch({ type: actions.removeMilestone, payload: milestone });
+  };
+
+  //function to remove the milestone
+  const removeMilestone = async () => {
+    try {
+      const response = await api.delete(`/milestone/${state.milestone.id}`);
+      dispatch({
+        type: actions.removeMilestoneSuccess,
+        payload: !state.reloadMilestones,
+      });
+    } catch {
+      dispatch({
+        type: actions.removeMilestoneError,
+        payload: "Ocurrió un error al momento de eliminar un logro",
+      });
+    }
+    console.log(`remove milestone ${state.milestone.id}`);
+  };
+
   const renderMilestones = () => {
     if (state.milestonesError) {
       return <Error />;
@@ -69,6 +91,8 @@ const Milestones = () => {
         isCollaborator={isCollaborator}
         isPage={true}
         showModalMilestone={showModalEditMilestone}
+        prepareRemoveMilestone={prepareRemoveMilestone}
+        removeMilestone={removeMilestone}
       />
     );
   };

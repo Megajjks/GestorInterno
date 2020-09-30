@@ -51,4 +51,7 @@ export const actions = {
   showModalAddMilestone: "SHOW_MODAL_ADD_MILESTONE",
   showModalEditMilestone: "SHOW_MODAL_EDIT_MILESTONE",
   closeModalEditMilestone: "CLOSE_MODAL_EDIT_MILESTONE",
+  removeMilestone: "REMOVE_MILESTONE",
+  removeMilestoneSuccess: "REMOVE_MILESTONE_SUCCESS",
+  removeMilestoneError: "REMOVE_MILESTONE_ERROR",
 };

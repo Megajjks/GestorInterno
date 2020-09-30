@@ -191,11 +191,21 @@ export const reducer = (state, action) => {
         ...state,
         reloadTasks: action.payload,
         msgError: null,
+        newTask: {
+          title: "",
+          description: "",
+          date: "",
+        },
       };
     case actions.removeTaskError:
       return {
         ...state,
         msgError: action.payload,
+        newTask: {
+          title: "",
+          description: "",
+          date: "",
+        },
       };
     case actions.showModalAddTask:
       return {
@@ -306,6 +316,32 @@ export const reducer = (state, action) => {
           date: "",
         },
         showModalMilestone: action.payload,
+      };
+    case actions.removeMilestone:
+      return {
+        ...state,
+        milestone: action.payload,
+      };
+    case actions.removeMilestoneSuccess:
+      return {
+        ...state,
+        reloadMilestones: action.payload,
+        milestonesError: null,
+        milestone: {
+          title: "",
+          description: "",
+          date: "",
+        },
+      };
+    case actions.removeMilestoneError:
+      return {
+        ...state,
+        milestonesError: action.payload,
+        milestone: {
+          title: "",
+          description: "",
+          date: "",
+        },
       };
     default:
       return state;

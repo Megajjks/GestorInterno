@@ -60,9 +60,9 @@ export const TxtIcon = styled.h1`
 `;
 
 export const ImgEdit = styled.img`
-  width: 1em;
-  height: 1em;
-  padding-left: 1em;
+  width: 0.8em;
+  height: 0.8em;
+  padding-left: 0.6em;
   &:hover {
     cursor: pointer;
   }

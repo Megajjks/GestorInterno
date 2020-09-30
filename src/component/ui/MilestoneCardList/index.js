@@ -1,16 +1,13 @@
 import React, { Fragment, useContext } from "react";
-import { CommitmentContext } from "../../context/CommitmentContext";
-import { actions } from "../../context/CommitmentContext/actions";
 import MilestoneCard from "../MilestoneCard";
-import api from "../../../helpers/api";
 
 const MilestoneCardList = ({
   milestones,
   isCollaborator,
   showModalMilestone,
+  prepareRemoveMilestone,
+  removeMilestone,
 }) => {
-  const { state, dispatch } = useContext(CommitmentContext);
-
   return (
     <Fragment>
       {milestones.map((milestone, idx) => (
@@ -19,6 +16,8 @@ const MilestoneCardList = ({
           milestone={milestone}
           isCollaborator={isCollaborator}
           showModalMilestone={showModalMilestone}
+          prepareRemoveMilestone={() => prepareRemoveMilestone(milestone)}
+          removeMilestone={removeMilestone}
         />
       ))}
     </Fragment>
