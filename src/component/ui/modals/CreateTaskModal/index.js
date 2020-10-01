@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, Fragment } from "react";
 import { CommitmentContext } from "../../../context/CommitmentContext";
 import { actions } from "../../../context/CommitmentContext/actions";
 
@@ -76,14 +76,8 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
     dispatch({ type: actions.closeModalEditTask, payload: false });
   };
 
-  const dataFormat = (dates) => {
-    const date = new Date(dates);
-    console.log(dates);
-    return date;
-  };
-
   return (
-    <>
+    <Fragment>
       <Dialog
         open={openNewTask}
         onClose={isEdit ? closeModalEditTask : closeModalNewTask}
@@ -137,7 +131,7 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
         </DialogContent>
         <DialogActions>
           <Button
-            title="Cerrar"
+            title="Cancelar"
             onClick={isEdit ? closeModalEditTask : closeModalNewTask}
             type="secundary"
             size="30%"
@@ -149,7 +143,7 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
           )}
         </DialogActions>
       </Dialog>
-    </>
+    </Fragment>
   );
 };
 

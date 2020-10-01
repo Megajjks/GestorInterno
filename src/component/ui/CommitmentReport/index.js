@@ -110,13 +110,13 @@ const CommitmentReport = (props) => {
           ...state.dataForm,
           status: "prevalidado",
           feedback: "validando",
-          message: null,
+          message: { title: null, msg: null },
         });
       } else {
         const response = await api.put(`/commitments/${state.dataForm.id}`, {
           ...state.dataForm,
           status: "primer_contacto",
-          message: null,
+          message: { title: null, msg: null },
         });
       }
       setError({
