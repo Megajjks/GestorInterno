@@ -1,66 +1,43 @@
-import React, { useState, useEffect } from "react";
-import CommitmentCardList from "../../ui/CommitmentCardList";
+import React, { useReducer, useEffect, Fragment } from "react";
+import { actions } from "./actions";
+import { initialState } from "./constants";
+import { reducer } from "./reducer";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import api from "../../../helpers/api";
-import WithoutData from "../../ui/alerts/WithoutData";
 
 const Dashboard = () => {
-  const [data, setData] = useState([]);
-  const [status, setStatus] = useState({
-    loader: false,
-    isError: false,
-    message: "",
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const id = JSON.parse(localStorage.getItem("login_data")).userId;
 
   useEffect(() => {
-    const fetchCommitments = async () => {
-      setStatus({ loader: true });
+    //get data user
+    const getUser = async () => {
+      dispatch({ type: actions.getUser });
       try {
-        const { data } = await api.get("/commitments");
-        setData(data);
-        setStatus({
-          loader: false,
-          isError: false,
-        });
-      } catch (e) {
-        console.log(e);
-        setStatus({
-          loader: false,
-          isError: true,
-          message:
-            "Por el momento no se pueden obtener los datos, verifique su conexión",
+        const { data } = await api.get(`/users/${id}`);
+        dispatch({ type: actions.getUserSuccess, payload: data });
+      } catch {
+        dispatch({
+          type: actions.getUserError,
+          payload: "Ocurrió un problema al cargar los datos del usuario",
         });
       }
     };
-    fetchCommitments();
+    getUser();
   }, []);
 
-  const renderCommitments = () => {
-    if (data.length === 0 && !status.loader && !status.isError)
-      return (
-        <WithoutData
-          title="!Vaya¡ parece que no hay compromisos"
-          content="Paciencia que pronto podras ver los compromisos 😉"
-        />
-      );
+  const renderView = () => {
+    if (state.userError) return <Error />;
+
     return (
-      <CommitmentCardList
-        commitments={data}
-        btnTitle="Leer compromiso"
-        btnUrlBase="/panel/commitment_report"
-      />
+      <Fragment>
+        <h1>{`Bienvenido ${state.user.firstName} ${state.user.lastName}`} </h1>
+      </Fragment>
     );
   };
 
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      {renderCommitments()}
-      {status.loader ? <Spinner /> : null}
-      {status.isError ? <Error /> : null}
-    </div>
-  );
+  return <Fragment>{state.userLoader ? <Spinner /> : renderView()}</Fragment>;
 };
 
 export default Dashboard;

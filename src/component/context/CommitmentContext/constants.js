@@ -29,4 +29,16 @@ export const initialState = {
   showModalTask: false,
   isEditModalTask: false,
   msgError: null,
+
+  milestones: [],
+  milestonesLoading: false,
+  milestonesError: null,
+  reloadMilestones: false,
+  milestone: {
+    title: "",
+    description: "",
+    date: "",
+  },
+  showModalMilestone: false,
+  isEditModalMilestone: false,
 };

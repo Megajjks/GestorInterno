@@ -4,6 +4,8 @@ import Tracing from "../../component/pages/Tracing";
 import Management from "../../component/pages/Management";
 import CommitmentReport from "../../component/ui/CommitmentReport";
 import TracingCommitmentDetails from "../../component/ui/TracingCommitmentDetails";
+import Milestones from "../../component/pages/Milestones";
+import Tasks from "../../component/pages/Tasks";
 import M1 from "../../assets/img/dashboard.svg";
 import M2 from "../../assets/img/gestion.svg";
 import M3 from "../../assets/img/gps.svg";
@@ -14,6 +16,8 @@ import {
   COMMITMENT_REPORT_DETAILS,
   TRACING_COMMITMENTS,
   TRACING_COMMITMENT_DETAILS,
+  MILESTONES,
+  TASKS,
   MANAGEMENT_COMMITMENTS,
 } from "../paths";
 
@@ -62,12 +66,28 @@ export const commitmentReportAdmin = {
   path: COMMITMENT_REPORT_DETAILS,
   isPrivate: true,
   render: false,
+  exact: true,
 };
 export const tracingCommitmentDetailsAdmin = {
   component: TracingCommitmentDetails,
   path: TRACING_COMMITMENT_DETAILS,
   isPrivate: true,
   render: false,
+  exact: true,
+};
+export const milestonesCommitmentAdmin = {
+  component: Milestones,
+  path: MILESTONES,
+  isPrivate: true,
+  render: false,
+  exact: true,
+};
+export const tasksCommitmentAdmin = {
+  component: Tasks,
+  path: TASKS,
+  isPrivate: true,
+  render: false,
+  exact: true,
 };
 
 export default [
@@ -77,4 +97,6 @@ export default [
   managementAdmin,
   commitmentReportAdmin,
   tracingCommitmentDetailsAdmin,
+  milestonesCommitmentAdmin,
+  tasksCommitmentAdmin,
 ];
