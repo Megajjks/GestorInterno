@@ -59,7 +59,7 @@ const UserTable = ({
                 <TableCell align="center">
                   <UserDataWrapper>
                     <ProfileImg
-                      src={user.image}
+                      src={`https://api.ashoka.hackademy.mx/${user.image}`}
                       alt={`UserPicture${user.id}`}
                     />
                     {`${user.firstName} ${user.lastName}`}
