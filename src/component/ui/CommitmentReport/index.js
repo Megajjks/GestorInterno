@@ -104,20 +104,32 @@ const CommitmentReport = (props) => {
 
   const acceptCommitment = async () => {
     try {
+      let formdata = new FormData();
+      let message = JSON.stringify({
+        title: null,
+        msg: null,
+      });
+
       //check if assistent
       if (rolName() === "assistant") {
-        const response = await api.put(`/commitments/${state.dataForm.id}`, {
-          ...state.dataForm,
-          status: "prevalidado",
-          feedback: "validando",
-          message: null,
-        });
+        //estructuring the formdata
+        formdata.append("status", "prevalidado");
+        formdata.append("feedback", "validando");
+        formdata.append("message", message);
+
+        const response = await api.put(
+          `/commitments/${state.dataForm.id}`,
+          formdata
+        );
       } else {
-        const response = await api.put(`/commitments/${state.dataForm.id}`, {
-          ...state.dataForm,
-          status: "primer_contacto",
-          message: null,
-        });
+        //estructuring the formdata
+        formdata.append("status", "primer_contacto");
+        formdata.append("feedback", null);
+        formdata.append("message", message);
+        const response = await api.put(
+          `/commitments/${state.dataForm.id}`,
+          formdata
+        );
       }
       setError({
         status: true,
@@ -180,7 +192,7 @@ const CommitmentReport = (props) => {
       {state.dataForm.status === "prevalidado" && (
         <AlertInformation preRol={state.dataForm.feedback} />
       )}
-      {state.dataForm.message && (
+      {state.dataForm.message.title && (
         <AlertInformation
           type="message"
           title={state.dataForm.message.title}

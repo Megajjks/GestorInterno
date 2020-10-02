@@ -22,16 +22,33 @@ import api from "../../../../helpers/api";
 const UserModal = ({ closeModalUser, closeModalClean }) => {
   const { state, dispatch } = useContext(StoreContext);
   const [showPassword, setShowPassword] = useState(false);
+  const [imgFile, setImgFile] = useState();
 
   const handleupdateUser = (field, value) => {
     dispatch({ type: actions.updateUser, payload: { field, value } });
+  };
+
+  //Handle function to set the img.
+  const handleSetImg = (e) => {
+    setImgFile(e.target.files[0]);
+    handleupdateUser(e.target.name, e.target.files[0].name);
   };
 
   //Add new User
   const addUser = async () => {
     dispatch({ type: actions.addUser });
     try {
-      const response = await api.post("/users", state.user);
+      //estructuring the formdata
+      let formdata = new FormData();
+      formdata.append("image", imgFile);
+      formdata.append("firstName", state.user.firstName);
+      formdata.append("lastName", state.user.lastName);
+      formdata.append("roleId", state.user.roleId);
+      formdata.append("email", state.user.email);
+      formdata.append("password", state.user.password);
+      formdata.append("phone", state.user.phone);
+
+      const response = await api.post("/users", formdata);
       dispatch({ type: actions.addUserSuccess, payload: !state.reload });
     } catch {
       dispatch({
@@ -45,7 +62,17 @@ const UserModal = ({ closeModalUser, closeModalClean }) => {
   const saveUser = async () => {
     dispatch({ type: actions.saveUpdateUser });
     try {
-      const response = await api.put(`/users/${state.user.id}`, state.user);
+      //estructuring the formdata
+      let formdata = new FormData();
+      formdata.append("image", imgFile);
+      formdata.append("firstName", state.user.firstName);
+      formdata.append("lastName", state.user.lastName);
+      formdata.append("roleId", state.user.roleId);
+      formdata.append("email", state.user.email);
+      formdata.append("password", state.user.password);
+      formdata.append("phone", state.user.phone);
+
+      const response = await api.put(`/users/${state.user.id}`, formdata);
       dispatch({ type: actions.saveUpdateUserSuccess, payload: !state.reload });
     } catch {
       dispatch({
@@ -69,7 +96,10 @@ const UserModal = ({ closeModalUser, closeModalClean }) => {
       </DialogTitle>
       <DialogContent style={{ margin: "0 1em" }}>
         <WrapperLogo>
-          <Logo src={state.user.image} alt="avatar" />
+          <Logo
+            src={`https://api.ashoka.hackademy.mx/${state.user.image}`}
+            alt="avatar"
+          />
           <input
             accept="image/png, .jpeg, .jpg"
             id="contained-button-file"
@@ -77,7 +107,7 @@ const UserModal = ({ closeModalUser, closeModalClean }) => {
             multiple
             type="file"
             name="image"
-            onChange={(e) => handleupdateUser(e.target.name, e.target.value)}
+            onChange={handleSetImg}
           />
           <label htmlFor="contained-button-file">
             <Button variant="outlined" component="span">

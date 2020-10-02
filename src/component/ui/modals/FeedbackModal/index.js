@@ -76,35 +76,55 @@ const FeedbackModal = ({
   //function to update the status
   const fetchUpdateState = async () => {
     try {
+      let formdata = new FormData();
+      let message = JSON.stringify({
+        title: commitmentFeedback.titleFeedback,
+        msg: commitmentFeedback.descriptionFeedback,
+      });
+
       if (optionFeedback === "aceptar") {
         if (rolName() === "assistant") {
-          const response = await api.put(`/commitments/${commitment.id}`, {
-            ...commitment,
-            status: "prevalidado",
-            feedback: "correccion",
-            message: commitmentFeedback.descriptionFeedback,
-          });
+          //estructuring the formdata
+          formdata.append("status", "prevalidado");
+          formdata.append("feedback", "correccion");
+          formdata.append("message", message);
+          const response = await api.put(
+            `/commitments/${commitment.id}`,
+            formdata
+          );
         } else {
-          const response = await api.put(`/commitments/${commitment.id}`, {
-            ...commitment,
-            status: "correccion",
-            message: commitmentFeedback.descriptionFeedback,
-          });
+          //estructuring the formdata
+          formdata.append("status", "correccion");
+          formdata.append("message", message);
+          const response = await api.put(
+            `/commitments/${commitment.id}`,
+            formdata
+          );
         }
       } else {
         if (rolName() === "assistant") {
-          const response = await api.put(`/commitments/${commitment.id}`, {
-            ...commitment,
-            status: "prevalidado",
-            feedback: "declinado",
-            message: commitmentFeedback.descriptionFeedback,
-          });
+          //estructuring the formdata
+          formdata.append("status", "prevalidado");
+          formdata.append("feedback", "declinado");
+          formdata.append("message", message);
+          const response = await api.put(
+            `/commitments/${commitment.id}`,
+            formdata
+          );
         } else {
-          const response = await api.put(`/commitments/${commitment.id}`, {
-            ...commitment,
-            status: "declinado",
-            message: commitmentFeedback.descriptionFeedback,
-          });
+          //estructuring the formdata
+          formdata.append("status", "declinado");
+          formdata.append(
+            "message",
+            JSON.stringify({
+              title: null,
+              msg: null,
+            })
+          );
+          const response = await api.put(
+            `/commitments/${commitment.id}`,
+            formdata
+          );
         }
       }
       successData();
