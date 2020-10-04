@@ -32,13 +32,10 @@ const SendEmailModal = () => {
     };
 
     function CheckData () {
-        if (!state.searchFilter.collaborator && 
-            !state.searchFilter.collaborator && 
-            !state.searchFilter.area && 
-            !state.searchFilter.state && 
-            !state.searchFilter.sector && 
-            !state.searchFilter.status /* &&
-            state.commitmentsFilter.length */) {
+        if (state.commitmentsFilter.length === 0 || 
+            (state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
+            state.searchFilter.state === "" && state.searchFilter.sector === "" && 
+            state.searchFilter.status === "")) {
             return <DialogContentText>
                     No hay compromisos seleccionados para enviar correo
                 </DialogContentText>
@@ -78,9 +75,17 @@ const SendEmailModal = () => {
 
     const sendEmailFilter = async () => {
         try {
-            const response = await api.post("/email/group/");
-            if (response) {
-                alert("Correo enviado")
+            if (state.commitmentsFilter.length === 0 || 
+                (state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
+                state.searchFilter.state === "" && state.searchFilter.sector === "" && 
+                state.searchFilter.status === "")) {
+                alert("El array esta vacio")
+                //alerta o mensaje de array vacio, activar
+            } else {
+                const response = await api.post("/email/group/");
+                if (response) {
+                    alert("Correo enviado")
+                }
             }
         } catch(err) {
             console.log(err)
