@@ -8,7 +8,7 @@ import api from "../../../helpers/api";
 import TracingTable from "../../ui/tables/TracingTable";
 import { filterWithStatus } from "../../../helpers";
 import FilterBar from "../../ui/FilterBar";
-import Btn from "../../ui/GeneralButton";
+import SendEmailModal from "../../ui/modals/SendEmailModal";
 import { BtnGroup } from "./styled";
 
 const Tracing = () => {
@@ -59,9 +59,7 @@ const Tracing = () => {
 
   return (
     <Fragment>
-      <BtnGroup>
-        <h1>Seguimiento de los compromisos</h1>
-      </BtnGroup>
+      <SendEmailModal/>
       <FilterBar status={query} typeTable={"tracing"}/>
       <TracingTable commitments={state.commitmentsFilter} viewDetails={viewDetails} />
       {state.commitmentsLoader ? <Spinner /> : null}

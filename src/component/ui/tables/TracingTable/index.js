@@ -21,7 +21,7 @@ const fields = [
   "Area",
   "Lugar",
   "Sede",
-  "Categoria",
+  "Categoría",
   "Estatus",
   "",
 ];
