@@ -61,17 +61,15 @@ const NewCommitment = () => {
     position: "",
     email: "",
     phone: "",
-    logo: "",
+    image: "",
     img: "",
     categoryId: 0,
-    area: "",
     question1: "",
     question2: "",
     question3: "",
     question4: "",
     question5: "",
     question6: "",
-    question8: null,
     question7: "",
     question9: "",
     question10: "",
@@ -124,12 +122,12 @@ const NewCommitment = () => {
 
   const [img, setImg] = useState([]);
 
-  const [logo, setLogo] = useState([]);
+  const [image, setImage] = useState([]);
 
-  const onChangeHandlerLogo = (e) => {
-    console.log("Logo");
+  const onChangeHandlerImage = (e) => {
+    console.log("Image");
     console.log(e.target.files[0]);
-    setLogo({
+    setImage({
       selectedFile: e.target.files[0],
     });
     setCommitment({
@@ -161,7 +159,6 @@ const NewCommitment = () => {
       commitment.lastName === "" ||
       commitment.organization === "" ||
       commitment.sector === "" ||
-      commitment.area === "" ||
       commitment.city === "" ||
       commitment.state === "" ||
       commitment.position === "" ||
@@ -200,10 +197,14 @@ const NewCommitment = () => {
     setIsLoader(true);
     try {
       let formdata = new FormData();
-      setCommitment({
-        ...commitment,
-        question8: question8Add,
-      });
+      const dataQuestion8 = JSON.stringify({
+        question8_1: question8Add.question8_1,
+        question8_2: question8Add.question8_2,
+        question8_3: question8Add.question8_3,
+        question8_4: question8Add.question8_4,
+        question8_5: question8Add.question8_5,
+        question8_6: question8Add.question8_6,
+      })
       formdata.append("firstName", commitment.firstName);
       formdata.append("lastName", commitment.lastName);
       formdata.append("organization", commitment.organization);
@@ -215,8 +216,7 @@ const NewCommitment = () => {
       formdata.append("email", commitment.email);
       formdata.append("categoryId", 0);
       formdata.append("img", img.selectedFile);
-      formdata.append("logo", logo.selectedFile);
-      formdata.append("area", commitment.area);
+      formdata.append("image", image.selectedFile);
       formdata.append("question1", commitment.question1);
       formdata.append("question2", commitment.question2);
       formdata.append("question3", commitment.question3);
@@ -224,7 +224,7 @@ const NewCommitment = () => {
       formdata.append("question5", commitment.question5);
       formdata.append("question6", commitment.question6);
       formdata.append("question7", commitment.question7);
-      //formdata.append("question8", commitment.question8);
+      formdata.append("question8", dataQuestion8); 
       formdata.append("question9", commitment.question9);
       formdata.append("question10", commitment.question10);
       formdata.append("question11", commitment.question11);
@@ -505,14 +505,14 @@ const NewCommitment = () => {
             </Label>
             <input
               type="file"
-              name="logo"
-              id="imglogo"
-              onChange={onChangeHandlerLogo}
+              name="image"
+              id="imgLogo"
+              onChange={onChangeHandlerImage}
               style={{ display: "none" }}
             />
-            <LabelFile for="imglogo">
+            <LabelFile for="imgLogo">
               {" "}
-              {commitment.logo ? commitment.logo : "Selecciona una imagen"}{" "}
+              {commitment.image ? commitment.image : "Selecciona una imagen"}{" "}
             </LabelFile>
           </Field>
           <Field>
@@ -676,37 +676,6 @@ const NewCommitment = () => {
               </SpanText>
             </WrapperSpan5>
           </WrapperTextSuggestion>
-
-          <Field>
-            <Label>
-              Selecciona el área de tu compromiso <TxtRequired>*</TxtRequired>
-            </Label>
-            <Select
-              name="area"
-              onFocus={() => {
-                removeStyle(
-                  "suggestion1",
-                  "suggestion2",
-                  "suggestion3",
-                  "suggestion4",
-                  "suggestion5"
-                );
-              }}
-              style={{ width: "61em" }}
-              value={commitment.area}
-              onChange={handleOnChange}
-            >
-              <option value="">-- Seleccione --</option>
-              {area.map((item, idx) => {
-                return (
-                  <option value={item} key={idx}>
-                    {item}
-                  </option>
-                );
-              })}
-            </Select>
-          </Field>
-
           <Field>
             <Label>
               ¿De qué manera Ashoka y su red pueden ayudarte a escalar el
