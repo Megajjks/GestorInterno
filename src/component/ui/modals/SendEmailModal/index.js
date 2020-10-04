@@ -14,6 +14,7 @@ import { BtnGroup, WrapperButtons, ButtonAccept, ButtonDecline } from "./styled"
 const SendEmailModal = () => {
     const { state, dispatch } = useContext(CommitmentFilterContext);
     const [open, setOpen] = useState(false);
+    const [dataSendEmail, setDataSendEmail] = useState(null);
     const [dataFilter, setDataFilter] = useState({
         subject: "",
         message: "",
@@ -25,11 +26,19 @@ const SendEmailModal = () => {
     
     const handleClickOpen = () => {
         setOpen(true);
+        //Limpiar campos de message y subject en el state
     };
 
     const handleClose = () => {
         setOpen(false);
     };
+
+    const updateDataSendEmail = (e) => {
+        setDataFilter({
+          ...dataFilter,
+          [e.target.name]: e.target.value,
+        });
+      };
 
     function CheckData () {
         if (state.commitmentsFilter.length === 0 || 
@@ -46,7 +55,7 @@ const SendEmailModal = () => {
                     </DialogContentText>
                     {state.searchFilter.collaborator ?
                         <DialogContentText>
-                            {`Colaborador: `}
+                            {`Colaborador: ${"colaborador :)"}`}
                         </DialogContentText> : null
                     }
                     {state.searchFilter.area ?
@@ -74,6 +83,7 @@ const SendEmailModal = () => {
     }
 
     const sendEmailFilter = async () => {
+        //Funcion para evitar datos vacios de subject y message
         try {
             if (state.commitmentsFilter.length === 0 || 
                 (state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
@@ -82,10 +92,46 @@ const SendEmailModal = () => {
                 alert("El array esta vacio")
                 //alerta o mensaje de array vacio, activar
             } else {
-                const response = await api.post("/email/group/");
+                if (state.searchFilter.collaborator !== "") {
+                    alert("tiene colaborador")
+                    setDataSendEmail({
+                        ...dataSendEmail,
+                        collaborator: state.searchFilter.collaborator
+                    })
+                } if (state.searchFilter.area !== "") {
+                    alert("tiene area")
+                    setDataSendEmail({
+                        ...dataSendEmail,
+                        area: state.searchFilter.area
+                    })
+                } if (state.searchFilter.state !== "") {
+                    alert("tiene estado")
+                    setDataSendEmail({
+                        ...dataSendEmail,
+                        state: state.searchFilter.state
+                    })
+                } if (state.searchFilter.sector !== "") {
+                    alert("tiene sector")
+                    setDataSendEmail({
+                        ...dataSendEmail,
+                        sector: state.searchFilter.sector
+                    })
+                } if (state.searchFilter.status !== "") {
+                    alert("tiene status")
+                    setDataSendEmail({
+                        ...dataSendEmail,
+                        status: state.searchFilter.status
+                    })
+                }
+                /*setDataSendEmail({
+                    ...dataSendEmail,
+                    subject: dataFilter.subject,
+                    message: dataFilter.message
+                })*/
+                /*const response = await api.post("/email/group/", dataSendEmail);
                 if (response) {
                     alert("Correo enviado")
-                }
+                }*/
             }
         } catch(err) {
             console.log(err)
@@ -114,6 +160,7 @@ const SendEmailModal = () => {
                         name="subject"
                         color="secondary" 
                         label="Titulo de correo"
+                        onChange={updateDataSendEmail}
                         type="text"
                         fullWidth
                     />
@@ -123,6 +170,7 @@ const SendEmailModal = () => {
                         name="message"
                         color="secondary" 
                         label="Mensaje de correo"
+                        onChange={updateDataSendEmail}
                         type="text"
                         fullWidth
                     />
