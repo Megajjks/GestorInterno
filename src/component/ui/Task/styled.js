@@ -4,11 +4,12 @@ export const Wrapper = styled.div`
   background-color: ${({ theme: { colors } }) => colors.white};
   justify-content: space-between;
   display: flex;
-  border-radius: 4px;
+  border-radius: 10px;
   box-shadow: 0 4px 8px 0 #ddd;
   transition: transform 0.2s ease-out;
   padding: 0.8em 0;
   margin-bottom: 1em;
+  width: inherit;
   padding-left: ${(props) => (props.isCollaborator ? 0 : "2em")};
   &:hover {
     transform: translateY(-0.125rem);
@@ -108,9 +109,9 @@ export const WrapperEditTask = styled.div`
 `;
 
 export const ImgEditTask = styled.img`
-  width: 1em;
-  height: 1em;
-  padding-left: 1em;
+  width: 0.8em;
+  height: 0.8em;
+  padding-left: 0.4em;
   &:hover {
     cursor: pointer;
   }

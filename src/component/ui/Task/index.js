@@ -82,10 +82,12 @@ const Task = ({
         )}
         <TaskData>
           <SectionEditTask>
-            <TitleTask>{task.title}</TitleTask>
-            {isCollaborator && (
-              <ImgEditTask src={IconEdit} alt="edit" onClick={editTask} />
-            )}
+            <TitleTask>
+              {task.title}{" "}
+              {isCollaborator && (
+                <ImgEditTask src={IconEdit} alt="edit" onClick={editTask} />
+              )}
+            </TitleTask>
           </SectionEditTask>
           <WrapperInfo>
             <ImgProfile src={task.user.image} />
