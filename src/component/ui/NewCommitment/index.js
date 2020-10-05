@@ -684,7 +684,7 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="8-1"
+                name="question8_1"
                 onFocus={() => {
                   removeStyle(
                     "suggestion1",
@@ -702,7 +702,16 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="8-2"
+                name="question8_2"
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={true}
                 onChange={handleOnChangeQuestion8}
               />{" "}
@@ -712,7 +721,16 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="8-3"
+                name="question8_3"
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={true}
                 onChange={handleOnChangeQuestion8}
               />{" "}
@@ -721,7 +739,16 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="8-4"
+                name="question8_4"
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={true}
                 onChange={handleOnChangeQuestion8}
               />{" "}
@@ -730,7 +757,16 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="8-5"
+                name="question8_5"
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={true}
                 onChange={handleOnChangeQuestion8}
               />{" "}
@@ -739,7 +775,16 @@ const NewCommitment = () => {
             <WrapperInputRadio>
               <InputRadio
                 type="checkbox"
-                name="8-6"
+                name="question8_6"
+                onFocus={() => {
+                  removeStyle(
+                    "suggestion1",
+                    "suggestion2",
+                    "suggestion3",
+                    "suggestion4",
+                    "suggestion5"
+                  );
+                }}
                 value={true}
                 onChange={handleOnChangeQuestion8}
               />{" "}
