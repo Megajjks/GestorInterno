@@ -17,4 +17,6 @@ export const initialState = {
     isActive: null,
   },
   addUserLoader: false,
+  page: 1,
+  pageLimit: 1,
 };

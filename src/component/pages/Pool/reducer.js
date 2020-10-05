@@ -13,6 +13,8 @@ export const reducer = (state, action) => {
         ...state,
         commitments: action.payload.commitments,
         showBtnSycn: action.payload.existSync,
+        page: action.payload.page,
+        pageLimit: action.payload.pageLimit,
         commitmentsLoader: false,
       };
     case actions.getCommitmentsError:

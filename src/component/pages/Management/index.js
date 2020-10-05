@@ -2,9 +2,10 @@ import React, { useState, useEffect, useReducer } from "react";
 import CommitmentCardList from "../../ui/CommitmentCardList";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
+import Pagination from "../../ui/Pagination";
 import WithoutData from "../../ui/alerts/WithoutData";
-import { SearchBar } from "./styled";
 import api from "../../../helpers/api";
+import { SearchBar } from "./styled";
 import { filterWithIdCollaboratorAndStatus } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
@@ -15,15 +16,21 @@ const Management = () => {
   const [searchString, setSearchString] = useState("");
   const userId = JSON.parse(localStorage.getItem("login_data")).userId;
 
+  //get commitments in Management
   useEffect(() => {
     const fetchCommitments = async () => {
       dispatch({ type: actions.getCommitments });
       try {
-        const { data } = await api.get("/commitments/filter/management/");
-        //const response = await api.get("/commitments/filter/management/");
+        const { data } = await api.get(
+          `/commitments/filter/management/?page=${state.page}`
+        );
         dispatch({
           type: actions.getCommitmentsSuccess,
-          payload: data,
+          payload: {
+            commitments: data.items,
+            page: data.page,
+            pageLimit: data.limitPage,
+          },
         });
       } catch (e) {
         dispatch({
@@ -32,7 +39,7 @@ const Management = () => {
       }
     };
     fetchCommitments();
-  }, []);
+  }, [state.page]);
 
   useEffect(() => {
     if (!searchString) {
@@ -66,7 +73,13 @@ const Management = () => {
     setSearchString(value);
   };
 
-  const renderCommitments = () => {
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
+  };
+
+  const renderManagementTable = () => {
+    if (state.commitmentsError) return <Error />;
     if (
       state.commitments.length === 0 &&
       !state.commitmentsLoader &&
@@ -80,11 +93,18 @@ const Management = () => {
       );
     }
     return (
-      <CommitmentCardList
-        commitments={state.commitments}
-        btnTitle="Gestionar compromiso"
-        btnUrlBase="/panel/traicing_commitment"
-      />
+      <>
+        <CommitmentCardList
+          commitments={state.commitments}
+          btnTitle="Gestionar compromiso"
+          btnUrlBase="/panel/traicing_commitment"
+        />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
     );
   };
 
@@ -92,9 +112,7 @@ const Management = () => {
     <div>
       <h1>Compromisos asignados</h1>
       <SearchBar value={searchString} onChange={search} />
-      {renderCommitments()}
-      {state.commitmentsLoader ? <Spinner /> : null}
-      {state.commitmentsError ? <Error /> : null}
+      {state.commitmentsLoader ? <Spinner /> : renderManagementTable()}
     </div>
   );
 };

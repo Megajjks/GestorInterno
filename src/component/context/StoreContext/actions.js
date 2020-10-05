@@ -17,4 +17,5 @@ export const actions = {
   removeUserError: "REMOVE_USER_ERROR",
   addUserSuccess: "ADD_USER_SUCCESS",
   addUserError: "ADD_USER_ERROR",
+  setPage: "SET_PAGE",
 };

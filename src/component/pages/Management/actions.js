@@ -3,4 +3,5 @@ export const actions = {
   getCommitmentsSuccess: "GET_COMMITMENTS_SUCCESS",
   getCommitmentsError: "GET_COMMITMENTS_ERROR",
   filterCommitments: "FILTER_COMMITMENTS",
+  setPage: "SET_PAGE",
 };

@@ -3,4 +3,6 @@ export const initialState = {
   commitmentsFilter: [],
   commitmentsLoader: false,
   commitmentsError: null,
+  page: 1,
+  pageLimit: 1,
 };

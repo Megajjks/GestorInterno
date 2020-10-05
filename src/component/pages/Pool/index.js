@@ -19,17 +19,21 @@ const Pool = () => {
   const history = useHistory();
   const [searchString, setSearchString] = useState("");
 
-  //get commitments
+  //get commitments in pool
   useEffect(() => {
     const fetchCommitment = async () => {
       dispatch({ type: actions.getCommitments });
       try {
-        const { data } = await api.get("/commitments/filter/pool/");
+        const { data } = await api.get(
+          `/commitments/filter/pool/?page=${state.page}`
+        );
         dispatch({
           type: actions.getCommitmentsSuccess,
           payload: {
-            commitments: data,
-            existSync: existSync(data),
+            commitments: data.items,
+            existSync: existSync(data.items),
+            page: data.page,
+            pageLimit: data.limitPage,
           },
         });
       } catch (e) {
@@ -41,7 +45,7 @@ const Pool = () => {
       }
     };
     fetchCommitment();
-  }, [state.reload]);
+  }, [state.reload, state.page]);
 
   //Logic of search bar
   useEffect(() => {

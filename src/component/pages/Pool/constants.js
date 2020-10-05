@@ -10,5 +10,5 @@ export const initialState = {
   syncCommitmentsError: null,
   reload: false,
   page: 1,
-  pageLimit: 10,
+  pageLimit: 1,
 };

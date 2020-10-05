@@ -10,7 +10,9 @@ export const reducer = (state, action) => {
     case actions.getUsersSuccess:
       return {
         ...state,
-        users: action.payload,
+        users: action.payload.users,
+        page: action.payload.page,
+        pageLimit: action.payload.pageLimit,
         usersLoader: false,
       };
     case actions.getUsersError:
@@ -110,6 +112,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         msgError: action.payload,
+      };
+    case actions.setPage:
+      return {
+        ...state,
+        page: action.payload,
       };
     default:
       return state;
