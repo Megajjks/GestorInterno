@@ -8,6 +8,7 @@ import MilestoneCardList from "../MilestoneCardList";
 import CollaboratorCardList from "../CollaboratorCardList";
 import Spinner from "../Spinner";
 import Error from "../alerts/Error";
+import Pagination from "../../ui/Pagination";
 import WithoutTasks from "../alerts/WithoutTasks";
 import WithoutMilestones from "../alerts/WithoutMilestones";
 import {
@@ -91,9 +92,20 @@ const TracingCommitmentDetails = (props) => {
       dispatch({ type: actions.getTasksList });
       try {
         const { data } = await api.get(
-          `/tasks/commitment/${history.location.state}`
+          `/tasks/commitment/${history.location.state}/?page=${state.page}`
         );
-        dispatch({ type: actions.getTasksListSuccess, payload: data });
+        dispatch({
+          type: actions.getTasksListSuccess,
+          payload: {
+            tasks: data.items,
+            page: data.page,
+            pageLimit: data.limitPage,
+          },
+        });
+        console.log(state.page);
+        console.log(
+          `/tasks/commitment/${history.location.state}/?page=${state.page}`
+        );
       } catch {
         dispatch({
           type: actions.getTasksListError,
@@ -103,7 +115,7 @@ const TracingCommitmentDetails = (props) => {
       }
     };
     getTasks();
-  }, [state.reload, state.reloadTasks]);
+  }, [state.reload, state.reloadTasks, state.page]);
 
   //get Milestones
   useEffect(() => {
@@ -244,6 +256,11 @@ const TracingCommitmentDetails = (props) => {
     dispatch({ type: actions.setColaborator, payload: item });
   };
 
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
+  };
+
   const renderTasks = () => {
     if (state.tasksError) {
       return <Error content={state.tasksError} />;
@@ -257,10 +274,17 @@ const TracingCommitmentDetails = (props) => {
       );
     }
     return (
-      <TaskList
-        tasks={state.tasks}
-        isCollaborator={matchUser(state.commitment.collaborators)}
-      />
+      <>
+        <TaskList
+          tasks={state.tasks}
+          isCollaborator={matchUser(state.commitment.collaborators)}
+        />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
     );
   };
 
