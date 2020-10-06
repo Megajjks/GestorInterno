@@ -30,61 +30,30 @@ const Dashboard = () => {
         });
       }
     };
-    //get Commitments current in Pool
-    const getCommitmentsPool = async () => {
-      dispatch({ type: actions.getCommitmentsPool });
+    //get data dashboard
+    const getDataDashboard = async () => {
+      dispatch({ type: actions.getDataDashboard });
       try {
-        const { data } = await api.get("/commitments/filter/pool/");
+        const { data } = await api.get("/dashboard");
         dispatch({
-          type: actions.getCommitmentsPoolSuccess,
-          payload: data.slice(0, 3),
+          type: actions.getDashboardDataSuccess,
+          payload: {
+            metrics: data.metrics,
+            currentPool: data.commitmentsCurrentsPool,
+            currentTracing: data.commitmentsCurrentsTracing,
+            currentManagement: data.commitmentsCurrentsManagement,
+          },
         });
       } catch {
         dispatch({
-          type: actions.getCommitmentsPoolError,
-          payload:
-            "Ocurrio un problema al traer los compromisos recientes en Pool",
+          type: actions.getDashboardDataError,
+          payload: "Ocurrio un problema al traer las metricas en Dashboard",
         });
       }
     };
-    //get Commitments current in Tracing
-    const getCommitmentsTracing = async () => {
-      dispatch({ type: actions.getCommitmentsTracing });
-      try {
-        const { data } = await api.get("/commitments/filter/tracing/");
-        dispatch({
-          type: actions.getCommitmentsTracingSuccess,
-          payload: data.slice(0, 3),
-        });
-      } catch {
-        dispatch({
-          type: actions.getCommitmentsTracingError,
-          payload:
-            "Ocurrio un problema al traer los compromisos recientes en Pool",
-        });
-      }
-    };
-    //get Commitments current in Management
-    const getCommitmentsManagement = async () => {
-      dispatch({ type: actions.getCommitmentsManagement });
-      try {
-        const { data } = await api.get("/commitments/filter/management/");
-        dispatch({
-          type: actions.getCommitmentsManagementSuccess,
-          payload: data.slice(0, 3),
-        });
-      } catch {
-        dispatch({
-          type: actions.getCommitmentsManagementError,
-          payload:
-            "Ocurrio un problema al traer los compromisos recientes en Pool",
-        });
-      }
-    };
+
     getUser();
-    getCommitmentsPool();
-    getCommitmentsTracing();
-    getCommitmentsManagement();
+    getDataDashboard();
   }, []);
 
   //go to section
@@ -104,43 +73,55 @@ const Dashboard = () => {
 
         {rolName() !== "collaborator" && (
           <>
-            <WrapperSectionHeader>
-              <h2>Compromisos recientes por validar</h2>
-              <BtnSecction onClick={() => goTo("/panel/pool")}>
-                Ver más
-              </BtnSecction>
-            </WrapperSectionHeader>
-            <CommitmentCardList
-              commitments={state.commitmentsCurrentsPool}
-              btnTitle="Ver compromiso"
-              btnUrlBase="/panel/commitment_report"
-            />
+            {state.commitmentsCurrentsPool.length !== 0 && (
+              <>
+                <WrapperSectionHeader>
+                  <h2>Compromisos recientes por validar</h2>
+                  <BtnSecction onClick={() => goTo("/panel/pool")}>
+                    Ver más
+                  </BtnSecction>
+                </WrapperSectionHeader>
+                <CommitmentCardList
+                  commitments={state.commitmentsCurrentsPool}
+                  btnTitle="Ver compromiso"
+                  btnUrlBase="/panel/commitment_report"
+                />
+              </>
+            )}
 
+            {state.commitmentsCurrentsTracing.length !== 0 && (
+              <>
+                <WrapperSectionHeader>
+                  <h2>Compromisos recientes por dar seguimiento</h2>
+                  <BtnSecction onClick={() => goTo("/panel/tracing")}>
+                    Ver más
+                  </BtnSecction>
+                </WrapperSectionHeader>
+                <CommitmentCardList
+                  commitments={state.commitmentsCurrentsTracing}
+                  btnTitle="Ver compromiso"
+                  btnUrlBase="/panel/traicing_commitment"
+                />
+              </>
+            )}
+          </>
+        )}
+
+        {state.commitmentsCurrentsManagement.length !== 0 && (
+          <>
             <WrapperSectionHeader>
-              <h2>Compromisos recientes por dar seguimiento</h2>
-              <BtnSecction onClick={() => goTo("/panel/tracing")}>
+              <h2>Compromisos recientes asignados</h2>
+              <BtnSecction onClick={() => goTo("/panel/management")}>
                 Ver más
               </BtnSecction>
             </WrapperSectionHeader>
             <CommitmentCardList
-              commitments={state.commitmentsCurrentsTracing}
+              commitments={state.commitmentsCurrentsManagement}
               btnTitle="Ver compromiso"
               btnUrlBase="/panel/traicing_commitment"
             />
           </>
         )}
-
-        <WrapperSectionHeader>
-          <h2>Compromisos recientes asignados</h2>
-          <BtnSecction onClick={() => goTo("/panel/management")}>
-            Ver más
-          </BtnSecction>
-        </WrapperSectionHeader>
-        <CommitmentCardList
-          commitments={state.commitmentsCurrentsManagement}
-          btnTitle="Ver compromiso"
-          btnUrlBase="/panel/traicing_commitment"
-        />
       </Fragment>
     );
   };

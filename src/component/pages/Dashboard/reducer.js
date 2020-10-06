@@ -19,59 +19,26 @@ export const reducer = (state, action) => {
         userLoader: false,
         userError: action.payload,
       };
-    case actions.getCommitmentsPool:
+    case actions.getDashboardData:
       return {
         ...state,
-        commitmentsCurrentsPoolLoader: true,
-        commitmentsCurrentsPoolError: null,
+        DataDasboardLoader: true,
+        DataDasboardError: null,
       };
-    case actions.getCommitmentsPoolSuccess:
+    case actions.getDashboardDataSuccess:
       return {
         ...state,
-        commitmentsCurrentsPool: action.payload,
-        commitmentsCurrentsPoolLoader: false,
+        metrics: action.payload.metrics,
+        commitmentsCurrentsPool: action.payload.currentPool,
+        commitmentsCurrentsTracing: action.payload.currentTracing,
+        commitmentsCurrentsManagement: action.payload.currentManagement,
+        DataDasboardLoader: false,
       };
-    case actions.getCommitmentsPoolError:
+    case actions.getDashboardDataError:
       return {
         ...state,
-        commitmentsCurrentsPoolError: action.payload,
-        commitmentsCurrentsPoolLoader: false,
-      };
-    case actions.getCommitmentsTracing:
-      return {
-        ...state,
-        commitmentsCurrentsTracingLoader: true,
-        commitmentsCurrentsTracingError: null,
-      };
-    case actions.getCommitmentsTracingSuccess:
-      return {
-        ...state,
-        commitmentsCurrentsTracing: action.payload,
-        commitmentsCurrentsTracingLoader: false,
-      };
-    case actions.getCommitmentsTracingError:
-      return {
-        ...state,
-        commitmentsCurrentsTracingError: action.payload,
-        commitmentsCurrentsTracingLoader: false,
-      };
-    case actions.getCommitmentsManagement:
-      return {
-        ...state,
-        commitmentsCurrentsManagementLoader: true,
-        commitmentsCurrentsManagementError: null,
-      };
-    case actions.getCommitmentsManagementSuccess:
-      return {
-        ...state,
-        commitmentsCurrentsManagement: action.payload,
-        commitmentsCurrentsManagementLoader: false,
-      };
-    case actions.getCommitmentsManagementError:
-      return {
-        ...state,
-        commitmentsCurrentsManagementError: action.payload,
-        commitmentsCurrentsManagementLoader: false,
+        DataDasboardError: action.payload,
+        DataDasboardLoader: false,
       };
     default:
       return state;
