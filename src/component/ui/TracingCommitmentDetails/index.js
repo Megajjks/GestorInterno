@@ -102,10 +102,6 @@ const TracingCommitmentDetails = (props) => {
             pageLimit: data.limitPage,
           },
         });
-        console.log(state.page);
-        console.log(
-          `/tasks/commitment/${history.location.state}/?page=${state.page}`
-        );
       } catch {
         dispatch({
           type: actions.getTasksListError,
@@ -114,7 +110,14 @@ const TracingCommitmentDetails = (props) => {
         });
       }
     };
-    getTasks();
+    //this function only exect when the pagination greather than 1 and the status commitment is not complet
+    if (state.page >= 1 && state.commitment.status !== "cumplido") {
+      getTasks();
+    }
+    console.log(state.page);
+    console.log(
+      `/tasks/commitment/${history.location.state}/?page=${state.page}`
+    );
   }, [state.reload, state.reloadTasks, state.page]);
 
   //get Milestones
@@ -122,8 +125,17 @@ const TracingCommitmentDetails = (props) => {
     const getMilestones = async () => {
       dispatch({ type: actions.getMilestones });
       try {
-        const { data } = await api.get(`/milestones/${history.location.state}`);
-        dispatch({ type: actions.getMilestonesSuccess, payload: data });
+        const { data } = await api.get(
+          `/milestones/${history.location.state}/?page=${state.page}`
+        );
+        dispatch({
+          type: actions.getMilestonesSuccess,
+          payload: {
+            milestones: data.items,
+            page: data.page,
+            pageLimit: data.limitPage,
+          },
+        });
       } catch {
         dispatch({
           type: actions.getMilestonesError,
@@ -131,8 +143,17 @@ const TracingCommitmentDetails = (props) => {
         });
       }
     };
-    getMilestones();
-  }, [state.reload]);
+    //this function only exect when the pagination greather than 1 and the status commitment is complet
+    if (state.page >= 1 && state.commitment.status !== "cumplido") {
+      getMilestones();
+      console.log("entre a milestone request");
+      console.log(state.commitment.status);
+    }
+    console.log(state.page);
+    console.log(
+      `/tasks/milestones/${history.location.state}/?page=${state.page}`
+    );
+  }, [state.reload, state.page]);
 
   //post to add colaborador in commitment
   const addCollaborator = () => {
@@ -301,11 +322,18 @@ const TracingCommitmentDetails = (props) => {
       );
     }
     return (
-      <MilestoneCardList
-        milestones={state.milestones}
-        isCollaborator={false}
-        isPage={false}
-      />
+      <>
+        <MilestoneCardList
+          milestones={state.milestones}
+          isCollaborator={false}
+          isPage={false}
+        />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
     );
   };
 

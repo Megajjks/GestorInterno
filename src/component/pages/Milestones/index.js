@@ -8,6 +8,7 @@ import MilestoneModal from "../../ui/modals/MilestoneModal";
 import WithoutMilestones from "../../ui/alerts/WithoutMilestones";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
+import Pagination from "../../ui/Pagination";
 import Btn from "../../ui/GeneralButton";
 import AddIcon from "../../../assets/img/add.svg";
 import api from "../../../helpers/api";
@@ -23,8 +24,17 @@ const Milestones = () => {
     const getMilestones = async () => {
       dispatch({ type: actions.getMilestones });
       try {
-        const { data } = await api.get(`/milestones/${collaboratorId}`);
-        dispatch({ type: actions.getMilestonesSuccess, payload: data });
+        const { data } = await api.get(
+          `/milestones/${collaboratorId}/?page=${state.page}`
+        );
+        dispatch({
+          type: actions.getMilestonesSuccess,
+          payload: {
+            milestones: data.items,
+            page: data.page,
+            pageLimit: data.limitPage,
+          },
+        });
       } catch {
         dispatch({
           type: actions.getMilestonesError,
@@ -33,7 +43,7 @@ const Milestones = () => {
       }
     };
     getMilestones();
-  }, [state.reloadMilestones]);
+  }, [state.reloadMilestones, state.page]);
 
   //functions to open or close the MilestoneModal
   const showModalMilestone = () => {
@@ -54,6 +64,11 @@ const Milestones = () => {
   //function to update the milestone to remove
   const prepareRemoveMilestone = (milestone) => {
     dispatch({ type: actions.removeMilestone, payload: milestone });
+  };
+
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
   };
 
   //function to remove the milestone
@@ -86,14 +101,21 @@ const Milestones = () => {
       );
     }
     return (
-      <MilestoneCardList
-        milestones={state.milestones}
-        isCollaborator={isCollaborator}
-        isPage={true}
-        showModalMilestone={showModalEditMilestone}
-        prepareRemoveMilestone={prepareRemoveMilestone}
-        removeMilestone={removeMilestone}
-      />
+      <>
+        <MilestoneCardList
+          milestones={state.milestones}
+          isCollaborator={isCollaborator}
+          isPage={true}
+          showModalMilestone={showModalEditMilestone}
+          prepareRemoveMilestone={prepareRemoveMilestone}
+          removeMilestone={removeMilestone}
+        />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
     );
   };
 
