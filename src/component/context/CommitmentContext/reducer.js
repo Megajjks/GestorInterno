@@ -173,6 +173,11 @@ export const reducer = (state, action) => {
     case actions.updateTaskSuccess:
       return {
         ...state,
+        newTask: {
+          title: "",
+          description: "",
+          date: "",
+        },
         reloadTasks: action.payload,
         msgError: null,
         showModalTask: false,
@@ -288,6 +293,11 @@ export const reducer = (state, action) => {
     case actions.updateMilestoneSuccess:
       return {
         ...state,
+        milestone: {
+          title: "",
+          description: "",
+          date: "",
+        },
         reloadMilestones: action.payload,
         msgError: null,
         showModalMilestone: false,
