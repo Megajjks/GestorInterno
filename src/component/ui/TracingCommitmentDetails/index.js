@@ -114,10 +114,6 @@ const TracingCommitmentDetails = (props) => {
     if (state.page >= 1 && state.commitment.status !== "cumplido") {
       getTasks();
     }
-    console.log(state.page);
-    console.log(
-      `/tasks/commitment/${history.location.state}/?page=${state.page}`
-    );
   }, [state.reload, state.reloadTasks, state.page]);
 
   //get Milestones
@@ -146,13 +142,7 @@ const TracingCommitmentDetails = (props) => {
     //this function only exect when the pagination greather than 1 and the status commitment is complet
     if (state.page >= 1 && state.commitment.status !== "cumplido") {
       getMilestones();
-      console.log("entre a milestone request");
-      console.log(state.commitment.status);
     }
-    console.log(state.page);
-    console.log(
-      `/tasks/milestones/${history.location.state}/?page=${state.page}`
-    );
   }, [state.reload, state.page]);
 
   //post to add colaborador in commitment
@@ -364,10 +354,10 @@ const TracingCommitmentDetails = (props) => {
           <WrapperOpc>
             <Options>
               {/*this button (add task) will be hidden if  user_id not is not assigned how collaborator of commitment*/}
-              {matchUser(state.commitment.collaborators) ||
-              state.commitment.status !== "cumplido" ? (
-                <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
-              ) : null}
+              {!matchUser(state.commitment.collaborators) ||
+                (state.commitment.status !== "cumplido" && (
+                  <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
+                ))}
 
               <Button
                 title="Detalles"
