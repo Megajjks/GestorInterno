@@ -1,17 +1,15 @@
 import React, { useEffect, useContext } from "react";
-import { CommitmentFilterContext } from "../../context/CommitmentFilterContext";
-import { actions } from "../../context/CommitmentFilterContext/actions";
+import { CommitmentContext } from "../../context/CommitmentContext";
+import { actions } from "../../context/CommitmentContext/actions";
 import CommitmentCardList from "../../ui/CommitmentCardList";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import WithoutData from "../../ui/alerts/WithoutData";
 import api from "../../../helpers/api";
-import { filterWithIdCollaboratorAndStatus } from "../../../helpers";
 import FilterBar from "../../ui/FilterBar";
 
 const Management = () => {
-  const { state, dispatch } = useContext(CommitmentFilterContext);
-  const userId = JSON.parse(localStorage.getItem("login_data")).userId;
+  const { state, dispatch } = useContext(CommitmentContext);
   const query = [
     "primer_contacto",
     "articulando",
@@ -21,15 +19,11 @@ const Management = () => {
     const fetchCommitments = async () => {
       dispatch({ type: actions.getCommitmentsTracing });
       try {
-        const { data } = await api.get("/commitments");
+        const { data } = await api.get("/commitments/filter/management");
         //filter commitments with status
         dispatch({
           type: actions.getCommitmentsSuccessTracing,
-          payload: filterWithIdCollaboratorAndStatus(data, userId, query),
-        });
-        dispatch({
-          type: actions.filterCommitments,
-          payload: filterWithIdCollaboratorAndStatus(data, userId, query),
+          payload: data,
         });
         dispatch({
           type: actions.clearSearchFilter,
@@ -46,7 +40,7 @@ const Management = () => {
 
   const renderCommitments = () => {
     if (
-      state.commitmentsFilter.length === 0 &&
+      state.commitments.length === 0 &&
       !state.commitmentsLoader &&
       !state.commitmentsError
     ) {
@@ -59,7 +53,7 @@ const Management = () => {
     }
     return (
       <CommitmentCardList
-        commitments={state.commitmentsFilter}
+        commitments={state.commitments}
         btnTitle="Gestionar compromiso"
         btnUrlBase="/panel/traicing_commitment"
       />

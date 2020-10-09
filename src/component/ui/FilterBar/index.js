@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useContext } from "react";
-import { CommitmentFilterContext } from "../../context/CommitmentFilterContext";
-import { actions } from "../../context/CommitmentFilterContext/actions";
+import { CommitmentContext } from "../../context/CommitmentContext";
+import { actions } from "../../context/CommitmentContext/actions";
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
+import api from "../../../helpers/api";
 import { 
   WrapperFilter,
   SelectFilter,
@@ -12,119 +13,126 @@ import {
 import { area, states ,sector, dataStatus } from "../../../helpers/index";
 
 const FilterBar = ({ status, typeTable }) =>{
-  const { state, dispatch } = useContext(CommitmentFilterContext);
+  const { state, dispatch } = useContext(CommitmentContext);
 
   //Logic of search bar
   useEffect(() => {
     if (!state.searchFilter) {
       return;
     }
-    const searchIn = state.searchFilter.searchIn.toLowerCase();
-    let arrayFiltred = state.commitments;
-    switch(searchIn){
-      case "agent":
-      case "collaborator":
-        if (state.searchFilter.agent !== "") {
-          arrayFiltred = arrayFiltred.filter((item) => {
-            const agent = `${item.firstName.toLowerCase()} ${item.lastName.toLowerCase()}`;
-            const payloadAgent = state.searchFilter.agent.toLowerCase();
-            if(agent.startsWith(payloadAgent)){
-              return item;
-            }
-          })
-        }
-        if(state.searchFilter.collaborator !== ""){
-          arrayFiltred = arrayFiltred.filter((item) => {
-            const payloadCollaborator = state.searchFilter.collaborator.toLowerCase();
-            let user = "";
-            for (let i = 0; i < item.collaborators.length; i++) {
-              user = `${item.collaborators[i].firstName.toLowerCase()} ${item.collaborators[i].lastName.toLowerCase()}`;
-              if (user.startsWith(payloadCollaborator)) {
-                return item;
+    const searchCommitmentFilter = async () => {
+      switch(typeTable){
+        case "pool":
+          if (state.searchFilter.agent !== "" || state.searchFilter.area !== "" ||
+              state.searchFilter.state !== "" || state.searchFilter.sector !== "" ||
+              state.searchFilter.status !== "") {
+            dispatch({ type: actions.getCommitmentsTracing });
+            try {
+              let params = null;
+              if (state.searchFilter.agent) {
+                params = new URLSearchParams({
+                  searchbox: `${state.searchFilter.agent}`,
+                  state: `${state.searchFilter.state}`,
+                  area: `${state.searchFilter.area}`,
+                  status: `${state.searchFilter.status}`,
+                  sector: `${state.searchFilter.sector}`,
+                }).toString();
+              } else {
+                params = new URLSearchParams({
+                  state: `${state.searchFilter.state}`,
+                  area: `${state.searchFilter.area}`,
+                  status: `${state.searchFilter.status}`,
+                  sector: `${state.searchFilter.sector}`,
+                }).toString();
               }
+              const url ="/commitments/filter/pool/?" + params;
+              console.log(url)
+              const { data } = await api.get(url);
+              dispatch({ type: actions.getCommitmentsSuccessTracing, payload: data });
+            } catch (error) {
+              dispatch({
+                type: actions.getCommitmentsError,
+                payload:
+                  "Por el momento no se pueden obtener los datos, verifique su conexión",
+              });
             }
-          })
-        }
-        if (state.searchFilter.area !== "") {
-          arrayFiltred = arrayFiltred.filter(item => {
-            if (item.area) {
-              let area = item.area.toLowerCase();
-              let payloadArea = state.searchFilter.area.toLowerCase();
-              if (area.startsWith(payloadArea)) {
-                return item;
+          }
+          break;
+        case "tracing":
+          if (state.searchFilter.collaborator !== "" || state.searchFilter.area !== "" ||
+              state.searchFilter.state !== "" || state.searchFilter.sector !== "" ||
+              state.searchFilter.status !== "") {
+            dispatch({ type: actions.getCommitmentsTracing });
+            try {
+              let params = null;
+              if (state.searchFilter.collaborator) {
+                params = new URLSearchParams({
+                  searchbox: `${state.searchFilter.collaborator}`,
+                  state: `${state.searchFilter.state}`,
+                  area: `${state.searchFilter.area}`,
+                  status: `${state.searchFilter.status}`,
+                  sector: `${state.searchFilter.sector}`,
+                }).toString();
+              } else {
+                params = new URLSearchParams({
+                  state: `${state.searchFilter.state}`,
+                  area: `${state.searchFilter.area}`,
+                  status: `${state.searchFilter.status}`,
+                  sector: `${state.searchFilter.sector}`,
+                }).toString();
               }
+              const url ="/commitments/filter/tracing/?" + params;
+              console.log(url)
+              const { data } = await api.get(url);
+              dispatch({ type: actions.getCommitmentsSuccessTracing, payload: data });
+            } catch (error) {
+              dispatch({
+                type: actions.getCommitmentsError,
+                payload:
+                  "Por el momento no se pueden obtener los datos, verifique su conexión",
+              });
             }
-          })
-        }
-        if(state.searchFilter.state !== ""){
-          arrayFiltred = arrayFiltred.filter((item, idx) => {
-            let payloadSede = state.searchFilter.state.toLowerCase();
-            let sede = item.state.toLowerCase();
-            if(sede.startsWith(payloadSede)){
-              return item;
+          }
+          break;
+        case "management":
+          if (state.searchFilter.userManagement !== "") {
+            dispatch({ type: actions.getCommitmentsTracing });
+            try {
+              let params = null;
+              if (state.searchFilter.userManagement) {
+                params = new URLSearchParams({
+                  searchbox: `${state.searchFilter.userManagement}`,
+                }).toString();
+              } else {
+                params = new URLSearchParams({
+                  searchbox: "",
+                }).toString();
+              }
+              const url ="/commitments/filter/management/?" + params;
+              console.log(url)
+              const { data } = await api.get(url);
+              dispatch({ type: actions.getCommitmentsSuccessTracing, payload: data });
+            } catch (error) {
+              dispatch({
+                type: actions.getCommitmentsError,
+                payload:
+                  "Por el momento no se pueden obtener los datos, verifique su conexión",
+              });
             }
-          })
-        }
-        if(state.searchFilter.sector !== ""){
-          arrayFiltred = arrayFiltred.filter(item => {
-            let category = item.sector.toLowerCase();
-            let payloadCategory = state.searchFilter.sector.toLowerCase();
-            if (category.startsWith(payloadCategory)) {
-              return item;
-            }
-          })
-        }
-        if(state.searchFilter.status !== ""){
-          arrayFiltred = arrayFiltred.filter(item => {
-            let status = item.status.toLowerCase();
-            let payloadStatus = state.searchFilter.status.toLowerCase(); 
-            if(status.startsWith(dataStatus(payloadStatus).tag)){
-              return item;
-            }
-          })
-        }
-        break;
-      case "management":
-        if (state.searchFilter.userManagement !== "") {
-          arrayFiltred = arrayFiltred.filter(item => {
-            let organization = item.organization.toLowerCase();
-            let agent = `${item.firstName.toLowerCase()} ${item.lastName.toLowerCase()}`;
-            let status = item.status.toLowerCase();
-            let sede = item.state.toLowerCase();
-            let payloadUserManagement = state.searchFilter.userManagement.toLowerCase();
-            if (organization.startsWith(payloadUserManagement)) {
-              return item;
-            } else if (agent.startsWith(payloadUserManagement)) {
-              return item;
-            } else if (sede.startsWith(payloadUserManagement)) {
-              return item;
-            } else if (status.startsWith(payloadUserManagement)) {
-              return item;
-            }
-          })
-        }
-        break;
-      case "user":
-        if (state.searchFilter.user !== "") {
-          //Filter users
-        }
-        break;
-      default:
-        break;
+          }
+          break;
+        case "user":
+
+          break;
+        default:
+          break;
+      }
     }
-    dispatch({ type: actions.filterCommitments, payload: arrayFiltred });
+    searchCommitmentFilter();
   }, [state.searchFilter]);
 
   const search = (field, value) => {
-    if (typeTable === "pool") {
-      dispatch({ type: actions.setSearchFilter, payload: { field, value, searchIn: "agent" } });
-    } else if (typeTable === "tracing") {
-      dispatch({ type: actions.setSearchFilter, payload: { field, value, searchIn: "collaborator" } });
-    } else if (typeTable === "management") {
-      dispatch({ type: actions.setSearchFilter, payload: { field, value, searchIn: "management" } });
-    } else {
-      dispatch({ type: actions.setSearchFilter, payload: { field, value, searchIn: "user" } });
-    }
+    dispatch({ type: actions.setSearchFilter, payload: { field, value } });
   };
 
   return(

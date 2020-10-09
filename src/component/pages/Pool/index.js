@@ -1,20 +1,20 @@
 import React, { Fragment, useEffect, useContext } from "react";
-import { CommitmentFilterContext } from "../../context/CommitmentFilterContext";
-import { actions } from "../../context/CommitmentFilterContext/actions";
+import { CommitmentContext } from "../../context/CommitmentContext";
+import { actions } from "../../context/CommitmentContext/actions";
 import { useHistory } from "react-router-dom";
 import PoolTable from "../../ui/tables/PoolTable";
 import Btn from "../../ui/GeneralButton";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import api from "../../../helpers/api";
-import { filterWithStatus, existSync } from "../../../helpers";
+import { existSync } from "../../../helpers";
 import { WrapperHeader, BtnGroup } from "./styled";
 import IcoExport from "../../../assets/img/download.svg";
 import IcoSync from "../../../assets/img/sync.svg";
 import FilterBar from "../../ui/FilterBar";
 
 const Pool = () => {
-  const { state, dispatch } = useContext(CommitmentFilterContext);
+  const { state, dispatch } = useContext(CommitmentContext);
   const query = ["prevalidado", "validando", "correcion", "falla"];
   const history = useHistory();
 
@@ -23,18 +23,14 @@ const Pool = () => {
     const fetchCommitment = async () => {
       dispatch({ type: actions.getCommitments });
       try {
-        const { data } = await api.get("/commitments");
+        const { data } = await api.get("/commitments/filter/pool");
         //filter commitments with status
         dispatch({
           type: actions.getCommitmentsSuccess,
           payload: {
-            commitments: filterWithStatus(data, query),
+            commitments: data,
             existSync: existSync(data),
           },
-        });
-        dispatch({
-          type: actions.filterCommitments,
-          payload: filterWithStatus(data, query)
         });
         dispatch({
           type: actions.clearSearchFilter,
@@ -128,7 +124,7 @@ const Pool = () => {
         </BtnGroup>
       </WrapperHeader>
       <FilterBar status={query} typeTable={"pool"}/>
-      <PoolTable commitments={state.commitmentsFilter} viewDetails={viewDetails} />
+      <PoolTable commitments={state.commitments} viewDetails={viewDetails} />
       {state.commitmentsLoader ? <Spinner /> : null}
       {state.commitmentsError ? <Error /> : null}
     </Fragment>

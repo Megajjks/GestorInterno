@@ -1,18 +1,16 @@
 import React, { Fragment, useEffect, useContext } from "react";
-import { CommitmentFilterContext } from "../../context/CommitmentFilterContext";
-import { actions } from "../../context/CommitmentFilterContext/actions";
+import { CommitmentContext } from "../../context/CommitmentContext";
+import { actions } from "../../context/CommitmentContext/actions";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import api from "../../../helpers/api";
 import TracingTable from "../../ui/tables/TracingTable";
-import { filterWithStatus } from "../../../helpers";
 import FilterBar from "../../ui/FilterBar";
 import SendEmailModal from "../../ui/modals/SendEmailModal";
-import { BtnGroup } from "./styled";
 
 const Tracing = () => {
-  const { state, dispatch } = useContext(CommitmentFilterContext);
+  const { state, dispatch } = useContext(CommitmentContext);
   const query = [
     "primer_contacto",
     "articulando",
@@ -25,15 +23,11 @@ const Tracing = () => {
     const fetchCommitment = async () => {
       dispatch({ type: actions.getCommitmentsTracing });
       try {
-        const { data } = await api.get("/commitments");
+        const { data } = await api.get("/commitments/filter/tracing");
         //filter commitments with status
         dispatch({
           type: actions.getCommitmentsSuccessTracing,
-          payload: filterWithStatus(data, query),
-        });
-        dispatch({
-          type: actions.filterCommitments,
-          payload: filterWithStatus(data, query)
+          payload: data,
         });
         dispatch({
           type: actions.clearSearchFilter,
@@ -61,7 +55,7 @@ const Tracing = () => {
     <Fragment>
       <SendEmailModal/>
       <FilterBar status={query} typeTable={"tracing"}/>
-      <TracingTable commitments={state.commitmentsFilter} viewDetails={viewDetails} />
+      <TracingTable commitments={state.commitments} viewDetails={viewDetails} />
       {state.commitmentsLoader ? <Spinner /> : null}
       {state.commitmentsError ? <Error /> : null}
     </Fragment>

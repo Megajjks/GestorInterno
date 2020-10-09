@@ -22,4 +22,26 @@ export const initialState = {
   },
   newTaskLoading: false,
   newTaskError: null,
+  //Pool Filtro
+  commitments: [],
+  commitmentsLoader: false,
+  commitmentsError: null,
+  exportData: false,
+  exportDataMessage: null,
+  showBtnSycn: null,
+  syncCommitmentsLoader: false,
+  syncCommitmentsError: null,
+  reload: false,
+  searchFilter: {
+    agent: "",
+    collaborator: "",
+    userManagement: "",
+    user: "",
+    area: "",
+    state: "",
+    sector: "",
+    status: "",
+    rol: null,
+    isActive: null
+  }
 };

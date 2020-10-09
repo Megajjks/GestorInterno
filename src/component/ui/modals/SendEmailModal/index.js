@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useContext } from "react";
-import { CommitmentFilterContext } from "../../../context/CommitmentFilterContext";
-import { actions } from "../../../context/CommitmentFilterContext/actions";
+import { CommitmentContext } from "../../../context/CommitmentContext";
+import { actions } from "../../../context/CommitmentContext/actions";
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,7 +12,7 @@ import api from "../../../../helpers/api";
 import { BtnGroup, WrapperButtons, ButtonAccept, ButtonDecline } from "./styled";
 
 const SendEmailModal = () => {
-    const { state, dispatch } = useContext(CommitmentFilterContext);
+    const { state, dispatch } = useContext(CommitmentContext);
     const [open, setOpen] = useState(false);
     const [dataSendEmail, setDataSendEmail] = useState(null);
     const [dataFilter, setDataFilter] = useState({
@@ -41,7 +41,7 @@ const SendEmailModal = () => {
       };
 
     function CheckData () {
-        if (state.commitmentsFilter.length === 0 || 
+        if (state.commitments.length === 0 || 
             (state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
             state.searchFilter.state === "" && state.searchFilter.sector === "" && 
             state.searchFilter.status === "")) {
@@ -85,7 +85,7 @@ const SendEmailModal = () => {
     const sendEmailFilter = async () => {
         //Funcion para evitar datos vacios de subject y message
         try {
-            if (state.commitmentsFilter.length === 0 || 
+            if (state.commitments.length === 0 || 
                 (state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
                 state.searchFilter.state === "" && state.searchFilter.sector === "" && 
                 state.searchFilter.status === "")) {
