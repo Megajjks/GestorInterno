@@ -134,7 +134,9 @@ export const reducer = (state, action) => {
     case actions.getTasksListSuccess:
       return {
         ...state,
-        tasks: action.payload,
+        tasks: action.payload.tasks,
+        page: action.payload.page,
+        pageLimit: action.payload.pageLimit,
         tasksLoading: false,
       };
     case actions.getTasksListError:
@@ -171,6 +173,11 @@ export const reducer = (state, action) => {
     case actions.updateTaskSuccess:
       return {
         ...state,
+        newTask: {
+          title: "",
+          description: "",
+          date: "",
+        },
         reloadTasks: action.payload,
         msgError: null,
         showModalTask: false,
@@ -240,7 +247,9 @@ export const reducer = (state, action) => {
       return {
         ...state,
         milestonesLoading: false,
-        milestones: action.payload,
+        milestones: action.payload.milestones,
+        page: action.payload.page,
+        pageLimit: action.payload.pageLimit,
       };
     case actions.getMilestonesError:
       return {
@@ -284,6 +293,11 @@ export const reducer = (state, action) => {
     case actions.updateMilestoneSuccess:
       return {
         ...state,
+        milestone: {
+          title: "",
+          description: "",
+          date: "",
+        },
         reloadMilestones: action.payload,
         msgError: null,
         showModalMilestone: false,
@@ -342,6 +356,11 @@ export const reducer = (state, action) => {
           description: "",
           date: "",
         },
+      };
+    case actions.setPage:
+      return {
+        ...state,
+        page: action.payload,
       };
     default:
       return state;

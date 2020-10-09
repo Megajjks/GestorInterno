@@ -8,6 +8,7 @@ import MilestoneCardList from "../MilestoneCardList";
 import CollaboratorCardList from "../CollaboratorCardList";
 import Spinner from "../Spinner";
 import Error from "../alerts/Error";
+import Pagination from "../../ui/Pagination";
 import WithoutTasks from "../alerts/WithoutTasks";
 import WithoutMilestones from "../alerts/WithoutMilestones";
 import {
@@ -91,9 +92,16 @@ const TracingCommitmentDetails = (props) => {
       dispatch({ type: actions.getTasksList });
       try {
         const { data } = await api.get(
-          `/tasks/commitment/${history.location.state}`
+          `/tasks/commitment/${history.location.state}/?page=${state.page}`
         );
-        dispatch({ type: actions.getTasksListSuccess, payload: data });
+        dispatch({
+          type: actions.getTasksListSuccess,
+          payload: {
+            tasks: data.items,
+            page: data.page,
+            pageLimit: data.limitPage,
+          },
+        });
       } catch {
         dispatch({
           type: actions.getTasksListError,
@@ -102,16 +110,28 @@ const TracingCommitmentDetails = (props) => {
         });
       }
     };
-    getTasks();
-  }, [state.reload, state.reloadTasks]);
+    //this function only exect when the pagination greather than 1 and the status commitment is not complet
+    if (state.page >= 1 && state.commitment.status !== "cumplido") {
+      getTasks();
+    }
+  }, [state.reload, state.reloadTasks, state.page]);
 
   //get Milestones
   useEffect(() => {
     const getMilestones = async () => {
       dispatch({ type: actions.getMilestones });
       try {
-        const { data } = await api.get(`/milestones/${history.location.state}`);
-        dispatch({ type: actions.getMilestonesSuccess, payload: data });
+        const { data } = await api.get(
+          `/milestones/${history.location.state}/?page=${state.page}`
+        );
+        dispatch({
+          type: actions.getMilestonesSuccess,
+          payload: {
+            milestones: data.items,
+            page: data.page,
+            pageLimit: data.limitPage,
+          },
+        });
       } catch {
         dispatch({
           type: actions.getMilestonesError,
@@ -119,8 +139,11 @@ const TracingCommitmentDetails = (props) => {
         });
       }
     };
-    getMilestones();
-  }, [state.reload]);
+    //this function only exect when the pagination greather than 1 and the status commitment is complet
+    if (state.page >= 1 && state.commitment.status !== "cumplido") {
+      getMilestones();
+    }
+  }, [state.reload, state.page]);
 
   //post to add colaborador in commitment
   const addCollaborator = () => {
@@ -244,6 +267,11 @@ const TracingCommitmentDetails = (props) => {
     dispatch({ type: actions.setColaborator, payload: item });
   };
 
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
+  };
+
   const renderTasks = () => {
     if (state.tasksError) {
       return <Error content={state.tasksError} />;
@@ -257,10 +285,17 @@ const TracingCommitmentDetails = (props) => {
       );
     }
     return (
-      <TaskList
-        tasks={state.tasks}
-        isCollaborator={matchUser(state.commitment.collaborators)}
-      />
+      <>
+        <TaskList
+          tasks={state.tasks}
+          isCollaborator={matchUser(state.commitment.collaborators)}
+        />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
     );
   };
 
@@ -277,11 +312,18 @@ const TracingCommitmentDetails = (props) => {
       );
     }
     return (
-      <MilestoneCardList
-        milestones={state.milestones}
-        isCollaborator={false}
-        isPage={false}
-      />
+      <>
+        <MilestoneCardList
+          milestones={state.milestones}
+          isCollaborator={false}
+          isPage={false}
+        />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
     );
   };
 
@@ -312,10 +354,10 @@ const TracingCommitmentDetails = (props) => {
           <WrapperOpc>
             <Options>
               {/*this button (add task) will be hidden if  user_id not is not assigned how collaborator of commitment*/}
-              {matchUser(state.commitment.collaborators) ||
-              state.commitment.status !== "cumplido" ? (
-                <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
-              ) : null}
+              {!matchUser(state.commitment.collaborators) ||
+                (state.commitment.status !== "cumplido" && (
+                  <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
+                ))}
 
               <Button
                 title="Detalles"

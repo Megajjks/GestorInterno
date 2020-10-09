@@ -4,6 +4,7 @@ import PoolTable from "../../ui/tables/PoolTable";
 import Btn from "../../ui/GeneralButton";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
+import Pagination from "../../ui/Pagination";
 import api from "../../../helpers/api";
 import { dataStatus, existSync } from "../../../helpers";
 import { actions } from "./actions";
@@ -18,17 +19,21 @@ const Pool = () => {
   const history = useHistory();
   const [searchString, setSearchString] = useState("");
 
-  //get commitments
+  //get commitments in pool
   useEffect(() => {
     const fetchCommitment = async () => {
       dispatch({ type: actions.getCommitments });
       try {
-        const { data } = await api.get("/commitments/filter/pool/");
+        const { data } = await api.get(
+          `/commitments/filter/pool/?page=${state.page}`
+        );
         dispatch({
           type: actions.getCommitmentsSuccess,
           payload: {
-            commitments: data,
-            existSync: existSync(data),
+            commitments: data.items,
+            existSync: existSync(data.items),
+            page: data.page,
+            pageLimit: data.limitPage,
           },
         });
       } catch (e) {
@@ -40,7 +45,7 @@ const Pool = () => {
       }
     };
     fetchCommitment();
-  }, [state.reload]);
+  }, [state.reload, state.page]);
 
   //Logic of search bar
   useEffect(() => {
@@ -84,7 +89,7 @@ const Pool = () => {
   const viewDetails = (item) => {
     history.push({
       pathname: `/panel/commitment_report/${item.id}`,
-      state: item,
+      state: item.id,
     });
   };
 
@@ -131,6 +136,25 @@ const Pool = () => {
     }
   };
 
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
+  };
+
+  const renderPoolTable = () => {
+    if (state.commitmentsError) return <Error />;
+    return (
+      <>
+        <PoolTable commitments={state.commitments} viewDetails={viewDetails} />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
+    );
+  };
+
   return (
     <Fragment>
       <WrapperHeader>
@@ -157,9 +181,7 @@ const Pool = () => {
         </BtnGroup>
       </WrapperHeader>
       <SearchBar value={searchString} onChange={search} />
-      <PoolTable commitments={state.commitments} viewDetails={viewDetails} />
-      {state.commitmentsLoader ? <Spinner /> : null}
-      {state.commitmentsError ? <Error /> : null}
+      {state.commitmentsLoader ? <Spinner /> : renderPoolTable()}
     </Fragment>
   );
 };

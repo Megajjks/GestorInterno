@@ -41,4 +41,7 @@ export const initialState = {
   },
   showModalMilestone: false,
   isEditModalMilestone: false,
+
+  page: 1,
+  pageLimit: 1,
 };

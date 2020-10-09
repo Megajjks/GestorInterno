@@ -12,7 +12,7 @@ const AlertInformation = ({ type, preRol, title, msg }) => {
     switch (rol) {
       case "validando":
         return "aceptar";
-      case "correcion":
+      case "correccion":
         return "aceptar con correcciónes";
       case "declinado":
         return "rechazar";

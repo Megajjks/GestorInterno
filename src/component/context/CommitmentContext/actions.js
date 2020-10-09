@@ -54,4 +54,6 @@ export const actions = {
   removeMilestone: "REMOVE_MILESTONE",
   removeMilestoneSuccess: "REMOVE_MILESTONE_SUCCESS",
   removeMilestoneError: "REMOVE_MILESTONE_ERROR",
+
+  setPage: "SET_PAGE",
 };

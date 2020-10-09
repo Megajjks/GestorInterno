@@ -10,7 +10,9 @@ export const reducer = (state, action) => {
     case actions.getCommitmentsSuccess:
       return {
         ...state,
-        commitments: action.payload,
+        commitments: action.payload.commitments,
+        page: action.payload.page,
+        pageLimit: action.payload.pageLimit,
         commitmentsLoader: false,
       };
     case actions.getCommitmentsError:
@@ -23,6 +25,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         commitmentsFilter: action.payload,
+      };
+    case actions.setPage:
+      return {
+        ...state,
+        page: action.payload,
       };
     default:
       return state;

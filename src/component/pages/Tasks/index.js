@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import TaskList from "../../ui/TaskList";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
+import Pagination from "../../ui/Pagination";
 import WithoutTasks from "../../ui/alerts/WithoutTasks";
 import { WrapperBody } from "./styled";
 import api from "../../../helpers/api";
@@ -19,8 +20,17 @@ const Tasks = () => {
     const getTasks = async () => {
       dispatch({ type: actions.getTasksList });
       try {
-        const { data } = await api.get(`/tasks/commitment/${commitmentId}`);
-        dispatch({ type: actions.getTasksListSuccess, payload: data });
+        const { data } = await api.get(
+          `/tasks/commitment/${commitmentId}/?page=${state.page}`
+        );
+        dispatch({
+          type: actions.getTasksListSuccess,
+          payload: {
+            tasks: data.items,
+            page: data.page,
+            pageLimit: data.limitPage,
+          },
+        });
       } catch {
         dispatch({
           type: actions.getTasksListError,
@@ -29,7 +39,12 @@ const Tasks = () => {
       }
     };
     getTasks();
-  }, []);
+  }, [state.page]);
+
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
+  };
 
   const renderTasks = () => {
     if (state.tasksError) {
@@ -43,7 +58,16 @@ const Tasks = () => {
         />
       );
     }
-    return <TaskList tasks={state.tasks} isCollaborator={false} />;
+    return (
+      <>
+        <TaskList tasks={state.tasks} isCollaborator={false} />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
+    );
   };
 
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { Tablestyle, Icon, Details, SearchBar } from "./styled";
+import { Tablestyle, Icon, Details, SearchBar, Chip } from "./styled";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
@@ -51,7 +51,12 @@ const PoolTable = ({ commitments, viewDetails }) => {
               <TableCell align="center">{commitment.state}</TableCell>
               <TableCell align="center">{commitment.sector}</TableCell>
               <TableCell align="center">
-                {dataStatus(commitment.status).value}
+                <Chip
+                  background={dataStatus(commitment.status).background}
+                  txtColor={dataStatus(commitment.status).color}
+                >
+                  {dataStatus(commitment.status).value}
+                </Chip>
               </TableCell>
               <TableCell align="center">
                 {commitment.status === "falla" ? (

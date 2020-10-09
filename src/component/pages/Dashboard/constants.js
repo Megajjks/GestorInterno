@@ -13,4 +13,18 @@ export const initialState = {
   userLoader: false,
   userError: null,
   reload: false,
+  metrics: [
+    { title: "Compromisos existentes en la plataforma", total: "0" },
+    { title: "Compromisos logrados en la plataforma", total: "0" },
+    { title: "Compromisos activos en la plataforma", total: "0" },
+    { title: "Agentes activos en la plataforma", total: "0" },
+    { title: "Compromisos asignados", total: "0" },
+    { title: "Compromisos asignados finalizados", total: "0" },
+    { title: "Compromisos asignados activos", total: "0" },
+  ],
+  commitmentsCurrentsPool: [],
+  commitmentsCurrentsTracing: [],
+  commitmentsCurrentsManagement: [],
+  DataDasboardLoader: false,
+  DataDasboardError: null,
 };

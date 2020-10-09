@@ -24,3 +24,14 @@ export const Details = styled.div`
   font-weight: bold;
   cursor: pointer;
 `;
+
+export const Chip = styled.div`
+  border-radius: 2em;
+  display: inline-block;
+  font-size: 0.8em;
+  line-height: 1em;
+  font-weight: bold;
+  padding: 0.25em 0.75em;
+  background: ${(props) => props.background};
+  color: ${(props) => props.txtColor};
+`;

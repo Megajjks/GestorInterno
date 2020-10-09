@@ -5,6 +5,7 @@ import { actions } from "../../context/StoreContext/actions";
 import UserModal from "../../ui/modals/UserModal";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
+import Pagination from "../../ui/Pagination";
 import UserTable from "../../ui/tables/UserTable";
 import api from "../../../helpers/api";
 import Btn from "../../ui/GeneralButton";
@@ -18,8 +19,15 @@ const Users = () => {
     const getUsers = async () => {
       try {
         dispatch({ type: actions.getUsers });
-        const { data } = await api.get("/users");
-        dispatch({ type: actions.getUsersSuccess, payload: data });
+        const { data } = await api.get(`/users?page=${state.page}`);
+        dispatch({
+          type: actions.getUsersSuccess,
+          payload: {
+            users: data.items,
+            page: data.page,
+            pageLimit: data.limitPage,
+          },
+        });
       } catch {
         dispatch({
           type: actions.getUsersError,
@@ -28,7 +36,7 @@ const Users = () => {
       }
     };
     getUsers();
-  }, [state.reload]);
+  }, [state.reload, state.page]);
 
   //functions to open, close to modal add user
   const showModalAddUser = () => {
@@ -40,7 +48,7 @@ const Users = () => {
     console.log(user);
     dispatch({
       type: actions.showModalEditUser,
-      payload: { isShow: !state.showModal, user: { ...user, password: null } },
+      payload: { isShow: !state.showModal, user: { ...user, password: "" } },
     });
   };
 
@@ -68,6 +76,30 @@ const Users = () => {
     }
   };
 
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
+  };
+
+  const renderUserTable = () => {
+    if (state.msgError) return <Error />;
+    return (
+      <>
+        <UserTable
+          users={state.users}
+          showModalEditUser={showModalEditUser}
+          removeUser={removeUser}
+          prepareRemoveUser={prepareRemoveUser}
+        />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
+    );
+  };
+
   return (
     <Fragment>
       <WrapperHeader>
@@ -80,18 +112,12 @@ const Users = () => {
           onClick={showModalAddUser}
         />
       </WrapperHeader>
-      <UserTable
-        users={state.users}
-        showModalEditUser={showModalEditUser}
-        removeUser={removeUser}
-        prepareRemoveUser={prepareRemoveUser}
-      />
+
       <UserModal
         closeModalUser={showModalAddUser}
         closeModalClean={closeModalUser}
       />
-      {state.usersLoader ? <Spinner /> : null}
-      {state.msgError ? <Error /> : null}
+      {state.usersLoader ? <Spinner /> : renderUserTable()}
     </Fragment>
   );
 };
