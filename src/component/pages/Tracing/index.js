@@ -1,28 +1,24 @@
-import React, { Fragment, useEffect, useContext } from "react";
-import { CommitmentContext } from "../../context/CommitmentContext";
-import { actions } from "../../context/CommitmentContext/actions";
+import React, { Fragment, useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import Pagination from "../../ui/Pagination";
 import api from "../../../helpers/api";
 import TracingTable from "../../ui/tables/TracingTable";
-import { dataStatus } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
 import FilterBar from "../../ui/FilterBar";
-import SendEmailModal from "../../ui/modals/SendEmailModal";
 
 const Tracing = () => {
-  const { state, dispatch } = useContext(CommitmentContext);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const query = ["primer_contacto", "articulando", "cumplido", "archivado"];
   const history = useHistory();
 
   //get commitments in tracing
   useEffect(() => {
     const fetchCommitment = async () => {
-      dispatch({ type: actions.getCommitmentsTracing });
+      dispatch({ type: actions.getCommitments });
       try {
         const { data } = await api.get(
           `/commitments/filter/tracing/?page=${state.page}`
@@ -35,10 +31,6 @@ const Tracing = () => {
             pageLimit: data.limitPage,
           },
         });
-        dispatch({
-          type: actions.clearSearchFilter,
-          payload: { reset: "" },
-        });
       } catch (e) {
         dispatch({
           type: actions.getCommitmentsError,
@@ -48,7 +40,7 @@ const Tracing = () => {
       }
     };
     fetchCommitment();
-  }, [state.reload]);
+  }, [state.page]);
 
   const viewDetails = (item) => {
     history.push({
@@ -82,9 +74,7 @@ const Tracing = () => {
   return (
     <Fragment>
       <h1>Seguimiento de los compromisos</h1>
-      <SendEmailModal />
       <FilterBar status={query} typeTable={"tracing"} />
-      <SearchBar value={searchString} onChange={search} />
       {state.commitmentsLoader ? <Spinner /> : renderTracingTable()}
     </Fragment>
   );
