@@ -204,7 +204,7 @@ const NewCommitment = () => {
         question8_4: question8Add.question8_4,
         question8_5: question8Add.question8_5,
         question8_6: question8Add.question8_6,
-      })
+      });
       formdata.append("firstName", commitment.firstName);
       formdata.append("lastName", commitment.lastName);
       formdata.append("organization", commitment.organization);
@@ -224,7 +224,7 @@ const NewCommitment = () => {
       formdata.append("question5", commitment.question5);
       formdata.append("question6", commitment.question6);
       formdata.append("question7", commitment.question7);
-      formdata.append("question8", dataQuestion8); 
+      formdata.append("question8", dataQuestion8);
       formdata.append("question9", commitment.question9);
       formdata.append("question10", commitment.question10);
       formdata.append("question11", commitment.question11);
@@ -512,7 +512,9 @@ const NewCommitment = () => {
             />
             <LabelFile for="imgLogo">
               {" "}
-              {commitment.image ? commitment.image : "Selecciona una imagen"}{" "}
+              {commitment.image
+                ? commitment.image
+                : "Selecciona una imagen"}{" "}
             </LabelFile>
           </Field>
           <Field>

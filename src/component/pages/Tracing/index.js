@@ -1,6 +1,7 @@
-import React, { Fragment, useState, useEffect, useReducer } from "react";
+import React, { Fragment, useEffect, useContext } from "react";
+import { CommitmentContext } from "../../context/CommitmentContext";
+import { actions } from "../../context/CommitmentContext/actions";
 import { useHistory } from "react-router-dom";
-import { SearchBar } from "./styled";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import Pagination from "../../ui/Pagination";
@@ -10,16 +11,18 @@ import { dataStatus } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
+import FilterBar from "../../ui/FilterBar";
+import SendEmailModal from "../../ui/modals/SendEmailModal";
 
 const Tracing = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useContext(CommitmentContext);
+  const query = ["primer_contacto", "articulando", "cumplido", "archivado"];
   const history = useHistory();
-  const [searchString, setSearchString] = useState("");
 
   //get commitments in tracing
   useEffect(() => {
     const fetchCommitment = async () => {
-      dispatch({ type: actions.getCommitments });
+      dispatch({ type: actions.getCommitmentsTracing });
       try {
         const { data } = await api.get(
           `/commitments/filter/tracing/?page=${state.page}`
@@ -32,6 +35,10 @@ const Tracing = () => {
             pageLimit: data.limitPage,
           },
         });
+        dispatch({
+          type: actions.clearSearchFilter,
+          payload: { reset: "" },
+        });
       } catch (e) {
         dispatch({
           type: actions.getCommitmentsError,
@@ -41,52 +48,13 @@ const Tracing = () => {
       }
     };
     fetchCommitment();
-  }, [state.page]);
-
-  useEffect(() => {
-    if (!searchString) {
-      return;
-    }
-    //const commitmentsBefore = [...commitments];
-    const busqueda = state.commitments.filter((item) => {
-      console.log(item);
-      const payload = searchString.toLowerCase();
-      const organization = item.organization.toLowerCase();
-      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
-      const city = item.city.toLowerCase();
-      const status = item.status.toLowerCase();
-      const sector = item.sector.toLowerCase();
-      const state = item.state.toLowerCase();
-
-      if (searchString === "") {
-        return dispatch({
-          type: actions.filterCommitments,
-          payload: state.commitments,
-        });
-      } else if (
-        organization.includes(payload) ||
-        agent.includes(payload) ||
-        city.includes(payload) ||
-        state.includes(payload) ||
-        sector.includes(payload) ||
-        status.includes(dataStatus(payload).tag)
-      ) {
-        return item;
-      }
-    });
-    dispatch({ type: actions.filterCommitments, payload: busqueda });
-  }, [searchString]);
+  }, [state.reload]);
 
   const viewDetails = (item) => {
     history.push({
       pathname: `/panel/traicing_commitment/${item.id}`,
       state: item.id,
     });
-  };
-
-  const search = (e) => {
-    const { value } = e.target;
-    setSearchString(value);
   };
 
   // handle Change Pagination
@@ -114,6 +82,8 @@ const Tracing = () => {
   return (
     <Fragment>
       <h1>Seguimiento de los compromisos</h1>
+      <SendEmailModal />
+      <FilterBar status={query} typeTable={"tracing"} />
       <SearchBar value={searchString} onChange={search} />
       {state.commitmentsLoader ? <Spinner /> : renderTracingTable()}
     </Fragment>

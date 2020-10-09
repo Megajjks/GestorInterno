@@ -1,6 +1,8 @@
 import { actions } from "./actions";
+
 export const reducer = (state, action) => {
   switch (action.type) {
+    //Pool Table
     case actions.getCommitments:
       return {
         ...state,
@@ -63,6 +65,44 @@ export const reducer = (state, action) => {
         ...state,
         page: action.payload,
       };
+    case actions.setSearchFilter:
+      return {
+        ...state,
+        searchFilter: {
+          ...state.searchFilter,
+          [action.payload.field]: action.payload.value,
+          searchIn: action.payload.searchIn
+        },
+      };
+    //Tracing Table
+    case actions.getCommitmentsTracing:
+      return {
+        ...state,
+        commitmentsLoader: true,
+        commitmentsError: null,
+      };
+    case actions.getCommitmentsSuccessTracing:
+      return {
+        ...state,
+        commitments: action.payload,
+        commitmentsLoader: false,
+      };
+    case actions.clearSearchFilter:
+      return {
+        ...state,
+        searchFilter: {
+          ...state.searchFilter,
+          agent: action.payload.reset,
+          collaborator: action.payload.reset,
+          userManagement: action.payload.reset,
+          user: action.payload.reset,
+          area: action.payload.reset,
+          state: action.payload.reset,
+          sector: action.payload.reset,
+          status: action.payload.reset,
+          searchIn: action.payload.reset,
+        }
+      }
     default:
       return state;
   }

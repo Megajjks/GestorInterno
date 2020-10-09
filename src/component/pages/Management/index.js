@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useEffect, useContext } from "react";
+import { CommitmentContext } from "../../context/CommitmentContext";
+import { actions } from "../../context/CommitmentContext/actions";
 import CommitmentCardList from "../../ui/CommitmentCardList";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
@@ -10,16 +12,16 @@ import { filterWithIdCollaboratorAndStatus } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
+import FilterBar from "../../ui/FilterBar";
 
 const Management = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [searchString, setSearchString] = useState("");
-  const userId = JSON.parse(localStorage.getItem("login_data")).userId;
+  const { state, dispatch } = useContext(CommitmentContext);
+  const query = ["primer_contacto", "articulando"];
 
   //get commitments in Management
   useEffect(() => {
     const fetchCommitments = async () => {
-      dispatch({ type: actions.getCommitments });
+      dispatch({ type: actions.getCommitmentsTracing });
       try {
         const { data } = await api.get(
           `/commitments/filter/management/?page=${state.page}`
@@ -32,6 +34,10 @@ const Management = () => {
             pageLimit: data.limitPage,
           },
         });
+        dispatch({
+          type: actions.clearSearchFilter,
+          payload: { reset: "" },
+        });
       } catch (e) {
         dispatch({
           type: actions.getCommitmentsError,
@@ -40,38 +46,6 @@ const Management = () => {
     };
     fetchCommitments();
   }, [state.page]);
-
-  useEffect(() => {
-    if (!searchString) {
-      return;
-    }
-    const busqueda = state.commitments.filter((item) => {
-      const payload = searchString.toLowerCase();
-      const organization = item.organization.toLowerCase();
-      const location = item.city.toLowerCase();
-      const status = item.status.toLowerCase();
-      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
-
-      if (searchString === "") {
-        return dispatch({
-          type: actions.filterCommitments,
-          payload: state.commitments,
-        });
-      } else if (
-        organization.includes(payload) ||
-        location.includes(payload) ||
-        status.includes(payload) ||
-        agent.includes(payload)
-      ) {
-        return item;
-      }
-    });
-    dispatch({ type: actions.filterCommitments, payload: busqueda });
-  }, [searchString]);
-  const search = (e) => {
-    const { value } = e.target;
-    setSearchString(value);
-  };
 
   // handle Change Pagination
   const handleChangePagination = (event, value) => {
@@ -87,7 +61,7 @@ const Management = () => {
     ) {
       return (
         <WithoutData
-          title="¡Oh! aun no tienes compromisos asignados"
+          title="¡Oh! no se han encontrado compromisos asignados"
           content="Espera a que un administrador te asigne un compromiso para empezar a trabajar 😉"
         />
       );
@@ -111,7 +85,7 @@ const Management = () => {
   return (
     <div>
       <h1>Compromisos asignados</h1>
-      <SearchBar value={searchString} onChange={search} />
+      <FilterBar status={query} typeTable={"management"} />
       {state.commitmentsLoader ? <Spinner /> : renderManagementTable()}
     </div>
   );

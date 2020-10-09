@@ -56,4 +56,18 @@ export const actions = {
   removeMilestoneError: "REMOVE_MILESTONE_ERROR",
 
   setPage: "SET_PAGE",
+  //Pool Filtro
+  getCommitments: "GET_COMMITMENTS",
+  getCommitmentsSuccess: "GET_COMMITMENTS_SUCCESS",
+  getCommitmentsError: "GET_COMMITMENTS_ERROR",
+  exportData: "EXPORT_DATA",
+  exportDataSuccess: "EXPORT_DATA_SUCCESS",
+  exportDataError: "EXPORT_DATA_ERROR",
+  sync: "SYNC",
+  syncSucess: "SYNC_SUCCESS",
+  syncError: "SYNC_ERROR",
+  setSearchFilter: "SET_SEARCH_FILTER",
+  getCommitmentsTracing: "GET_COMMITMENTS_TRACING",
+  getCommitmentsSuccessTracing: "GET_COMMITMENTS_SUCCESS_TRACING",
+  clearSearchFilter: "CLEAN_SEARCH_FILTER",
 };

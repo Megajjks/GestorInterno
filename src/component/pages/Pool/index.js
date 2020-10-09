@@ -1,4 +1,6 @@
-import React, { Fragment, useState, useEffect, useReducer } from "react";
+import React, { Fragment, useEffect, useContext } from "react";
+import { CommitmentContext } from "../../context/CommitmentContext";
+import { actions } from "../../context/CommitmentContext/actions";
 import { useHistory } from "react-router-dom";
 import PoolTable from "../../ui/tables/PoolTable";
 import Btn from "../../ui/GeneralButton";
@@ -6,18 +8,19 @@ import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import Pagination from "../../ui/Pagination";
 import api from "../../../helpers/api";
+import { WrapperHeader, BtnGroup, SearchBar } from "./styled";
 import { dataStatus, existSync } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
-import { WrapperHeader, BtnGroup, SearchBar } from "./styled";
 import IcoExport from "../../../assets/img/download.svg";
 import IcoSync from "../../../assets/img/sync.svg";
+import FilterBar from "../../ui/FilterBar";
 
 const Pool = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useContext(CommitmentContext);
+  const query = ["prevalidado", "validando", "correcion", "falla"];
   const history = useHistory();
-  const [searchString, setSearchString] = useState("");
 
   //get commitments in pool
   useEffect(() => {
@@ -36,6 +39,10 @@ const Pool = () => {
             pageLimit: data.limitPage,
           },
         });
+        dispatch({
+          type: actions.clearSearchFilter,
+          payload: { reset: "" },
+        });
       } catch (e) {
         dispatch({
           type: actions.getCommitmentsError,
@@ -46,44 +53,6 @@ const Pool = () => {
     };
     fetchCommitment();
   }, [state.reload, state.page]);
-
-  //Logic of search bar
-  useEffect(() => {
-    if (!searchString) {
-      return;
-    }
-    const busqueda = state.commitments.filter((item) => {
-      const payload = searchString.toLowerCase();
-      const organization = item.organization.toLowerCase();
-      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
-      const city = item.city.toLowerCase();
-      const status = item.status.toLowerCase();
-      const sector = item.sector.toLowerCase();
-      const state = item.state.toLowerCase();
-
-      if (searchString === "") {
-        return dispatch({
-          type: actions.filterCommitments,
-          payload: state.commitments,
-        });
-      } else if (
-        organization.includes(payload) ||
-        agent.includes(payload) ||
-        city.includes(payload) ||
-        state.includes(payload) ||
-        sector.includes(payload) ||
-        status.includes(dataStatus(payload).tag)
-      ) {
-        return item;
-      }
-    });
-    dispatch({ type: actions.filterCommitments, payload: busqueda });
-  }, [searchString]);
-
-  const search = (e) => {
-    const { value } = e.target;
-    setSearchString(value);
-  };
 
   //View details of one commitment
   const viewDetails = (item) => {
@@ -180,7 +149,7 @@ const Pool = () => {
           />
         </BtnGroup>
       </WrapperHeader>
-      <SearchBar value={searchString} onChange={search} />
+      <FilterBar status={query} typeTable={"pool"} />
       {state.commitmentsLoader ? <Spinner /> : renderPoolTable()}
     </Fragment>
   );
