@@ -8,6 +8,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import Alert from "@material-ui/lab/Alert";
 import { useStyles } from "./styled";
 import api from "../../../../helpers/api";
 
@@ -88,6 +89,9 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
           {"Crear Tarea"}
         </DialogTitle>
         <DialogContent>
+          {state.newTaskError && (
+            <Alert severity="error">{state.newTaskError}</Alert>
+          )}
           <form>
             <TextField
               type="text"

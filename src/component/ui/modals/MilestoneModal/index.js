@@ -8,6 +8,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import Alert from "@material-ui/lab/Alert";
 import { useStyles } from "./styled";
 import api from "../../../../helpers/api";
 
@@ -101,6 +102,9 @@ const MilestoneModal = (isEdit) => {
           {state.isEditModalMilestone ? "Editar logro" : "Crear logro"}
         </DialogTitle>
         <DialogContent>
+          {state.milestonesError && (
+            <Alert severity="error">{state.milestonesError}</Alert>
+          )}
           <form>
             <TextField
               type="text"

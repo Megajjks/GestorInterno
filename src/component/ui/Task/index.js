@@ -27,6 +27,7 @@ import IconIncompleteTask from "../../../assets/img/incomplete.svg";
 import IconCloseTask from "../../../assets/img/close.svg";
 import IconClock from "../../../assets/img/clock.svg";
 import IconEdit from "../../../assets/img/editar.svg";
+import AvatarIco from "../../../assets/img/usercard.svg";
 
 function StatusTaskComplete({ status }) {
   return status === "true" ? (
@@ -90,7 +91,13 @@ const Task = ({
             </TitleTask>
           </SectionEditTask>
           <WrapperInfo>
-            <ImgProfile src={task.user.image} />
+            <ImgProfile
+              src={
+                task.user.image
+                  ? `https://api.ashoka.hackademy.mx/${task.user.image}`
+                  : AvatarIco
+              }
+            />
             <TxtIcon>{`${task.user.firstName} ${task.user.lastName}`}</TxtIcon>
           </WrapperInfo>
           <WrapperInfo>

@@ -45,7 +45,7 @@ const Tracing = () => {
   const viewDetails = (item) => {
     history.push({
       pathname: `/panel/traicing_commitment/${item.id}`,
-      state: item.id,
+      state: item,
     });
   };
 

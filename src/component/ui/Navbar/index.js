@@ -1,11 +1,21 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
-import { Nav, MenuNav, AvatarBadge } from "./styled";
+import {
+  Nav,
+  MenuNav,
+  AvatarBadge,
+  IcoMenu,
+  DropdownWrapper,
+  DropdownMenu,
+  DropdownMenuItem,
+} from "./styled";
 import api from "../../../helpers/api";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import IcoUser from "../../../assets/img/user-profile.svg";
+import IcoLogout from "../../../assets/img/logout.svg";
 import Badge from "@material-ui/core/Badge";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -13,6 +23,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 
 const Navbar = ({ goback }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [menu, setMenu] = useState(false);
   const history = useHistory();
   const id = JSON.parse(localStorage.getItem("login_data")).userId;
 
@@ -31,6 +42,9 @@ const Navbar = ({ goback }) => {
   }, []);
 
   //function to behavior UserOptions
+  const handleUserMenu = () => {
+    setMenu(!menu);
+  };
   const handleClickAvatarUser = (event) => {
     dispatch({ type: actions.listOptions, payload: event.currentTarget });
   };
@@ -58,21 +72,27 @@ const Navbar = ({ goback }) => {
           aria-controls="long-menu-user-list"
           aria-haspopup="true"
           alt={`${state.user.firstName} profile`}
-          src={state.user.image ? state.user.image : null}
-          onClick={handleClickAvatarUser}
+          src={
+            state.user.image
+              ? `https://api.ashoka.hackademy.mx/${state.user.image}`
+              : null
+          }
+          onClick={handleUserMenu}
         >
           {}
         </AvatarBadge>
-        <Menu
-          id="long-menu-user-list"
-          anchorEl={state.dropdownUser}
-          keepMounted
-          open={Boolean(state.dropdownUser)}
-          onClose={handleCloseUserOptions}
-        >
-          <MenuItem onClick={handleCloseUserOptions}>My perfil</MenuItem>
-          <MenuItem onClick={logOut}>cerrar sesión</MenuItem>
-        </Menu>
+        <DropdownWrapper isShow={menu}>
+          <DropdownMenu>
+            <DropdownMenuItem>
+              <IcoMenu src={IcoUser} alt="profile" />
+              Mi perfil
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={logOut}>
+              <IcoMenu src={IcoLogout} alt="logout" />
+              Cerrar sesión
+            </DropdownMenuItem>
+          </DropdownMenu>
+        </DropdownWrapper>
       </MenuNav>
     </Nav>
   );

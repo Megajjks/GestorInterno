@@ -56,7 +56,7 @@ const Pool = () => {
   const viewDetails = (item) => {
     history.push({
       pathname: `/panel/commitment_report/${item.id}`,
-      state: item.id,
+      state: item,
     });
   };
 

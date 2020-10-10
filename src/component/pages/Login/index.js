@@ -68,11 +68,16 @@ const GenericLogin = () => {
     dispatch({ type: actions.setUser, name, payload: value });
   };
 
+  //redirecto to landingPage
+  const goHome = () => {
+    window.location.href = "https://millonesdeagentesdecambio.org/";
+  };
+
   return (
     <Wrapper>
       <Img src={LoginImg} />
       <WrapperForm>
-        <BtnExtra>Regresar</BtnExtra>
+        <BtnExtra onClick={goHome}>Regresar</BtnExtra>
         <Form onSubmit={submitData}>
           <Title>BIENVENIDO DE NUEVO</Title>
           <TextField
@@ -113,10 +118,6 @@ const GenericLogin = () => {
             loader={state.loginLoading}
           />
         </Form>
-        <SignIn>
-          ¿Aun no tienes una cuenta?,{" "}
-          <BtnExtra style={{ padding: "0" }}>Registrate</BtnExtra>
-        </SignIn>
       </WrapperForm>
       <>
         <Dialog

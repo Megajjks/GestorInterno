@@ -166,7 +166,7 @@ export const reducer = (state, action) => {
     case actions.addTaskError:
       return {
         ...state,
-        showModalTask: false,
+        showModalTask: true,
         newTaskLoading: false,
         newTaskError: action.payload,
       };
@@ -219,6 +219,7 @@ export const reducer = (state, action) => {
         ...state,
         showModalTask: action.payload,
         isEditModalTask: false,
+        newTaskError: null,
       };
     case actions.showModalEditTask:
       return {
@@ -286,7 +287,7 @@ export const reducer = (state, action) => {
     case actions.addMilestoneError:
       return {
         ...state,
-        showModalMilestone: false,
+        showModalMilestone: true,
         milestonesLoading: false,
         milestonesError: action.payload,
       };
@@ -313,6 +314,7 @@ export const reducer = (state, action) => {
         ...state,
         showModalMilestone: action.payload,
         isEditModalMilestone: false,
+        milestonesError: null,
       };
     case actions.showModalEditMilestone:
       return {

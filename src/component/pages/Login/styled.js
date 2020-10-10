@@ -6,20 +6,35 @@ export const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 100vh;
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
-export const Img = styled.img`
-  width: 40%;
+export const Img = styled.div`
+  background-image: url("https://images.unsplash.com/photo-1601317848953-057aa886867b?ixlib=rb-1.2.1&auto=format&fit=crop&w=518&q=80");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* filter: hue-rotate(35deg); */
+  width: 50%;
   height: 100%;
+  @media (max-width: 768px) {
+    visibility: hidden;
+    display: none;
+  }
 `;
 
 export const WrapperForm = styled.div`
-  width: 60%;
+  width: 50%;
   height: inherit;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const Form = styled.form`
@@ -28,7 +43,15 @@ export const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 0 4em 0;
+  margin: 0 0 4rem 0;
+  @media (max-width: 768px) {
+    background: ${(props) => props.theme.colors.white};
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    transform: scale(1.02);
+    min-width: 50%;
+  }
 `;
 
 export const Title = styled.h1`
@@ -37,6 +60,9 @@ export const Title = styled.h1`
   text-align: center;
   font-weight: 900;
   font-size: 3em;
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
 `;
 
 export const BtnExtra = styled(Link)`
