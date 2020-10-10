@@ -1,32 +1,46 @@
-import React, { Fragment, useEffect, useContext } from "react";
-import { CommitmentContext } from "../../context/CommitmentContext";
-import { actions } from "../../context/CommitmentContext/actions";
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
+import React, { Fragment, useEffect } from "react";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
 import api from "../../../helpers/api";
-import { 
+import {
   WrapperFilter,
   SelectFilter,
   SearchBar,
-  WrapperSelect
+  WrapperSelect,
 } from "./styled";
-import { area, states ,sector, dataStatus } from "../../../helpers/index";
+import { area, states, sector, dataStatus } from "../../../helpers/index";
 
-const FilterBar = ({ status, typeTable }) =>{
-  const { state, dispatch } = useContext(CommitmentContext);
-
+const FilterBar = ({
+  state,
+  status,
+  typeTable,
+  getFilterCommitmentsPoolSuccess,
+  getFilterCommitmentsPool,
+  getFilterCommitmentsPoolError,
+  getFilterCommitmentsTracing,
+  getFilterCommitmentsTracingSuccess,
+  getFilterCommitmentsTracingError,
+  getFilterCommitmentsManagement,
+  getFilterCommitmentsManagementSuccess,
+  getFilterCommitmentsManagementError,
+  handleSearchFilter,
+}) => {
   //Logic of search bar
   useEffect(() => {
     if (!state.searchFilter) {
       return;
     }
     const searchCommitmentFilter = async () => {
-      switch(typeTable){
+      switch (typeTable) {
         case "pool":
-          if (state.searchFilter.agent !== "" || state.searchFilter.area !== "" ||
-              state.searchFilter.state !== "" || state.searchFilter.sector !== "" ||
-              state.searchFilter.status !== "") {
-            dispatch({ type: actions.getCommitmentsTracing });
+          if (
+            state.searchFilter.agent !== "" ||
+            state.searchFilter.area !== "" ||
+            state.searchFilter.state !== "" ||
+            state.searchFilter.sector !== "" ||
+            state.searchFilter.status !== ""
+          ) {
+            getFilterCommitmentsPool();
             try {
               let params = null;
               if (state.searchFilter.agent) {
@@ -45,24 +59,26 @@ const FilterBar = ({ status, typeTable }) =>{
                   sector: `${state.searchFilter.sector}`,
                 }).toString();
               }
-              const url ="/commitments/filter/pool/?" + params;
-              console.log(url)
+              const url = "/commitments/filter/pool/?" + params;
+              console.log(url);
               const { data } = await api.get(url);
-              dispatch({ type: actions.getCommitmentsSuccessTracing, payload: data });
+              getFilterCommitmentsPoolSuccess(data);
             } catch (error) {
-              dispatch({
-                type: actions.getCommitmentsError,
-                payload:
-                  "Por el momento no se pueden obtener los datos, verifique su conexión",
-              });
+              getFilterCommitmentsPoolError(
+                "Por el momento no se pueden obtener los datos, verifique su conexión"
+              );
             }
           }
           break;
         case "tracing":
-          if (state.searchFilter.collaborator !== "" || state.searchFilter.area !== "" ||
-              state.searchFilter.state !== "" || state.searchFilter.sector !== "" ||
-              state.searchFilter.status !== "") {
-            dispatch({ type: actions.getCommitmentsTracing });
+          if (
+            state.searchFilter.collaborator !== "" ||
+            state.searchFilter.area !== "" ||
+            state.searchFilter.state !== "" ||
+            state.searchFilter.sector !== "" ||
+            state.searchFilter.status !== ""
+          ) {
+            getFilterCommitmentsTracing();
             try {
               let params = null;
               if (state.searchFilter.collaborator) {
@@ -81,22 +97,20 @@ const FilterBar = ({ status, typeTable }) =>{
                   sector: `${state.searchFilter.sector}`,
                 }).toString();
               }
-              const url ="/commitments/filter/tracing/?" + params;
-              console.log(url)
+              const url = "/commitments/filter/tracing/?" + params;
+              console.log(url);
               const { data } = await api.get(url);
-              dispatch({ type: actions.getCommitmentsSuccessTracing, payload: data });
+              getFilterCommitmentsTracingSuccess(data);
             } catch (error) {
-              dispatch({
-                type: actions.getCommitmentsError,
-                payload:
-                  "Por el momento no se pueden obtener los datos, verifique su conexión",
-              });
+              getFilterCommitmentsTracingError(
+                "Por el momento no se pueden obtener los datos, verifique su conexión"
+              );
             }
           }
           break;
         case "management":
           if (state.searchFilter.userManagement !== "") {
-            dispatch({ type: actions.getCommitmentsTracing });
+            getFilterCommitmentsManagement();
             try {
               let params = null;
               if (state.searchFilter.userManagement) {
@@ -108,77 +122,74 @@ const FilterBar = ({ status, typeTable }) =>{
                   searchbox: "",
                 }).toString();
               }
-              const url ="/commitments/filter/management/?" + params;
-              console.log(url)
+              const url = "/commitments/filter/management/?" + params;
+              console.log(url);
               const { data } = await api.get(url);
-              dispatch({ type: actions.getCommitmentsSuccessTracing, payload: data });
+              getFilterCommitmentsManagementSuccess(data);
             } catch (error) {
-              dispatch({
-                type: actions.getCommitmentsError,
-                payload:
-                  "Por el momento no se pueden obtener los datos, verifique su conexión",
-              });
+              getFilterCommitmentsManagementError(
+                "Por el momento no se pueden obtener los datos, verifique su conexión"
+              );
             }
           }
           break;
         case "user":
-
           break;
         default:
           break;
       }
-    }
+    };
     searchCommitmentFilter();
   }, [state.searchFilter]);
 
-  const search = (field, value) => {
-    dispatch({ type: actions.setSearchFilter, payload: { field, value } });
-  };
-
-  return(
+  return (
     <Fragment>
       <WrapperFilter>
-        {typeTable === "pool" ? 
+        {typeTable === "pool" ? (
           <WrapperSelect>
-            <SearchBar 
-              name="agent" 
-              value={state.searchFilter.agent} 
-              onChange={(e) => search(e.target.name, e.target.value)}
-            /> 
+            <SearchBar
+              name="agent"
+              value={state.searchFilter.agent}
+              onChange={(e) =>
+                handleSearchFilter(e.target.name, e.target.value)
+              }
+            />
           </WrapperSelect>
-          : null
-        }
-        {typeTable === "tracing" ? 
+        ) : null}
+        {typeTable === "tracing" ? (
           <WrapperSelect>
-            <SearchBar 
-              name="collaborator" 
-              value={state.searchFilter.collaborator} 
-              onChange={(e) => search(e.target.name, e.target.value)}
-            /> 
+            <SearchBar
+              name="collaborator"
+              value={state.searchFilter.collaborator}
+              onChange={(e) =>
+                handleSearchFilter(e.target.name, e.target.value)
+              }
+            />
           </WrapperSelect>
-            : null
-        }
-        {typeTable === "management" ? 
-          <WrapperSelect style={{marginRight: "auto"}}>
-            <SearchBar 
-              name="userManagement" 
+        ) : null}
+        {typeTable === "management" ? (
+          <WrapperSelect style={{ marginRight: "auto" }}>
+            <SearchBar
+              name="userManagement"
               value={state.searchFilter.userManagement}
-              onChange={(e) => search(e.target.name, e.target.value)}
-            /> 
+              onChange={(e) =>
+                handleSearchFilter(e.target.name, e.target.value)
+              }
+            />
           </WrapperSelect>
-          : null
-        }
-        {typeTable === "user" ? 
-          <WrapperSelect style={{marginRight: "auto"}}>
-            <SearchBar 
-              name="user" 
-              value={state.searchFilter.user} 
-              onChange={(e) => search(e.target.name, e.target.value)}
-            /> 
+        ) : null}
+        {typeTable === "user" ? (
+          <WrapperSelect style={{ marginRight: "auto" }}>
+            <SearchBar
+              name="user"
+              value={state.searchFilter.user}
+              onChange={(e) =>
+                handleSearchFilter(e.target.name, e.target.value)
+              }
+            />
           </WrapperSelect>
-          : null
-        }
-        {typeTable === "pool" || typeTable === "tracing" ?
+        ) : null}
+        {typeTable === "pool" || typeTable === "tracing" ? (
           <Fragment>
             <WrapperSelect>
               <InputLabel id="area-label">Area</InputLabel>
@@ -187,14 +198,18 @@ const FilterBar = ({ status, typeTable }) =>{
                 id="area-label"
                 name="area"
                 value={state.searchFilter.area}
-                onChange={(e) => search(e.target.name, e.target.value)}
+                onChange={(e) =>
+                  handleSearchFilter(e.target.name, e.target.value)
+                }
               >
                 <MenuItem value="">-- Todos --</MenuItem>
-                {
-                  area.map((item, idx)=>{
-                    return <MenuItem value={item} key={idx} >{item}</MenuItem>
-                  })
-                }
+                {area.map((item, idx) => {
+                  return (
+                    <MenuItem value={item} key={idx}>
+                      {item}
+                    </MenuItem>
+                  );
+                })}
               </SelectFilter>
             </WrapperSelect>
             <WrapperSelect>
@@ -204,14 +219,18 @@ const FilterBar = ({ status, typeTable }) =>{
                 id="sede-label"
                 name="state"
                 value={state.searchFilter.state}
-                onChange={(e) => search(e.target.name, e.target.value)}
+                onChange={(e) =>
+                  handleSearchFilter(e.target.name, e.target.value)
+                }
               >
                 <MenuItem value="">-- Todos --</MenuItem>
-                {
-                  states.map((item, idx)=>{
-                    return <MenuItem value={item} key={idx} >{item}</MenuItem>
-                  })
-                }
+                {states.map((item, idx) => {
+                  return (
+                    <MenuItem value={item} key={idx}>
+                      {item}
+                    </MenuItem>
+                  );
+                })}
               </SelectFilter>
             </WrapperSelect>
             <WrapperSelect>
@@ -221,14 +240,18 @@ const FilterBar = ({ status, typeTable }) =>{
                 id="category-label"
                 name="sector"
                 value={state.searchFilter.sector}
-                onChange={(e) => search(e.target.name, e.target.value)}
+                onChange={(e) =>
+                  handleSearchFilter(e.target.name, e.target.value)
+                }
               >
                 <MenuItem value="">-- Todos --</MenuItem>
-                {
-                  sector.map((item, idx)=>{
-                    return <MenuItem value={item} key={idx} >{item}</MenuItem>
-                  })
-                }
+                {sector.map((item, idx) => {
+                  return (
+                    <MenuItem value={item} key={idx}>
+                      {item}
+                    </MenuItem>
+                  );
+                })}
               </SelectFilter>
             </WrapperSelect>
             <WrapperSelect>
@@ -238,21 +261,25 @@ const FilterBar = ({ status, typeTable }) =>{
                 id="status-label"
                 name="status"
                 value={state.searchFilters}
-                onChange={(e) => search(e.target.name, e.target.value)}
+                onChange={(e) =>
+                  handleSearchFilter(e.target.name, e.target.value)
+                }
               >
                 <MenuItem value="">-- Todos --</MenuItem>
-                {
-                  status.map((item, idx)=>{
-                    return <MenuItem value={item} key={idx} >{item}</MenuItem>
-                  })
-                }
+                {status.map((item, idx) => {
+                  return (
+                    <MenuItem value={item} key={idx}>
+                      {item}
+                    </MenuItem>
+                  );
+                })}
               </SelectFilter>
             </WrapperSelect>
-          </Fragment> : null     
-        }
+          </Fragment>
+        ) : null}
       </WrapperFilter>
     </Fragment>
-  )
-}
+  );
+};
 
 export default FilterBar;

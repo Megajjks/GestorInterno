@@ -1,6 +1,4 @@
-import React, { Fragment, useEffect, useContext } from "react";
-import { CommitmentContext } from "../../context/CommitmentContext";
-import { actions } from "../../context/CommitmentContext/actions";
+import React, { Fragment, useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import PoolTable from "../../ui/tables/PoolTable";
 import Btn from "../../ui/GeneralButton";
@@ -10,12 +8,15 @@ import Pagination from "../../ui/Pagination";
 import api from "../../../helpers/api";
 import { WrapperHeader, BtnGroup } from "./styled";
 import { existSync } from "../../../helpers";
+import { actions } from "./actions";
+import { initialState } from "./constants";
+import { reducer } from "./reducer";
 import IcoExport from "../../../assets/img/download.svg";
 import IcoSync from "../../../assets/img/sync.svg";
 import FilterBar from "../../ui/FilterBar";
 
 const Pool = () => {
-  const { state, dispatch } = useContext(CommitmentContext);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const query = ["prevalidado", "validando", "correcion", "falla"];
   const history = useHistory();
 
@@ -107,6 +108,26 @@ const Pool = () => {
     dispatch({ type: actions.setPage, payload: value });
   };
 
+  //Functions to filter
+  const getFilterCommitmentsPool = () => {
+    dispatch({ type: actions.getCommitmentsPoolFilter });
+  };
+  const getFilterCommitmentsPoolSuccess = (data) => {
+    dispatch({
+      type: actions.getCommitmentsPoolFilterSuccess,
+      payload: data,
+    });
+  };
+  const getFilterCommitmentsPoolError = (msg) => {
+    dispatch({
+      type: actions.getCommitmentsError,
+      payload: msg,
+    });
+  };
+  const handleSearchFilter = (field, value) => {
+    dispatch({ type: actions.setSearchFilter, payload: { field, value } });
+  };
+
   const renderPoolTable = () => {
     if (state.commitmentsError) return <Error />;
     return (
@@ -146,7 +167,15 @@ const Pool = () => {
           />
         </BtnGroup>
       </WrapperHeader>
-      <FilterBar status={query} typeTable={"pool"} />
+      <FilterBar
+        state={state}
+        status={query}
+        typeTable={"pool"}
+        getFilterCommitmentsPool={getFilterCommitmentsPool}
+        getFilterCommitmentsPoolSuccess={getFilterCommitmentsPoolSuccess}
+        getFilterCommitmentsPoolError={getFilterCommitmentsPoolError}
+        handleSearchFilter={handleSearchFilter}
+      />
       {state.commitmentsLoader ? <Spinner /> : renderPoolTable()}
     </Fragment>
   );

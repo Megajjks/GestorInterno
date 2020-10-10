@@ -83,7 +83,7 @@ const CommitmentReport = (props) => {
       dispatch({ type: actions.getDataForm });
       dispatch({ type: actions.getQuestions });
       try {
-        const idCommitment = history.location.state;
+        const idCommitment = history.location.state.id;
         const { data } = await api.get(`/commitments/${idCommitment}`);
         dispatch({ type: actions.getDataFormSuccess, payload: data });
         dispatch({ type: actions.getQuestionsSuccess, payload: data.answers });

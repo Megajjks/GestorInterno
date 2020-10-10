@@ -54,6 +54,26 @@ const Tracing = () => {
     dispatch({ type: actions.setPage, payload: value });
   };
 
+  //Functions to filter
+  const getFilterCommitmentsTracing = () => {
+    dispatch({ type: actions.getCommitmentsTracingFilter });
+  };
+  const getFilterCommitmentsTracingSuccess = (data) => {
+    dispatch({
+      type: actions.getCommitmentsTracingFilterSuccess,
+      payload: data,
+    });
+  };
+  const getFilterCommitmentsTracingError = (msg) => {
+    dispatch({
+      type: actions.getCommitmentsError,
+      payload: msg,
+    });
+  };
+  const handleSearchFilter = (field, value) => {
+    dispatch({ type: actions.setSearchFilter, payload: { field, value } });
+  };
+
   const renderTracingTable = () => {
     if (state.commitmentsError) return <Error />;
     return (
@@ -74,7 +94,15 @@ const Tracing = () => {
   return (
     <Fragment>
       <h1>Seguimiento de los compromisos</h1>
-      <FilterBar status={query} typeTable={"tracing"} />
+      <FilterBar
+        state={state}
+        status={query}
+        typeTable={"tracing"}
+        getFilterCommitmentsTracing={getFilterCommitmentsTracing}
+        getFilterCommitmentsTracingSuccess={getFilterCommitmentsTracingSuccess}
+        getFilterCommitmentsTracingError={getFilterCommitmentsTracingError}
+        handleSearchFilter={handleSearchFilter}
+      />
       {state.commitmentsLoader ? <Spinner /> : renderTracingTable()}
     </Fragment>
   );

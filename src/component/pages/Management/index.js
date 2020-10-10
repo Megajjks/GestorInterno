@@ -1,19 +1,17 @@
-import React, { useEffect, useContext } from "react";
-import { CommitmentContext } from "../../context/CommitmentContext";
-import { actions } from "../../context/CommitmentContext/actions";
+import React, { useEffect, useReducer } from "react";
 import CommitmentCardList from "../../ui/CommitmentCardList";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import Pagination from "../../ui/Pagination";
 import WithoutData from "../../ui/alerts/WithoutData";
 import api from "../../../helpers/api";
-import { filterWithIdCollaboratorAndStatus } from "../../../helpers";
+import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
 import FilterBar from "../../ui/FilterBar";
 
 const Management = () => {
-  const { state, dispatch } = useContext(CommitmentContext);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const query = ["primer_contacto", "articulando"];
 
   //get commitments in Management
@@ -50,6 +48,26 @@ const Management = () => {
     dispatch({ type: actions.setPage, payload: value });
   };
 
+  //Functions to filter
+  const getFilterCommitmentsManagement = () => {
+    dispatch({ type: actions.getCommitmentsManagementFilter });
+  };
+  const getFilterCommitmentsManagementSuccess = (data) => {
+    dispatch({
+      type: actions.getCommitmentsManagementFilterSuccess,
+      payload: data,
+    });
+  };
+  const getFilterCommitmentsManagementError = (msg) => {
+    dispatch({
+      type: actions.getCommitmentsError,
+      payload: msg,
+    });
+  };
+  const handleSearchFilter = (field, value) => {
+    dispatch({ type: actions.setSearchFilter, payload: { field, value } });
+  };
+
   const renderManagementTable = () => {
     if (state.commitmentsError) return <Error />;
     if (
@@ -83,7 +101,19 @@ const Management = () => {
   return (
     <div>
       <h1>Compromisos asignados</h1>
-      <FilterBar status={query} typeTable={"management"} />
+      <FilterBar
+        state={state}
+        status={query}
+        typeTable={"management"}
+        getFilterCommitmentsManagement={getFilterCommitmentsManagement}
+        getFilterCommitmentsManagementSuccess={
+          getFilterCommitmentsManagementSuccess
+        }
+        getFilterCommitmentsManagementError={
+          getFilterCommitmentsManagementError
+        }
+        handleSearchFilter={handleSearchFilter}
+      />
       {state.commitmentsLoader ? <Spinner /> : renderManagementTable()}
     </div>
   );
