@@ -15,28 +15,40 @@ const Tracing = () => {
   const query = ["primer_contacto", "articulando", "cumplido", "archivado"];
   const history = useHistory();
 
+  //Functions to send in FilterBar
+  const getFilterCommitmentsTracing = () => {
+    dispatch({ type: actions.getCommitments });
+  };
+  const getFilterCommitmentsTracingSuccess = (data) => {
+    dispatch({
+      type: actions.getCommitmentsSuccess,
+      payload: {
+        commitments: data.items,
+        page: data.page,
+        pageLimit: data.limitPage,
+      },
+    });
+  };
+  const getFilterCommitmentsTracingError = (msg) => {
+    dispatch({
+      type: actions.getCommitmentsError,
+      payload: msg
+    });
+  };
+
   //get commitments in tracing
   useEffect(() => {
     const fetchCommitment = async () => {
-      dispatch({ type: actions.getCommitments });
+      getFilterCommitmentsTracing();
       try {
         const { data } = await api.get(
           `/commitments/filter/tracing/?page=${state.page}`
         );
-        dispatch({
-          type: actions.getCommitmentsSuccess,
-          payload: {
-            commitments: data.items,
-            page: data.page,
-            pageLimit: data.limitPage,
-          },
-        });
+        getFilterCommitmentsTracingSuccess(data);
       } catch (e) {
-        dispatch({
-          type: actions.getCommitmentsError,
-          payload:
-            "Por el momento no se pueden obtener los datos, verifique su conexión",
-        });
+        getFilterCommitmentsTracingError(
+          "Por el momento no se pueden obtener los datos, verifique su conexión"
+        );
       }
     };
     fetchCommitment();
@@ -54,22 +66,7 @@ const Tracing = () => {
     dispatch({ type: actions.setPage, payload: value });
   };
 
-  //Functions to filter
-  const getFilterCommitmentsTracing = () => {
-    dispatch({ type: actions.getCommitmentsTracingFilter });
-  };
-  const getFilterCommitmentsTracingSuccess = (data) => {
-    dispatch({
-      type: actions.getCommitmentsTracingFilterSuccess,
-      payload: data,
-    });
-  };
-  const getFilterCommitmentsTracingError = (msg) => {
-    dispatch({
-      type: actions.getCommitmentsError,
-      payload: msg,
-    });
-  };
+  //Function to filter
   const handleSearchFilter = (field, value) => {
     dispatch({ type: actions.setSearchFilter, payload: { field, value } });
   };

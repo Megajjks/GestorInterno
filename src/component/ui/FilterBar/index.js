@@ -8,7 +8,16 @@ import {
   SearchBar,
   WrapperSelect,
 } from "./styled";
-import { area, states, sector, dataStatus } from "../../../helpers/index";
+import { 
+  area, 
+  states, 
+  sector, 
+  isActiveUser,
+  roles,
+  rolName,
+  dataStatus,
+
+} from "../../../helpers/index";
 
 const FilterBar = ({
   state,
@@ -23,6 +32,9 @@ const FilterBar = ({
   getFilterCommitmentsManagement,
   getFilterCommitmentsManagementSuccess,
   getFilterCommitmentsManagementError,
+  getFilterUsers,
+  getFilterUsersSuccess,
+  getFilterUsersError,
   handleSearchFilter,
 }) => {
   //Logic of search bar
@@ -59,7 +71,7 @@ const FilterBar = ({
                   sector: `${state.searchFilter.sector}`,
                 }).toString();
               }
-              const url = "/commitments/filter/pool/?" + params;
+              const url = `/commitments/filter/pool/?page=${state.page}&${params}`;
               console.log(url);
               const { data } = await api.get(url);
               getFilterCommitmentsPoolSuccess(data);
@@ -97,7 +109,7 @@ const FilterBar = ({
                   sector: `${state.searchFilter.sector}`,
                 }).toString();
               }
-              const url = "/commitments/filter/tracing/?" + params;
+              const url = `/commitments/filter/tracing/?page=${state.page}&${params}`;
               console.log(url);
               const { data } = await api.get(url);
               getFilterCommitmentsTracingSuccess(data);
@@ -122,7 +134,7 @@ const FilterBar = ({
                   searchbox: "",
                 }).toString();
               }
-              const url = "/commitments/filter/management/?" + params;
+              const url = `/commitments/filter/management/?page=${state.page}&${params}`;
               console.log(url);
               const { data } = await api.get(url);
               getFilterCommitmentsManagementSuccess(data);
@@ -134,6 +146,29 @@ const FilterBar = ({
           }
           break;
         case "user":
+          if (state.searchFilter.user !== "") {
+            getFilterUsers()
+            try {
+              let params = null;
+              if (state.searchFilter.user) {
+                params = new URLSearchParams({
+                  searchbox: `${state.searchFilter.user}`,
+                }).toString();
+              } else {
+                params = new URLSearchParams({
+                  searchbox: "",
+                }).toString();
+              }
+              const url = `/users/?page=${state.page}&${params}`;
+              console.log(url);
+              const { data } = await api.get(url);
+              getFilterUsersSuccess(data);
+            } catch (error) {
+              getFilterUsersError(
+                "Por el momento no se pueden obtener los datos, verifique su conexión"
+              );
+            }
+          }
           break;
         default:
           break;
@@ -179,15 +214,17 @@ const FilterBar = ({
           </WrapperSelect>
         ) : null}
         {typeTable === "user" ? (
-          <WrapperSelect style={{ marginRight: "auto" }}>
-            <SearchBar
-              name="user"
-              value={state.searchFilter.user}
-              onChange={(e) =>
-                handleSearchFilter(e.target.name, e.target.value)
-              }
-            />
-          </WrapperSelect>
+          <Fragment>
+            <WrapperSelect style={{ marginRight: "auto" }}>
+              <SearchBar
+                name="user"
+                value={state.searchFilter.user}
+                onChange={(e) =>
+                  handleSearchFilter(e.target.name, e.target.value)
+                }
+              />
+            </WrapperSelect>
+          </Fragment>
         ) : null}
         {typeTable === "pool" || typeTable === "tracing" ? (
           <Fragment>

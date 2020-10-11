@@ -21,11 +21,6 @@ export const reducer = (state, action) => {
         commitmentsLoader: false,
         commitmentsError: true,
       };
-    case actions.filterCommitments:
-      return {
-        ...state,
-        commitmentsFilter: action.payload,
-      };
     case actions.setPage:
       return {
         ...state,
@@ -56,18 +51,6 @@ export const reducer = (state, action) => {
           rol: action.payload.reset,
           isActive: action.payload.reset,
         },
-      };
-    case actions.getCommitmentsManagementFilter:
-      return {
-        ...state,
-        commitmentsLoader: true,
-        commitmentsError: null,
-      };
-    case actions.getCommitmentsManagementFilterSuccess:
-      return {
-        ...state,
-        commitments: action.payload,
-        commitmentsLoader: false,
       };
     default:
       return state;

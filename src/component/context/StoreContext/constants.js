@@ -19,4 +19,17 @@ export const initialState = {
   addUserLoader: false,
   page: 1,
   pageLimit: 1,
+  //User Filtro
+  searchFilter: {
+    agent: "",
+    collaborator: "",
+    userManagement: "",
+    user: "",
+    area: "",
+    state: "",
+    sector: "",
+    status: "",
+    rol: null,
+    isActive: null,
+  },
 };

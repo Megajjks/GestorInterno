@@ -23,11 +23,6 @@ export const reducer = (state, action) => {
         commitmentsLoader: false,
         commitmentsError: action.payload,
       };
-    case actions.filterCommitments:
-      return {
-        ...state,
-        commitmentsFilter: action.payload,
-      };
     case actions.exportData:
       return {
         ...state,
@@ -88,18 +83,6 @@ export const reducer = (state, action) => {
           rol: action.payload.reset,
           isActive: action.payload.reset,
         },
-      };
-    case actions.getCommitmentsPoolFilter:
-      return {
-        ...state,
-        commitmentsLoader: true,
-        commitmentsError: null,
-      };
-    case actions.getCommitmentsPoolFilterSuccess:
-      return {
-        ...state,
-        commitments: action.payload,
-        commitmentsLoader: false,
       };
     default:
       return state;

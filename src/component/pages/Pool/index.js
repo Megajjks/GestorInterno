@@ -17,36 +17,47 @@ import FilterBar from "../../ui/FilterBar";
 
 const Pool = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const query = ["prevalidado", "validando", "correcion", "falla"];
+  const query = ["prevalidado", "validando", "correccion", "falla"];
   const history = useHistory();
+
+  //Functions to send in FilterBar
+  const getFilterCommitmentsPool = () => {
+    dispatch({ type: actions.getCommitments });
+  };
+  const getFilterCommitmentsPoolSuccess = (data) => {
+    dispatch({
+      type: actions.getCommitmentsSuccess,
+      payload: {
+        commitments: data.items,
+        existSync: existSync(data.items),
+        page: data.page,
+        pageLimit: data.limitPage,
+      },
+    });
+  };
+  const getFilterCommitmentsPoolError = (msg) => {
+    dispatch({
+      type: actions.getCommitmentsError,
+      payload: msg
+    });
+  };
+
 
   //get commitments in pool
   useEffect(() => {
     const fetchCommitment = async () => {
-      dispatch({ type: actions.getCommitments });
+      getFilterCommitmentsPool();
       try {
         const { data } = await api.get(
           `/commitments/filter/pool/?page=${state.page}`
         );
-        dispatch({
-          type: actions.getCommitmentsSuccess,
-          payload: {
-            commitments: data.items,
-            existSync: existSync(data.items),
-            page: data.page,
-            pageLimit: data.limitPage,
-          },
-        });
+        getFilterCommitmentsPoolSuccess(data);
         dispatch({
           type: actions.clearSearchFilter,
           payload: { reset: "" },
         });
       } catch (e) {
-        dispatch({
-          type: actions.getCommitmentsError,
-          payload:
-            "Por el momento no se pueden obtener los datos, verifique su conexión",
-        });
+        getFilterCommitmentsPoolError("Por el momento no se pueden obtener los datos, verifique su conexión")
       }
     };
     fetchCommitment();
@@ -108,22 +119,7 @@ const Pool = () => {
     dispatch({ type: actions.setPage, payload: value });
   };
 
-  //Functions to filter
-  const getFilterCommitmentsPool = () => {
-    dispatch({ type: actions.getCommitmentsPoolFilter });
-  };
-  const getFilterCommitmentsPoolSuccess = (data) => {
-    dispatch({
-      type: actions.getCommitmentsPoolFilterSuccess,
-      payload: data,
-    });
-  };
-  const getFilterCommitmentsPoolError = (msg) => {
-    dispatch({
-      type: actions.getCommitmentsError,
-      payload: msg,
-    });
-  };
+  //Function to filter
   const handleSearchFilter = (field, value) => {
     dispatch({ type: actions.setSearchFilter, payload: { field, value } });
   };

@@ -201,6 +201,11 @@ export const area = [
   "Venture y Fellowship",
 ];
 
+export const isActiveUser = [
+  { value: true, tag: "Activo" },
+  { value: false, tag: "Deshabilitado" },
+];
+
 export const roles = [
   { value: 4, tag: "Super Admin" },
   { value: 1, tag: "Admin" },
