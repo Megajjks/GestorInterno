@@ -17,7 +17,7 @@ import FilterBar from "../../ui/FilterBar";
 
 const Pool = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const query = ["prevalidado", "validando", "correcion", "falla"];
+  const query = ["prevalidado", "validando", "correccion", "falla"];
   const history = useHistory();
 
   //get commitments in pool
