@@ -14,30 +14,41 @@ const Management = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const query = ["primer_contacto", "articulando"];
 
+  //Functions to send in FilterBar
+  const getFilterCommitmentsManagement = () => {
+    dispatch({ type: actions.getCommitmentsTracing });
+  };
+  const getFilterCommitmentsManagementSuccess = (data) => {
+    dispatch({
+      type: actions.getCommitmentsSuccess,
+      payload: {
+        commitments: data.items,
+        page: data.page,
+        pageLimit: data.limitPage,
+      },
+    });
+  };
+  const getFilterCommitmentsManagementError = () => {
+    dispatch({
+      type: actions.getCommitmentsError,
+    });
+  };
+
   //get commitments in Management
   useEffect(() => {
     const fetchCommitments = async () => {
-      dispatch({ type: actions.getCommitmentsTracing });
+      getFilterCommitmentsManagement();
       try {
         const { data } = await api.get(
           `/commitments/filter/management/?page=${state.page}`
         );
-        dispatch({
-          type: actions.getCommitmentsSuccess,
-          payload: {
-            commitments: data.items,
-            page: data.page,
-            pageLimit: data.limitPage,
-          },
-        });
+        getFilterCommitmentsManagementSuccess(data);
         dispatch({
           type: actions.clearSearchFilter,
           payload: { reset: "" },
         });
       } catch (e) {
-        dispatch({
-          type: actions.getCommitmentsError,
-        });
+        getFilterCommitmentsManagementError();
       }
     };
     fetchCommitments();
@@ -48,22 +59,7 @@ const Management = () => {
     dispatch({ type: actions.setPage, payload: value });
   };
 
-  //Functions to filter
-  const getFilterCommitmentsManagement = () => {
-    dispatch({ type: actions.getCommitmentsManagementFilter });
-  };
-  const getFilterCommitmentsManagementSuccess = (data) => {
-    dispatch({
-      type: actions.getCommitmentsManagementFilterSuccess,
-      payload: data,
-    });
-  };
-  const getFilterCommitmentsManagementError = (msg) => {
-    dispatch({
-      type: actions.getCommitmentsError,
-      payload: msg,
-    });
-  };
+  //Function to filter
   const handleSearchFilter = (field, value) => {
     dispatch({ type: actions.setSearchFilter, payload: { field, value } });
   };
