@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import Btn from "../../GeneralButton";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -23,6 +24,7 @@ import {
 const EditCommitmentModal = ({ handleClose, open, dataForm }) => {
   const [data, setData] = useState(dataForm);
   const [imgFile, setImgFile] = useState();
+  const [isLoader, setIsLoader] = useState(false);
   const history = useHistory();
   const [dataUpdate, setDataUpdate] = useState(null);
 
@@ -65,10 +67,16 @@ const EditCommitmentModal = ({ handleClose, open, dataForm }) => {
   };
 
   const putCommitment = async () => {
+    setIsLoader(true);
     try {
       //estructuring the formdata
       let formdata = new FormData();
-      formdata.append("img", imgFile);
+      //We make sure the image is not lost
+      if (Object.keys(imgFile).length > 0) {
+        formdata.append("img", imgFile);
+        console.log("cambio de imagen");
+      }
+
       formdata.append("firstName", data.firstName);
       formdata.append("lastName", data.lastName);
       formdata.append("organization", data.organization);
@@ -84,8 +92,10 @@ const EditCommitmentModal = ({ handleClose, open, dataForm }) => {
       console.log(formdata);
 
       const response = await api.put(`/commitments/${data.id}`, formdata);
+      setIsLoader(false);
       window.location.reload();
     } catch (e) {
+      setIsLoader(false);
       console.log(`Request failed: ${e}`);
     }
     handleClose();
@@ -432,12 +442,19 @@ const EditCommitmentModal = ({ handleClose, open, dataForm }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} variant="outlined">
-          Cancelar
-        </Button>
-        <Button onClick={putCommitment} variant="contained" color="secondary">
-          Actualizar compromiso
-        </Button>
+        <Btn
+          onClick={handleClose}
+          title="Cancelar"
+          type="secundary"
+          size="30%"
+        />
+        <Btn
+          onClick={putCommitment}
+          title="Actualizar datos"
+          size="40%"
+          type="primary-loader"
+          loader={isLoader}
+        />
       </DialogActions>
     </Dialog>
   );

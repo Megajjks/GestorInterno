@@ -26,6 +26,7 @@ export const reducer = (state, action) => {
         ...state,
         showModal: action.payload,
         isEditModal: false,
+        msgErrorModal: null,
       };
     case actions.showModalEditUser:
       return {
@@ -39,6 +40,7 @@ export const reducer = (state, action) => {
         ...state,
         showModal: false,
         user: {},
+        msgErrorModal: null,
       };
     case actions.updateUser:
       return {
@@ -51,8 +53,8 @@ export const reducer = (state, action) => {
     case actions.addUser:
       return {
         ...state,
-        addUserLoader: true,
-        msgError: null,
+        userModalLoader: true,
+        msgErrorModal: null,
       };
     case actions.addUserSuccess:
       return {
@@ -67,36 +69,45 @@ export const reducer = (state, action) => {
           image: "",
           roleId: "",
         },
-        addUserLoader: false,
+        userModalLoader: false,
         showModal: false,
         reload: action.payload,
       };
     case actions.addUserError:
       return {
         ...state,
-        addUserLoader: false,
-        showModal: false,
-        msgError: action.payload,
+        userModalLoader: false,
+        msgErrorModal: action.payload,
       };
     case actions.saveUpdateUser:
       return {
         ...state,
-        addUserLoader: true,
-        msgError: action.payload,
+        userModalLoader: true,
+        msgErrorModal: action.payload,
       };
     case actions.saveUpdateUserSuccess:
       return {
         ...state,
+        user: {
+          id: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          phone: "",
+          image: "",
+          roleId: "",
+        },
         showModal: false,
-        addUserLoader: false,
+        userModalLoader: false,
         reload: action.payload,
       };
     case actions.saveUpdateUserError:
       return {
         ...state,
         showModal: false,
-        addUserLoader: false,
-        msgError: action.payload,
+        userModalLoader: false,
+        msgErrorModal: action.payload,
       };
     case actions.removeUser:
       return {
@@ -127,23 +138,23 @@ export const reducer = (state, action) => {
           [action.payload.field]: action.payload.value,
         },
       };
-      case actions.clearSearchFilter:
-        return {
-          ...state,
-          searchFilter: {
-            ...state.searchFilter,
-            agent: action.payload.reset,
-            collaborator: action.payload.reset,
-            userManagement: action.payload.reset,
-            user: action.payload.reset,
-            area: action.payload.reset,
-            state: action.payload.reset,
-            sector: action.payload.reset,
-            status: action.payload.reset,
-            rol: action.payload.reset,
-            isActive: action.payload.reset,
-          },
-        };
+    case actions.clearSearchFilter:
+      return {
+        ...state,
+        searchFilter: {
+          ...state.searchFilter,
+          agent: action.payload.reset,
+          collaborator: action.payload.reset,
+          userManagement: action.payload.reset,
+          user: action.payload.reset,
+          area: action.payload.reset,
+          state: action.payload.reset,
+          sector: action.payload.reset,
+          status: action.payload.reset,
+          rol: action.payload.reset,
+          isActive: action.payload.reset,
+        },
+      };
     default:
       return state;
   }

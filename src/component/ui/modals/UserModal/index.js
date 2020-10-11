@@ -15,6 +15,8 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Alert from "@material-ui/lab/Alert";
+import AccountIcon from "../../../../assets/img/profile.svg";
 import { WrapperLogo, Logo } from "./styled";
 import { roles } from "../../../../helpers";
 import api from "../../../../helpers/api";
@@ -22,7 +24,7 @@ import api from "../../../../helpers/api";
 const UserModal = ({ closeModalUser, closeModalClean }) => {
   const { state, dispatch } = useContext(StoreContext);
   const [showPassword, setShowPassword] = useState(false);
-  const [imgFile, setImgFile] = useState();
+  const [imgFile, setImgFile] = useState({});
 
   const handleupdateUser = (field, value) => {
     dispatch({ type: actions.updateUser, payload: { field, value } });
@@ -36,6 +38,23 @@ const UserModal = ({ closeModalUser, closeModalClean }) => {
 
   //Add new User
   const addUser = async () => {
+    //validate that the fields are not empty
+    if (
+      state.user.firstName === "" ||
+      state.user.lastName === "" ||
+      state.user.roleId === "" ||
+      state.user.email === "" ||
+      state.user.password === "" ||
+      state.user.phone === "" ||
+      state.user.image === ""
+    ) {
+      dispatch({
+        type: actions.addUserError,
+        payload: "¡Ops!, no tan rapido, has olvidado rellenar unos campos",
+      });
+      return;
+    }
+    //request to send a new user
     dispatch({ type: actions.addUser });
     try {
       //estructuring the formdata
@@ -64,7 +83,10 @@ const UserModal = ({ closeModalUser, closeModalClean }) => {
     try {
       //estructuring the formdata
       let formdata = new FormData();
-      formdata.append("image", imgFile);
+      //We make sure the image is not lost
+      if (Object.keys(imgFile).length > 0) {
+        formdata.append("image", imgFile);
+      }
       formdata.append("firstName", state.user.firstName);
       formdata.append("lastName", state.user.lastName);
       formdata.append("roleId", state.user.roleId);
@@ -95,9 +117,16 @@ const UserModal = ({ closeModalUser, closeModalClean }) => {
         {state.isEditModal ? "Editar Usuario" : "Agregar Usuario"}
       </DialogTitle>
       <DialogContent style={{ margin: "0 1em" }}>
+        {state.msgErrorModal && (
+          <Alert severity="error">{state.msgErrorModal}</Alert>
+        )}
         <WrapperLogo>
           <Logo
-            src={`https://api.ashoka.hackademy.mx/${state.user.image}`}
+            src={
+              state.user.image
+                ? `https://api.ashoka.hackademy.mx/${state.user.image}`
+                : AccountIcon
+            }
             alt="avatar"
           />
           <input
@@ -207,9 +236,21 @@ const UserModal = ({ closeModalUser, closeModalClean }) => {
           size="30%"
         />
         {state.isEditModal ? (
-          <Btn onClick={saveUser} title="Guardar cambios" size="40%" />
+          <Btn
+            onClick={saveUser}
+            title="Guardar cambios"
+            size="40%"
+            type="primary-loader"
+            loader={state.userModalLoader}
+          />
         ) : (
-          <Btn onClick={addUser} title="Agregar usuario" size="40%" />
+          <Btn
+            onClick={addUser}
+            title="Agregar usuario"
+            size="40%"
+            type="primary-loader"
+            loader={state.userModalLoader}
+          />
         )}
       </DialogActions>
     </Dialog>

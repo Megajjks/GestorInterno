@@ -32,7 +32,9 @@ export const initialState = {
 
   milestones: [],
   milestonesLoading: false,
+  milestonesLoadingModal: false,
   milestonesError: null,
+  milestonesMsgError: null,
   reloadMilestones: false,
   milestone: {
     title: "",

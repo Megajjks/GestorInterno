@@ -12,11 +12,14 @@ export const Wrapper = styled.div`
 `;
 
 export const Img = styled.div`
-  background-image: url("https://images.unsplash.com/photo-1601317848953-057aa886867b?ixlib=rb-1.2.1&auto=format&fit=crop&w=518&q=80");
+  background-image: linear-gradient(
+      rgba(245, 124, 0, 0.5),
+      rgba(216, 67, 21, 0.5)
+    ),
+    url("https://api.ashoka.hackademy.mx/public/picture2.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  /* filter: hue-rotate(35deg); */
   width: 50%;
   height: 100%;
   @media (max-width: 768px) {
