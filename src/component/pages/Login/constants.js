@@ -3,7 +3,6 @@ export const initialState = {
     email: "",
     password: "",
   },
-  open: false,
   loginLoading: false,
   loginError: null,
 };

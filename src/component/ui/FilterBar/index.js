@@ -9,10 +9,10 @@ import {
   WrapperSelect,
   WrapperSelectFiltersUsers,
 } from "./styled";
-import { 
-  area, 
-  states, 
-  sector, 
+import {
+  area,
+  states,
+  sector,
   isActiveUser,
   roles,
 } from "../../../helpers/index";
@@ -117,11 +117,12 @@ const FilterBar = ({
           }
           break;
         case "user":
-          if (state.searchFilter.user !== "" || 
+          if (
+            state.searchFilter.user !== "" ||
             state.searchFilter.rol !== 0 ||
             state.searchFilter.isActive !== ""
           ) {
-            getFilterUsers()
+            getFilterUsers();
             try {
               let params = null;
               if (state.searchFilter.rol) {

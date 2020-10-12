@@ -1,5 +1,25 @@
 /* Generic functions that can be reused for extra behavior */
 
+/* Import resources that React toastify needs */
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+/* Function that return a notify pop */
+export const notify = (type, msg) => {
+  switch (type) {
+    case "success":
+      return toast.success(msg, { position: toast.POSITION.TOP_RIGHT });
+    case "info":
+      return toast.info(msg, { position: toast.POSITION.TOP_RIGHT });
+    case "warn":
+      return toast.warn(msg, { position: toast.POSITION.TOP_RIGHT });
+    case "error":
+      return toast.error(msg, { position: toast.POSITION.TOP_RIGHT });
+    default:
+      return toast(msg, { position: toast.POSITION.TOP_RIGHT });
+  }
+};
+
 /* This function return a dataStatus based on a status */
 export const dataStatus = (status) => {
   switch (status) {
