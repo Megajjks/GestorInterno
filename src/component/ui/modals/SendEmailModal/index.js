@@ -8,9 +8,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Btn from "../../GeneralButton";
 import api from "../../../../helpers/api";
 import iconEmail from "../../../../assets/img/sendEmail.svg";
-import { BtnGroup, WrapperButtons, ButtonDecline } from "./styled";
+import { WrapperButtons, ButtonDecline } from "./styled";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import Alert from "@material-ui/lab/Alert";
 
 const SendEmailModal = ({state, typeTable}) => {
     const [open, setOpen] = useState(false);
@@ -19,6 +20,13 @@ const SendEmailModal = ({state, typeTable}) => {
         subject: "",
         message: "",
     });
+    //Error in empty data
+    const [errorData, setErrorData] = useState({
+        status: false,
+        message: "",
+        typeMessage: "",
+    });
+    //Error in send data
     const [error, setError] = useState({
         status: false,
         message: "",
@@ -38,6 +46,13 @@ const SendEmailModal = ({state, typeTable}) => {
           status: false,
           typeMessage: ""
         });
+        //Error in empty data
+        setErrorData({
+            ...errorData,
+            status: false,
+            message: "",
+            typeMessage: "",
+        });
     };
     
     const sendEmail = () => {
@@ -51,6 +66,18 @@ const SendEmailModal = ({state, typeTable}) => {
 
     const handleClose = () => {
         setOpen(false);
+        setError({
+            ...error,
+            status: false,
+            typeMessage: ""
+        });
+        //Error in empty data
+        setErrorData({
+            ...errorData,
+            status: false,
+            message: "",
+            typeMessage: "",
+        });
     };
 
     const updateDataSendEmail = (e) => {
@@ -107,6 +134,18 @@ const SendEmailModal = ({state, typeTable}) => {
         }
     }
 
+    const validateData = () => {
+        if (dataFilter.subject === "" && dataFilter.message === "") {
+            setErrorData({
+                status: true,
+                message: "¡Ups!, parace que tienes campos sin rellenar.",
+                typeMessage: "error",
+            });
+        } else {
+            sendEmailFilter();
+        }
+    }
+
     const sendEmailFilter = async () => {
         setIsLoader(true);
         try {
@@ -114,11 +153,10 @@ const SendEmailModal = ({state, typeTable}) => {
                 (state.searchFilter.agent === "" && state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
                 state.searchFilter.state === "" && state.searchFilter.sector === "" && 
                 state.searchFilter.status === "")) {
-                setError({
+                setErrorData({
                     status: true,
-                    message:
-                        "Los campos para enviar correo estan vacios, intentalo nuevamente", 
-                    typeMessage: "error"
+                    message: "Revisa el uso de los filtros para seleccionar compromisos al enviar correo.",
+                    typeMessage: "error",
                 });
                 setIsLoader(false);
             } else {
@@ -155,6 +193,13 @@ const SendEmailModal = ({state, typeTable}) => {
                           "¡Excelente!, Su petición ha sido enviada exitosamente.", 
                         typeMessage: "success"
                       });
+                    //Error in empty data
+                    setErrorData({
+                        ...errorData,
+                        status: false,
+                        message: "",
+                        typeMessage: "",
+                    });
                     setTimeout(handleClose, 3000);
                 }
             }
@@ -166,6 +211,13 @@ const SendEmailModal = ({state, typeTable}) => {
                 message:
                   "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo", 
                 typeMessage: "error"
+            });
+            //Error in empty data
+            setErrorData({
+                ...errorData,
+                status: false,
+                message: "",
+                typeMessage: "",
             });
         }
     }
@@ -183,6 +235,7 @@ const SendEmailModal = ({state, typeTable}) => {
                 <DialogTitle id="form-dialog-title">Envio de correos</DialogTitle>
                 <DialogContent>
                     <CheckData/>
+                    {errorData.message && <Alert severity="error">{errorData.message}</Alert>}
                     <TextField
                         autoFocus
                         margin="dense"
@@ -213,7 +266,7 @@ const SendEmailModal = ({state, typeTable}) => {
                         title="Enviar"
                         size="27em"
                         type="primary-loader"
-                        onClick={sendEmailFilter}
+                        onClick={validateData}
                         loader={isLoader}
                     />
                 </WrapperButtons>

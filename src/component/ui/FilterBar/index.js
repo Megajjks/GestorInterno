@@ -7,7 +7,6 @@ import {
   SelectFilter,
   SearchBar,
   WrapperSelect,
-  WrapperSelectFiltersUsers,
 } from "./styled";
 import {
   area,
