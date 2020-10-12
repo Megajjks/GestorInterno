@@ -19,7 +19,7 @@ import {
   commitmentImpact,
   socialNetworks,
   area,
-} from "../../../../helpers/index";
+} from "../../../../helpers";
 
 const EditCommitmentModal = ({ handleClose, open, dataForm }) => {
   const [data, setData] = useState(dataForm);

@@ -7,7 +7,7 @@ import Error from "../../ui/alerts/Error";
 import Pagination from "../../ui/Pagination";
 import api from "../../../helpers/api";
 import { WrapperHeader, BtnGroup } from "./styled";
-import { existSync } from "../../../helpers";
+import { existSync, notify } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
@@ -15,6 +15,7 @@ import IcoExport from "../../../assets/img/download.svg";
 import IcoSync from "../../../assets/img/sync.svg";
 import FilterBar from "../../ui/FilterBar";
 import SendEmailModal from "../../ui/modals/SendEmailModal";
+import { ToastContainer } from "react-toastify";
 
 const Pool = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -39,10 +40,9 @@ const Pool = () => {
   const getFilterCommitmentsPoolError = (msg) => {
     dispatch({
       type: actions.getCommitmentsError,
-      payload: msg
+      payload: msg,
     });
   };
-
 
   //get commitments in pool
   useEffect(() => {
@@ -58,7 +58,9 @@ const Pool = () => {
           payload: { reset: "" },
         });
       } catch (e) {
-        getFilterCommitmentsPoolError("Por el momento no se pueden obtener los datos, verifique su conexión")
+        getFilterCommitmentsPoolError(
+          "Por el momento no se pueden obtener los datos, verifique su conexión"
+        );
       }
     };
     fetchCommitment();
@@ -92,8 +94,10 @@ const Pool = () => {
         document.body.appendChild(link);
         link.click();
         link.remove();
+        notify("success", "💾  Datos exportados correctamente");
       })
       .catch((e) => {
+        notify("error", "⚠️ Problemas al momento de descargar el archivo");
         dispatch({
           type: actions.exportDataError,
           payload: "Problemas al momento de descargar el archivo",
@@ -106,8 +110,10 @@ const Pool = () => {
     dispatch({ type: actions.sync });
     try {
       const { data } = await api.post("/resendall/");
+      notify("success", "🔃  Compromisos sincronizados correctamente");
       dispatch({ type: actions.syncSucess, payload: !state.reload });
     } catch {
+      notify("error", "⚠️ Problemas al momento de sincronizar los compromisos");
       dispatch({
         type: actions.syncError,
         payload: "Problemas al sincronizar los compromisos",
@@ -163,10 +169,7 @@ const Pool = () => {
             loader={state.exportData}
           />
         </BtnGroup>
-        <SendEmailModal
-          state={state}
-          typeTable={"pool"}
-        />
+        <SendEmailModal state={state} typeTable={"pool"} />
       </WrapperHeader>
       <FilterBar
         state={state}
@@ -178,6 +181,7 @@ const Pool = () => {
         handleSearchFilter={handleSearchFilter}
       />
       {state.commitmentsLoader ? <Spinner /> : renderPoolTable()}
+      <ToastContainer />
     </Fragment>
   );
 };

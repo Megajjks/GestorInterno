@@ -16,13 +16,9 @@ import IconButton from "@material-ui/core/IconButton";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import LoginImg from "../../../assets/img/imageLogin.jpg";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import api from "../../../helpers/api";
+import { notify } from "../../../helpers";
+import { ToastContainer } from "react-toastify";
 
 import { reducer } from "./reducer";
 import { initialState } from "./constants";
@@ -35,6 +31,12 @@ const GenericLogin = () => {
 
   const submitData = async (e) => {
     e.preventDefault();
+
+    if (state.user.email === "" || state.user.password === "") {
+      notify("info", "✋ No tan rapido, No has rellenado todos los campos");
+      return;
+    }
+
     dispatch({ type: actions.fetchLogin });
     try {
       //when the server response is a 200
@@ -52,15 +54,12 @@ const GenericLogin = () => {
       history.push(`/panel/dashboard`);
     } catch (error) {
       //when the server response is different than a 200
+      notify("error", "🚧 Crendenciales inválidas, introduzca las correctas");
       dispatch({
         type: actions.fetchLoginError,
         payload: "Crendenciales inválidas",
       });
     }
-  };
-
-  const handleClose = () => {
-    dispatch({ type: actions.toggleModal });
   };
 
   const handleChange = (e) => {
@@ -119,28 +118,7 @@ const GenericLogin = () => {
           />
         </Form>
       </WrapperForm>
-      <>
-        <Dialog
-          open={state.open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{""}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {state.loginError
-                ? state.loginError
-                : "Los campos que has ingresado no son correctos, por favorverificalos y vuelve a intentarlo."}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="secondary">
-              Cerrar
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </>
+      <ToastContainer />
     </Wrapper>
   );
 };
