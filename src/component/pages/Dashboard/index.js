@@ -1,66 +1,132 @@
-import React, { useState, useEffect } from "react";
+import React, { useReducer, useEffect, Fragment } from "react";
+import { actions } from "./actions";
+import { initialState } from "./constants";
+import { reducer } from "./reducer";
+import { useHistory } from "react-router-dom";
+import { rolName } from "../../../helpers";
+import MetricCardList from "../../ui/MetricCardList";
 import CommitmentCardList from "../../ui/CommitmentCardList";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import api from "../../../helpers/api";
-import WithoutData from "../../ui/alerts/WithoutData";
+import { Title, WrapperSectionHeader, BtnSecction } from "./styled";
 
 const Dashboard = () => {
-  const [data, setData] = useState([]);
-  const [status, setStatus] = useState({
-    loader: false,
-    isError: false,
-    message: "",
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const history = useHistory();
+  const id = JSON.parse(localStorage.getItem("login_data")).userId;
 
   useEffect(() => {
-    const fetchCommitments = async () => {
-      setStatus({ loader: true });
+    //get data user
+    const getUser = async () => {
+      dispatch({ type: actions.getUser });
       try {
-        const { data } = await api.get("/commitments");
-        setData(data);
-        setStatus({
-          loader: false,
-          isError: false,
-        });
-      } catch (e) {
-        console.log(e);
-        setStatus({
-          loader: false,
-          isError: true,
-          message:
-            "Por el momento no se pueden obtener los datos, verifique su conexión",
+        const { data } = await api.get(`/users/${id}`);
+        dispatch({ type: actions.getUserSuccess, payload: data });
+      } catch {
+        dispatch({
+          type: actions.getUserError,
+          payload: "Ocurrió un problema al cargar los datos del usuario",
         });
       }
     };
-    fetchCommitments();
+    //get data dashboard
+    const getDataDashboard = async () => {
+      dispatch({ type: actions.getDataDashboard });
+      try {
+        const { data } = await api.get("/dashboard");
+        dispatch({
+          type: actions.getDashboardDataSuccess,
+          payload: {
+            metrics: data.metrics,
+            currentPool: data.commitmentsCurrentsPool,
+            currentTracing: data.commitmentsCurrentsTracing,
+            currentManagement: data.commitmentsCurrentsManagement,
+          },
+        });
+      } catch {
+        dispatch({
+          type: actions.getDashboardDataError,
+          payload: "Ocurrio un problema al traer las metricas en Dashboard",
+        });
+      }
+    };
+
+    getUser();
+    getDataDashboard();
   }, []);
 
-  const renderCommitments = () => {
-    if (data.length === 0 && !status.loader && !status.isError)
-      return (
-        <WithoutData
-          title="!Vaya¡ parece que no hay compromisos"
-          content="Paciencia que pronto podras ver los compromisos 😉"
-        />
-      );
+  //go to section
+  const goTo = (url) => {
+    history.push(url);
+  };
+
+  const renderView = () => {
+    if (state.userError) return <Error />;
+
     return (
-      <CommitmentCardList
-        commitments={data}
-        btnTitle="Leer compromiso"
-        btnUrlBase="/panel/commitment_report"
-      />
+      <Fragment>
+        <Title>
+          {`Bienvenido ${state.user.firstName} ${state.user.lastName}`}{" "}
+        </Title>
+        <MetricCardList metrics={state.metrics} />
+
+        {rolName() !== "collaborator" && (
+          <>
+            {state.commitmentsCurrentsPool.length !== 0 && (
+              <>
+                <WrapperSectionHeader>
+                  <h2>Compromisos recientes por validar</h2>
+                  <BtnSecction onClick={() => goTo("/panel/pool")}>
+                    Ver más
+                  </BtnSecction>
+                </WrapperSectionHeader>
+                <CommitmentCardList
+                  commitments={state.commitmentsCurrentsPool}
+                  btnTitle="Ver compromiso"
+                  btnUrlBase="/panel/commitment_report"
+                />
+              </>
+            )}
+
+            {state.commitmentsCurrentsTracing.length !== 0 && (
+              <>
+                <WrapperSectionHeader>
+                  <h2>Compromisos recientes por dar seguimiento</h2>
+                  <BtnSecction onClick={() => goTo("/panel/tracing")}>
+                    Ver más
+                  </BtnSecction>
+                </WrapperSectionHeader>
+                <CommitmentCardList
+                  commitments={state.commitmentsCurrentsTracing}
+                  btnTitle="Ver compromiso"
+                  btnUrlBase="/panel/traicing_commitment"
+                />
+              </>
+            )}
+          </>
+        )}
+
+        {state.commitmentsCurrentsManagement.length !== 0 && (
+          <>
+            <WrapperSectionHeader>
+              <h2>Compromisos recientes asignados</h2>
+              <BtnSecction onClick={() => goTo("/panel/management")}>
+                Ver más
+              </BtnSecction>
+            </WrapperSectionHeader>
+            <CommitmentCardList
+              commitments={state.commitmentsCurrentsManagement}
+              btnTitle="Ver compromiso"
+              btnUrlBase="/panel/traicing_commitment"
+            />
+          </>
+        )}
+      </Fragment>
     );
   };
 
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      {renderCommitments()}
-      {status.loader ? <Spinner /> : null}
-      {status.isError ? <Error /> : null}
-    </div>
-  );
+  return <Fragment>{state.userLoader ? <Spinner /> : renderView()}</Fragment>;
 };
 
 export default Dashboard;

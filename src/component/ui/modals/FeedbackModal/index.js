@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import Button from "@material-ui/core/Button";
+import Btn from "../../GeneralButton";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -8,103 +8,50 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import api from "../../../../helpers/api";
-import { ButtonAccept } from "./styled";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+import { rolName } from "../../../../helpers";
+import Alert from "@material-ui/lab/Alert";
 
 const FeedbackModal = ({
   openModalFeedback,
   closeModalFeedback,
   optionFeedback,
+  commitment,
 }) => {
   const [commitmentFeedback, setCommitmentFeedback] = useState({
     titleFeedback: "",
     descriptionFeedback: "",
   });
+  const [error, setError] = useState({
+    status: false,
+    message: "",
+    typeMessage: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const { titleFeedback, descriptionFeedback } = commitmentFeedback;
+  const history = useHistory();
+
+  //Handle change of form
   const updateCommitmentFeedback = (e) => {
     setCommitmentFeedback({
       ...commitmentFeedback,
       [e.target.name]: e.target.value,
     });
   };
-  const history = useHistory();
-  const [error, setError] = useState({
-    status: false,
-    message: "",
-    typeMessage: ""
-  });
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+
+  //Close the modal
+  const closeModal = () => {
+    closeModalFeedback();
     setError({
       ...error,
       status: false,
-      typeMessage: ""
+      message: "",
+      typeMessage: "",
     });
   };
-  const { titleFeedback, descriptionFeedback } = commitmentFeedback;
 
-  function AlertError(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
-
-  const successData = () => {
-    closeModalFeedback();
-    history.push("/panel/pool");
-  }
-
-  const fetchUpdateFeedback = async idCommitment => {
-    try {
-      let response = "";
-      response = await api.put(
-        `/commitmentsupdate/${idCommitment}`, {
-          feedback: descriptionFeedback
-        }
-      );
-      console.log(response);
-      setError({
-        status: true,
-        message:
-          "¡Excelente!, Su petición ha sido enviada exitosamente.", 
-        typeMessage: "success"
-      });
-      setTimeout(successData, 3000);
-    } catch (e) {
-      setError({
-        status: true,
-        message:
-          "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo", 
-        typeMessage: "error"
-      });
-      console.log(e);
-    }
-  }
-
-  const fetchUpdateState = async () => {
-    try {
-      let response = "";
-      const idCommitment = history.location.state.id;
-      if (optionFeedback === "aceptar") {
-        response = await api.put(
-          `/commitments/${idCommitment}/correcion`
-        );
-      } else {
-        response = await api.put(
-          `/commitments/${idCommitment}/declinado`
-        );
-      }
-      console.log(response);
-      if (response.status === 200) {
-        fetchUpdateFeedback(idCommitment);
-      } 
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const validateFeedback = e => {
-    e.preventDefault(); 
+  //function that validates that a fields is not empty
+  const validateFeedback = (e) => {
+    e.preventDefault();
     if (
       commitmentFeedback.titleFeedback === "" ||
       commitmentFeedback.descriptionFeedback === ""
@@ -112,23 +59,106 @@ const FeedbackModal = ({
       setError({
         status: true,
         message: "¡Ups!, parace que tienes campos sin rellenar.",
-        typeMessage: "error"
+        typeMessage: "error",
       });
     } else {
       setError({
         status: false,
         message: "",
-        typeMessage: ""
+        typeMessage: "",
       });
-      fetchUpdateState()
+      fetchUpdateState();
     }
-  }
+  };
+
+  //function to update the status
+  const fetchUpdateState = async () => {
+    setIsLoading(true);
+    try {
+      let formdata = new FormData();
+      let message = JSON.stringify({
+        title: commitmentFeedback.titleFeedback,
+        msg: commitmentFeedback.descriptionFeedback,
+      });
+
+      //Clear data error
+      setError({
+        status: false,
+        message: "",
+        typeMessage: "",
+      });
+
+      if (optionFeedback === "aceptar") {
+        if (rolName() === "assistant") {
+          //estructuring the formdata
+          formdata.append("status", "prevalidado");
+          formdata.append("feedback", "correccion");
+          formdata.append("message", message);
+          const response = await api.put(
+            `/commitments/${commitment.id}`,
+            formdata
+          );
+        } else {
+          //estructuring the formdata
+          formdata.append("status", "correccion");
+          formdata.append("message", message);
+          const response = await api.put(
+            `/commitments/${commitment.id}`,
+            formdata
+          );
+        }
+      } else {
+        if (rolName() === "assistant") {
+          //estructuring the formdata
+          formdata.append("status", "prevalidado");
+          formdata.append("feedback", "declinado");
+          formdata.append("message", message);
+          const response = await api.put(
+            `/commitments/${commitment.id}`,
+            formdata
+          );
+        } else {
+          //estructuring the formdata
+          formdata.append("status", "declinado");
+          formdata.append(
+            "message",
+            JSON.stringify({
+              title: null,
+              msg: null,
+            })
+          );
+          const response = await api.put(
+            `/commitments/${commitment.id}`,
+            formdata
+          );
+        }
+      }
+      setIsLoading(false);
+      successData();
+    } catch (e) {
+      setIsLoading(false);
+      console.log(e);
+      closeModalFeedback();
+    }
+  };
+
+  const successData = () => {
+    closeModalFeedback();
+    //Clear error
+    setError({
+      status: false,
+      message: "",
+      typeMessage: "",
+    });
+    //Go back
+    history.push("/panel/pool");
+  };
 
   return (
     <>
       <Dialog
         open={openModalFeedback}
-        onClose={closeModalFeedback}
+        onClose={closeModal}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -139,6 +169,7 @@ const FeedbackModal = ({
           <DialogContentText id="alert-dialog-description">
             Escribe aquí el titulo del mensaje que se enviará
           </DialogContentText>
+          {error.message && <Alert severity="error">{error.message}</Alert>}
           <TextField
             type="text"
             name="titleFeedback"
@@ -161,23 +192,23 @@ const FeedbackModal = ({
             value={descriptionFeedback}
             style={{ marginTop: "10px" }}
           />
-          <ButtonAccept onClick={validateFeedback}>Enviar</ButtonAccept>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeModalFeedback} color="secondary">
-            Cerrar
-          </Button>
+          <Btn
+            onClick={closeModal}
+            title="Cancelar"
+            type="secundary"
+            size="30%"
+          />
+          <Btn
+            onClick={validateFeedback}
+            title="Enviar"
+            size="40%"
+            type="primary-loader"
+            loader={isLoading}
+          />
         </DialogActions>
       </Dialog>
-      <Snackbar
-        open={error.status}
-        autoHideDuration={6000}
-        onClose={handleClose}
-      >
-        <AlertError onClose={handleClose} severity={error.typeMessage}>
-          {error.message}
-        </AlertError>
-      </Snackbar>
     </>
   );
 };

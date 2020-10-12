@@ -46,10 +46,11 @@ export const Wrapper = styled.div`
 `;
 
 export const Img = styled.img`
-  width: 25%;
-  height: 50%;
-  border-radius: 100%;
+  width: 15em;
+  height: 15em;
+  border-radius: 50%;
   margin-left: 2em;
+  margin-right: 2em;
   margin-top: 4em;
 `;
 

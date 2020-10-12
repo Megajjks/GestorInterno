@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment, useState } from "react";
 import {
   Wrapper,
   WrapperCheckTask,
@@ -21,11 +21,13 @@ import {
   WrapperStatusTask,
   StatusTask,
 } from "./styled";
+import AlertModal from "../modals/AlertModal";
 import IconCompleteTask from "../../../assets/img/complete.svg";
 import IconIncompleteTask from "../../../assets/img/incomplete.svg";
 import IconCloseTask from "../../../assets/img/close.svg";
 import IconClock from "../../../assets/img/clock.svg";
 import IconEdit from "../../../assets/img/editar.svg";
+import AvatarIco from "../../../assets/img/usercard.svg";
 
 function StatusTaskComplete({ status }) {
   return status === "true" ? (
@@ -50,56 +52,79 @@ function Priority({ priority }) {
 }
 
 const Task = ({
-  title,
-  description,
-  status,
-  priority,
-  date,
-  user,
+  task,
   isCollaborator,
   changeStatusTask,
+  prepareRemoveTask,
   removeTask,
   editTask,
 }) => {
+  const [showModalAlert, setShowModalAlert] = useState(false);
+
+  const showAlert = () => {
+    prepareRemoveTask();
+    setShowModalAlert(!showModalAlert);
+  };
+  const closeAlert = () => {
+    setShowModalAlert(!showModalAlert);
+  };
+
   return (
-    <Wrapper isCollaborator={isCollaborator}>
-      {isCollaborator && (
-        <WrapperCheckTask>
-          {status === "true" ? (
-            <CheckTask src={IconCompleteTask} onClick={changeStatusTask} />
-          ) : (
-            <CheckTask src={IconIncompleteTask} onClick={changeStatusTask} />
-          )}
-        </WrapperCheckTask>
-      )}
-      <TaskData>
-        <SectionEditTask>
-          <TitleTask>{title}</TitleTask>
-          {isCollaborator && (
-            <ImgEditTask src={IconEdit} alt="edit" onClick={editTask} />
-          )}
-        </SectionEditTask>
-        <WrapperInfo>
-          <ImgProfile src={user.image} />
-          <TxtIcon>{`${user.firstName} ${user.lastName}`}</TxtIcon>
-        </WrapperInfo>
-        <WrapperInfo>
-          <Icon src={IconClock} />
-          <TxtIcon>{date.substring(0, 10)}</TxtIcon>
-        </WrapperInfo>
-        <TxtDescriptionTask>{description}</TxtDescriptionTask>
-      </TaskData>
-      <WrapperPriority>
-        {isCollaborator ? (
-          <>
-            <CloseTask src={IconCloseTask} onClick={removeTask} />
-            <Priority priority={priority} />
-          </>
-        ) : (
-          <StatusTaskComplete status={status} />
+    <Fragment>
+      <Wrapper isCollaborator={isCollaborator}>
+        {isCollaborator && (
+          <WrapperCheckTask>
+            {task.status === "true" ? (
+              <CheckTask src={IconCompleteTask} onClick={changeStatusTask} />
+            ) : (
+              <CheckTask src={IconIncompleteTask} onClick={changeStatusTask} />
+            )}
+          </WrapperCheckTask>
         )}
-      </WrapperPriority>
-    </Wrapper>
+        <TaskData>
+          <SectionEditTask>
+            <TitleTask>
+              {task.title}{" "}
+              {isCollaborator && (
+                <ImgEditTask src={IconEdit} alt="edit" onClick={editTask} />
+              )}
+            </TitleTask>
+          </SectionEditTask>
+          <WrapperInfo>
+            <ImgProfile
+              src={
+                task.user.image
+                  ? `https://api.ashoka.hackademy.mx/${task.user.image}`
+                  : AvatarIco
+              }
+            />
+            <TxtIcon>{`${task.user.firstName} ${task.user.lastName}`}</TxtIcon>
+          </WrapperInfo>
+          <WrapperInfo>
+            <Icon src={IconClock} />
+            <TxtIcon>{task.date.substring(0, 10)}</TxtIcon>
+          </WrapperInfo>
+          <TxtDescriptionTask>{task.description}</TxtDescriptionTask>
+        </TaskData>
+        <WrapperPriority>
+          {isCollaborator ? (
+            <>
+              <CloseTask src={IconCloseTask} onClick={() => showAlert()} />
+              <Priority priority={task.priority} />
+            </>
+          ) : (
+            <StatusTaskComplete status={task.status} />
+          )}
+        </WrapperPriority>
+      </Wrapper>
+      <AlertModal
+        title="¿Estas seguro?"
+        message="Estas seguro de eliminar la tarea"
+        open={showModalAlert}
+        handleClose={closeAlert}
+        callback={removeTask}
+      />
+    </Fragment>
   );
 };
 

@@ -1,6 +1,5 @@
 export const initialState = {
   commitments: [],
-  commitmentsFilter: [],
   commitmentsLoader: false,
   commitmentsError: null,
   exportData: false,
@@ -9,4 +8,20 @@ export const initialState = {
   syncCommitmentsLoader: false,
   syncCommitmentsError: null,
   reload: false,
+  page: 1,
+  pageLimit: 1,
+
+  //Pool Filtro
+  searchFilter: {
+    agent: "",
+    collaborator: "",
+    userManagement: "",
+    user: "",
+    area: "",
+    state: "",
+    sector: "",
+    status: "",
+    rol: null,
+    isActive: null,
+  },
 };

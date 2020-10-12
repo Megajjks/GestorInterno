@@ -1,93 +1,119 @@
 import React, { Fragment, useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
-import { SearchBar } from "./styled";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
+import Pagination from "../../ui/Pagination";
 import api from "../../../helpers/api";
 import TracingTable from "../../ui/tables/TracingTable";
-import { dataStatus } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
+import FilterBar from "../../ui/FilterBar";
+import SendEmailModal from "../../ui/modals/SendEmailModal";
+import { BtnGroup } from "./styled";
 
 const Tracing = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const query = ["primer_contacto", "articulando", "cumplido", "archivado"];
   const history = useHistory();
-  const [searchString, setSearchString] = useState("");
 
+  //Functions to send in FilterBar
+  const getFilterCommitmentsTracing = () => {
+    dispatch({ type: actions.getCommitments });
+  };
+  const getFilterCommitmentsTracingSuccess = (data) => {
+    dispatch({
+      type: actions.getCommitmentsSuccess,
+      payload: {
+        commitments: data.items,
+        page: data.page,
+        pageLimit: data.limitPage,
+      },
+    });
+  };
+  const getFilterCommitmentsTracingError = (msg) => {
+    dispatch({
+      type: actions.getCommitmentsError,
+      payload: msg
+    });
+  };
+
+  //get commitments in tracing
   useEffect(() => {
     const fetchCommitment = async () => {
-      dispatch({ type: actions.getCommitments });
+      getFilterCommitmentsTracing();
       try {
-        const { data } = await api.get("/commitments/filter/tracing/");
+        const { data } = await api.get(
+          `/commitments/filter/tracing/?page=${state.page}`
+        );
+        getFilterCommitmentsTracingSuccess(data);
         dispatch({
-          type: actions.getCommitmentsSuccess,
-          payload: data,
+          type: actions.clearSearchFilter,
+          payload: { reset: "" },
         });
       } catch (e) {
-        dispatch({
-          type: actions.getCommitmentsError,
-          payload:
-            "Por el momento no se pueden obtener los datos, verifique su conexión",
-        });
+        getFilterCommitmentsTracingError(
+          "Por el momento no se pueden obtener los datos, verifique su conexión"
+        );
       }
     };
     fetchCommitment();
-  }, []);
-
-  useEffect(() => {
-    if (!searchString) {
-      return;
-    }
-    //const commitmentsBefore = [...commitments];
-    const busqueda = state.commitments.filter((item) => {
-      console.log(item);
-      const payload = searchString.toLowerCase();
-      const organization = item.organization.toLowerCase();
-      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
-      const city = item.city.toLowerCase();
-      const status = item.status.toLowerCase();
-      const sector = item.sector.toLowerCase();
-      const state = item.state.toLowerCase();
-
-      if (searchString === "") {
-        return dispatch({
-          type: actions.filterCommitments,
-          payload: state.commitments,
-        });
-      } else if (
-        organization.includes(payload) ||
-        agent.includes(payload) ||
-        city.includes(payload) ||
-        state.includes(payload) ||
-        sector.includes(payload) ||
-        status.includes(dataStatus(payload).tag)
-      ) {
-        return item;
-      }
-    });
-    dispatch({ type: actions.filterCommitments, payload: busqueda });
-  }, [searchString]);
+  }, [state.page]);
 
   const viewDetails = (item) => {
     history.push({
       pathname: `/panel/traicing_commitment/${item.id}`,
-      state: item.id,
+      state: item,
     });
   };
 
-  const search = (e) => {
-    const { value } = e.target;
-    setSearchString(value);
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
+  };
+
+  //Function to filter
+  const handleSearchFilter = (field, value) => {
+    dispatch({ type: actions.setSearchFilter, payload: { field, value } });
+  };
+
+  const renderTracingTable = () => {
+    if (state.commitmentsError) return <Error />;
+    return (
+      <>
+        <TracingTable
+          commitments={state.commitments}
+          viewDetails={viewDetails}
+        />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
+    );
   };
 
   return (
     <Fragment>
-      <h1>Seguimiento de los compromisos</h1>
-      <SearchBar value={searchString} onChange={search} />
-      <TracingTable commitments={state.commitments} viewDetails={viewDetails} />
-      {state.commitmentsLoader ? <Spinner /> : null}
-      {state.commitmentsError ? <Error /> : null}
+      <BtnGroup>
+        <h1 style={{ marginRight: "10.5em" }}>
+          Seguimiento de los compromisos</h1>
+          <SendEmailModal
+            state={state}
+            typeTable={"tracing"}
+          />
+      </BtnGroup>
+      <FilterBar
+        state={state}
+        status={query}
+        typeTable={"tracing"}
+        getFilterCommitmentsTracing={getFilterCommitmentsTracing}
+        getFilterCommitmentsTracingSuccess={getFilterCommitmentsTracingSuccess}
+        getFilterCommitmentsTracingError={getFilterCommitmentsTracingError}
+        handleSearchFilter={handleSearchFilter}
+      />
+      {state.commitmentsLoader ? <Spinner /> : renderTracingTable()}
     </Fragment>
   );
 };

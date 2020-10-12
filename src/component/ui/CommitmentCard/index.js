@@ -20,7 +20,7 @@ const CommitmentCard = ({ data, btnTitle, onClick }) => {
   return (
     <div style={{ display: "flex", justifyContent: "space-beetwen" }}>
       <Wrapper>
-        <Logo src={data.logo} />
+        <Logo src={`https://api.ashoka.hackademy.mx/${data.img}`} />
         <TxtPrimary> {data.organization} </TxtPrimary>
         <Badge style={{ alignSelf: "flex-start", padding: ".5rem 0" }}>
           <SvgImg src={User} />

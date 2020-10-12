@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, Fragment } from "react";
 import { CommitmentContext } from "../../../context/CommitmentContext";
 import { actions } from "../../../context/CommitmentContext/actions";
 
@@ -8,6 +8,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import Alert from "@material-ui/lab/Alert";
 import { useStyles } from "./styled";
 import api from "../../../../helpers/api";
 
@@ -37,11 +38,10 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
       dispatch({ type: actions.addTask });
       const fetchTask = async () => {
         const response = await api.post("/tasks", {
-          title: state.newTask.title,
-          description: state.newTask.description,
-          status: true,
+          ...state.newTask,
+          status: false,
           priority: "low",
-          date: state.newTask.date,
+          commitmentId: state.commitment.id,
           collaboratorId: id,
         });
         dispatch({ type: actions.addTaskSuccess, payload: !state.reloadTasks });
@@ -54,8 +54,8 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
 
   //save data after edit the task
   const saveTask = async () => {
-    console.log("guardando la tarea");
     //request to save change of task
+    dispatch({ type: actions.updateTask });
     try {
       const response = await api.put(
         `/tasks/${state.newTask.id}`,
@@ -78,14 +78,8 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
     dispatch({ type: actions.closeModalEditTask, payload: false });
   };
 
-  const dataFormat = (dates) => {
-    const date = new Date(dates);
-    console.log(dates);
-    return date;
-  };
-
   return (
-    <>
+    <Fragment>
       <Dialog
         open={openNewTask}
         onClose={isEdit ? closeModalEditTask : closeModalNewTask}
@@ -96,6 +90,9 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
           {"Crear Tarea"}
         </DialogTitle>
         <DialogContent>
+          {state.newTaskError && (
+            <Alert severity="error">{state.newTaskError}</Alert>
+          )}
           <form>
             <TextField
               type="text"
@@ -139,19 +136,31 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
         </DialogContent>
         <DialogActions>
           <Button
-            title="Cerrar"
-            onClick={isEdit ? closeModalEditTask : closeModalNewTask}
+            title="Cancelar"
+            onClick={closeModalEditTask}
             type="secundary"
             size="30%"
           />
           {isEdit ? (
-            <Button title="Guardar Tarea" onClick={saveTask} size="40%" />
+            <Button
+              title="Guardar Tarea"
+              onClick={saveTask}
+              size="40%"
+              type="primary-loader"
+              loader={state.newTaskLoading}
+            />
           ) : (
-            <Button title="Agregar Tarea" onClick={addTask} size="40%" />
+            <Button
+              title="Agregar Tarea"
+              onClick={addTask}
+              size="40%"
+              type="primary-loader"
+              loader={state.newTaskLoading}
+            />
           )}
         </DialogActions>
       </Dialog>
-    </>
+    </Fragment>
   );
 };
 

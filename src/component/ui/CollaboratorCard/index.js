@@ -17,7 +17,6 @@ const CollaboratorCard = ({ collaborator }) => {
   const { state, dispatch } = useContext(CommitmentContext);
   const [showModal, setShowColModal] = useState(false);
   const [deleted, setDeleted] = useState(false);
-  const token = JSON.parse(localStorage.getItem("login_data")).accessToken;
 
   //Alert modal functions
   const handleShowModal = () => setShowColModal(true);
@@ -56,7 +55,11 @@ const CollaboratorCard = ({ collaborator }) => {
     <Fragment>
       <Colaborator>
         <ImgCollaborator
-          src={collaborator.image ? collaborator.image : AvatarIco}
+          src={
+            collaborator.image
+              ? `https://api.ashoka.hackademy.mx/${collaborator.image}`
+              : AvatarIco
+          }
           alt="profile img"
         />
         <NameColaborator>
@@ -76,7 +79,7 @@ const CollaboratorCard = ({ collaborator }) => {
         message="Estas seguro de eliminar al colaborador"
         open={showModal}
         handleClose={handlecloseModal}
-        callback={setDeleted}
+        callback={() => setDeleted(true)}
       />
     </Fragment>
   );

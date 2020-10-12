@@ -10,7 +10,9 @@ export const reducer = (state, action) => {
     case actions.getCommitmentsSuccess:
       return {
         ...state,
-        commitments: action.payload,
+        commitments: action.payload.commitments,
+        page: action.payload.page,
+        pageLimit: action.payload.pageLimit,
         commitmentsLoader: false,
       };
     case actions.getCommitmentsError:
@@ -19,10 +21,36 @@ export const reducer = (state, action) => {
         commitmentsLoader: false,
         commitmentsError: true,
       };
-    case actions.filterCommitments:
+    case actions.setPage:
       return {
         ...state,
-        commitmentsFilter: action.payload,
+        page: action.payload,
+      };
+    //Filter cases
+    case actions.setSearchFilter:
+      return {
+        ...state,
+        searchFilter: {
+          ...state.searchFilter,
+          [action.payload.field]: action.payload.value,
+        },
+      };
+    case actions.clearSearchFilter:
+      return {
+        ...state,
+        searchFilter: {
+          ...state.searchFilter,
+          agent: action.payload.reset,
+          collaborator: action.payload.reset,
+          userManagement: action.payload.reset,
+          user: action.payload.reset,
+          area: action.payload.reset,
+          state: action.payload.reset,
+          sector: action.payload.reset,
+          status: action.payload.reset,
+          rol: action.payload.reset,
+          isActive: action.payload.reset,
+        },
       };
     default:
       return state;

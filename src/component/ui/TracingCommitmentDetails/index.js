@@ -4,10 +4,13 @@ import { actions } from "../../context/CommitmentContext/actions";
 import { useHistory } from "react-router-dom";
 import Button from "../GeneralButton";
 import TaskList from "../TaskList";
+import MilestoneCardList from "../MilestoneCardList";
 import CollaboratorCardList from "../CollaboratorCardList";
 import Spinner from "../Spinner";
 import Error from "../alerts/Error";
+import Pagination from "../../ui/Pagination";
 import WithoutTasks from "../alerts/WithoutTasks";
+import WithoutMilestones from "../alerts/WithoutMilestones";
 import {
   dataStatus,
   filterWithRol,
@@ -22,7 +25,9 @@ import Menu from "@material-ui/core/Menu";
 import AddIco from "../../../assets/img/add.svg";
 import TaskIco from "../../../assets/img/gestion.svg";
 import EyeIco from "../../../assets/img/eye.svg";
+import MilestoneIco from "../../../assets/img/milestone.svg";
 import StatusIco from "../../../assets/img/point.svg";
+import TasksIco from "../../../assets/img/tasks.svg";
 import ModalCreateTask from "../modals/CreateTaskModal";
 import {
   Wrapper,
@@ -50,7 +55,7 @@ const TracingCommitmentDetails = (props) => {
     const getCommitment = async () => {
       dispatch({ type: actions.getCommitment });
       try {
-        const url = `/commitments/${history.location.state}`;
+        const url = `/commitments/${history.location.state.id}`;
         const { data } = await api.get(url);
         dispatch({ type: actions.getCommitmentSuccess, payload: data });
       } catch (e) {
@@ -60,11 +65,11 @@ const TracingCommitmentDetails = (props) => {
         });
       }
     };
-
+    //getListCollaborator
     const getListCollaborator = async () => {
       dispatch({ type: actions.getCollaboratorsList });
       try {
-        const url = `/missingCollaborators/${history.location.state}`;
+        const url = `/missingCollaborators/${history.location.state.id}`;
         const { data } = await api.get(url);
         dispatch({
           type: actions.getCollaboratorsListSuccess,
@@ -86,8 +91,17 @@ const TracingCommitmentDetails = (props) => {
     const getTasks = async () => {
       dispatch({ type: actions.getTasksList });
       try {
-        const { data } = await api.get("/tasks");
-        dispatch({ type: actions.getTasksListSuccess, payload: data });
+        const { data } = await api.get(
+          `/tasks/commitment/${history.location.state.id}/?page=${state.page}`
+        );
+        dispatch({
+          type: actions.getTasksListSuccess,
+          payload: {
+            tasks: data.items,
+            page: data.page,
+            pageLimit: data.limitPage,
+          },
+        });
       } catch {
         dispatch({
           type: actions.getTasksListError,
@@ -96,8 +110,40 @@ const TracingCommitmentDetails = (props) => {
         });
       }
     };
-    getTasks();
-  }, [state.reload, state.reloadTasks]);
+    //this function only exect when the pagination greather than 1 and the status commitment is not complet
+    if (state.page >= 1 && state.commitment.status !== "cumplido") {
+      getTasks();
+    }
+  }, [state.reload, state.reloadTasks, state.page]);
+
+  //get Milestones
+  useEffect(() => {
+    const getMilestones = async () => {
+      dispatch({ type: actions.getMilestones });
+      try {
+        const { data } = await api.get(
+          `/milestones/${history.location.state.id}/?page=${state.page}`
+        );
+        dispatch({
+          type: actions.getMilestonesSuccess,
+          payload: {
+            milestones: data.items,
+            page: data.page,
+            pageLimit: data.limitPage,
+          },
+        });
+      } catch {
+        dispatch({
+          type: actions.getMilestonesError,
+          payload: "Ocurrió un error al momento de traer la lista de logros",
+        });
+      }
+    };
+    //this function only exect when the pagination greather than 1 and the status commitment is complet
+    if (state.page >= 1 && state.commitment.status !== "cumplido") {
+      getMilestones();
+    }
+  }, [state.reload, state.page]);
 
   //post to add colaborador in commitment
   const addCollaborator = () => {
@@ -140,8 +186,8 @@ const TracingCommitmentDetails = (props) => {
     //Put request that change the status of commitment
     dispatch({ type: actions.updateStatusCommitment });
     try {
-      const url = `/commitments/${state.commitment.id}/${status}`;
-      const response = await api.put(url);
+      const url = `/commitments/${state.commitment.id}`;
+      const response = await api.put(url, { ...state.commitment, status });
       dispatch({
         type: actions.updateStatusCommitmentSuccess,
         payload: !state.reload,
@@ -182,6 +228,29 @@ const TracingCommitmentDetails = (props) => {
     });
   };
 
+  //function to show milestones
+  const showMilestonesCommitment = () => {
+    history.push({
+      pathname: `${history.location.pathname}/milestones`,
+      state: {
+        id: state.commitment.id,
+        isCollaborator: matchUser(state.commitment.collaborators),
+        organization: state.commitment.organization,
+      },
+    });
+  };
+
+  //function to show tasks
+  const showTasksCommitment = () => {
+    history.push({
+      pathname: `${history.location.pathname}/tasks`,
+      state: {
+        id: state.commitment.id,
+        organization: state.commitment.organization,
+      },
+    });
+  };
+
   //function to view and edit status
   const handleDropdownStatus = (event) => {
     dispatch({
@@ -198,6 +267,11 @@ const TracingCommitmentDetails = (props) => {
     dispatch({ type: actions.setColaborator, payload: item });
   };
 
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
+  };
+
   const renderTasks = () => {
     if (state.tasksError) {
       return <Error content={state.tasksError} />;
@@ -211,11 +285,58 @@ const TracingCommitmentDetails = (props) => {
       );
     }
     return (
-      <TaskList
-        tasks={state.tasks}
-        isCollaborator={matchUser(state.commitment.collaborators)}
-      />
+      <>
+        <TaskList
+          tasks={state.tasks}
+          isCollaborator={matchUser(state.commitment.collaborators)}
+        />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
     );
+  };
+
+  const renderMilestones = () => {
+    if (state.milestonesError) {
+      return <Error content={state.milestonesError} />;
+    }
+    if (state.milestones.length === 0) {
+      return (
+        <WithoutMilestones
+          title="¡Oh! no se tienen logros en este compromiso"
+          content="Este compromiso no cuenta con logros a pesar que ha finalizado"
+        />
+      );
+    }
+    return (
+      <>
+        <MilestoneCardList
+          milestones={state.milestones}
+          isCollaborator={false}
+          isPage={false}
+        />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
+    );
+  };
+
+  const renderFinishCommitment = () => {
+    //validate if empty commitment
+    if (Object.entries(state.commitment).length <= 1) {
+      return <Error />;
+    }
+    //validate if is complete commitment
+    if (state.commitment.status === "cumplido") {
+      return renderMilestones();
+    }
+    return renderTasks();
   };
 
   const renderView = () => {
@@ -224,14 +345,19 @@ const TracingCommitmentDetails = (props) => {
         <h1> {state.commitment.organization} </h1>
         <Wrapper>
           <WrapperTask>
-            {state.tasksLoading ? <Spinner /> : renderTasks()}
+            {state.tasksLoading || state.milestonesLoading ? (
+              <Spinner />
+            ) : (
+              renderFinishCommitment()
+            )}
           </WrapperTask>
           <WrapperOpc>
             <Options>
               {/*this button (add task) will be hidden if  user_id not is not assigned how collaborator of commitment*/}
-              {matchUser(state.commitment.collaborators) ? (
-                <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
-              ) : null}
+              {!matchUser(state.commitment.collaborators) ||
+                (state.commitment.status !== "cumplido" && (
+                  <Button title="Nueva tarea" ico={TaskIco} onClick={addTask} />
+                ))}
 
               <Button
                 title="Detalles"
@@ -248,6 +374,21 @@ const TracingCommitmentDetails = (props) => {
                 ico={StatusIco}
                 onClick={handleDropdownStatus}
               />
+              {state.commitment.status === "cumplido" ? (
+                <Button
+                  title="Tareas"
+                  type="secundary"
+                  ico={TasksIco}
+                  onClick={showTasksCommitment}
+                />
+              ) : (
+                <Button
+                  title="Logros"
+                  type="secundary"
+                  ico={MilestoneIco}
+                  onClick={showMilestonesCommitment}
+                />
+              )}
               <Menu
                 id="simple-menu"
                 anchorEl={state.dropdownStatus}
@@ -283,9 +424,9 @@ const TracingCommitmentDetails = (props) => {
                       />
                       Archivado
                     </MenuItems>
-                    <MenuItems onClick={() => changeStatus("correcion")}>
+                    <MenuItems onClick={() => changeStatus("correccion")}>
                       <CircleStatus
-                        color={dataStatus("correcion").background}
+                        color={dataStatus("correccion").background}
                       />
                       En correcion
                     </MenuItems>

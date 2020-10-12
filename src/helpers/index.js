@@ -1,5 +1,25 @@
 /* Generic functions that can be reused for extra behavior */
 
+/* Import resources that React toastify needs */
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+/* Function that return a notify pop */
+export const notify = (type, msg) => {
+  switch (type) {
+    case "success":
+      return toast.success(msg, { position: toast.POSITION.TOP_RIGHT });
+    case "info":
+      return toast.info(msg, { position: toast.POSITION.TOP_RIGHT });
+    case "warn":
+      return toast.warn(msg, { position: toast.POSITION.TOP_RIGHT });
+    case "error":
+      return toast.error(msg, { position: toast.POSITION.TOP_RIGHT });
+    default:
+      return toast(msg, { position: toast.POSITION.TOP_RIGHT });
+  }
+};
+
 /* This function return a dataStatus based on a status */
 export const dataStatus = (status) => {
   switch (status) {
@@ -48,14 +68,14 @@ export const dataStatus = (status) => {
         color: "#FFFFFF",
         tag: "archivado",
       };
-    case "correcion":
+    case "correccion":
     case "En corrección":
     case "En correccion":
       return {
         value: "En corrección",
         background: "#FFE110",
         color: "#000000",
-        tag: "correcion",
+        tag: "correccion",
       };
     case "declinado":
     case "rechazado":
@@ -201,7 +221,20 @@ export const area = [
   "Venture y Fellowship",
 ];
 
-//This function return the name of rol
+export const isActiveUser = [
+  { value: true, tag: "Activo" },
+  { value: false, tag: "Deshabilitado" },
+];
+
+export const roles = [
+  { value: 4, tag: "Super Admin" },
+  { value: 1, tag: "Admin" },
+  { value: 5, tag: "Asistente" },
+  { value: 2, tag: "Colaborador" },
+  { value: 3, tag: "Agente" },
+];
+
+//This function return the name of rol take in localStorage
 export const rolName = () => {
   let rol = localStorage.getItem("login_data")
     ? JSON.parse(localStorage.getItem("login_data")).role
@@ -222,6 +255,54 @@ export const rolName = () => {
   }
 };
 
+//This function return the name of rol by parameter
+export const rolNameUser = (rol) => {
+  switch (rol) {
+    case 1:
+      return {
+        value: "Admin",
+        tag: "admin",
+        background: "#E64A19",
+        color: "#FFFFFF",
+      };
+    case 2:
+      return {
+        value: "Colaborador",
+        tag: "collaborator",
+        background: "#01579b",
+        color: "#FFFFFF",
+      };
+    case 3:
+      return {
+        value: "Agente",
+        tag: "agent",
+        background: "#00796B",
+        color: "#FFFFFF",
+      };
+    case 4:
+      return {
+        value: "Super Admin",
+        tag: "superAdmin",
+        background: "#0D0D0D",
+        color: "#FFFFFF",
+      };
+    case 5:
+      return {
+        value: "Asistente",
+        tag: "assistant",
+        background: "#FFA000",
+        color: "#212121",
+      };
+    default:
+      return {
+        value: "sin rol",
+        tag: "notRol",
+        background: "#D32F2F",
+        color: "#FFFFFF",
+      };
+  }
+};
+
 //This function return if the userId is match with list of collaborators
 export const matchUser = (listCollaborators) => {
   let userId = localStorage.getItem("login_data")
@@ -232,6 +313,7 @@ export const matchUser = (listCollaborators) => {
     const isMatch = listCollaborators.some(function (collaborator) {
       if (collaborator.id === userId) return true;
     });
+    console.log(isMatch);
     return isMatch;
   } catch (e) {
     console.log(e);

@@ -10,11 +10,6 @@ export const reducer = (state, action) => {
           [action.name]: action.payload,
         },
       };
-    case actions.toggleModal:
-      return {
-        ...state,
-        open: !state.open,
-      };
     case actions.fetchLogin:
       return {
         ...state,
@@ -32,7 +27,6 @@ export const reducer = (state, action) => {
         ...state,
         loginLoading: false,
         loginError: action.payload,
-        open: true,
       };
     default:
       return state;

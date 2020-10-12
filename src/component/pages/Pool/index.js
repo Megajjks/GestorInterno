@@ -4,81 +4,67 @@ import PoolTable from "../../ui/tables/PoolTable";
 import Btn from "../../ui/GeneralButton";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
+import Pagination from "../../ui/Pagination";
 import api from "../../../helpers/api";
-import { dataStatus, existSync } from "../../../helpers";
+import { WrapperHeader, BtnGroup } from "./styled";
+import { existSync, notify } from "../../../helpers";
 import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
-import { WrapperHeader, BtnGroup, SearchBar } from "./styled";
 import IcoExport from "../../../assets/img/download.svg";
 import IcoSync from "../../../assets/img/sync.svg";
+import FilterBar from "../../ui/FilterBar";
+import SendEmailModal from "../../ui/modals/SendEmailModal";
+import { ToastContainer } from "react-toastify";
 
 const Pool = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const query = ["prevalidado", "validando", "correccion", "falla"];
   const history = useHistory();
-  const [searchString, setSearchString] = useState("");
 
-  //get commitments
+  //Functions to send in FilterBar
+  const getFilterCommitmentsPool = () => {
+    dispatch({ type: actions.getCommitments });
+  };
+  const getFilterCommitmentsPoolSuccess = (data) => {
+    dispatch({
+      type: actions.getCommitmentsSuccess,
+      payload: {
+        commitments: data.items,
+        existSync: existSync(data.items),
+        page: data.page,
+        pageLimit: data.limitPage,
+      },
+    });
+  };
+  const getFilterCommitmentsPoolError = (msg) => {
+    dispatch({
+      type: actions.getCommitmentsError,
+      payload: msg,
+    });
+  };
+
+  //get commitments in pool
   useEffect(() => {
     const fetchCommitment = async () => {
-      dispatch({ type: actions.getCommitments });
+      getFilterCommitmentsPool();
       try {
-        const { data } = await api.get("/commitments/filter/pool/");
+        const { data } = await api.get(
+          `/commitments/filter/pool/?page=${state.page}`
+        );
+        getFilterCommitmentsPoolSuccess(data);
         dispatch({
-          type: actions.getCommitmentsSuccess,
-          payload: {
-            commitments: data,
-            existSync: existSync(data),
-          },
+          type: actions.clearSearchFilter,
+          payload: { reset: "" },
         });
       } catch (e) {
-        dispatch({
-          type: actions.getCommitmentsError,
-          payload:
-            "Por el momento no se pueden obtener los datos, verifique su conexión",
-        });
+        getFilterCommitmentsPoolError(
+          "Por el momento no se pueden obtener los datos, verifique su conexión"
+        );
       }
     };
     fetchCommitment();
-  }, [state.reload]);
-
-  //Logic of search bar
-  useEffect(() => {
-    if (!searchString) {
-      return;
-    }
-    const busqueda = state.commitments.filter((item) => {
-      const payload = searchString.toLowerCase();
-      const organization = item.organization.toLowerCase();
-      const agent = `${item.firstName.toLowerCase()}  ${item.lastName.toLowerCase()}`;
-      const city = item.city.toLowerCase();
-      const status = item.status.toLowerCase();
-      const sector = item.sector.toLowerCase();
-      const state = item.state.toLowerCase();
-
-      if (searchString === "") {
-        return dispatch({
-          type: actions.filterCommitments,
-          payload: state.commitments,
-        });
-      } else if (
-        organization.includes(payload) ||
-        agent.includes(payload) ||
-        city.includes(payload) ||
-        state.includes(payload) ||
-        sector.includes(payload) ||
-        status.includes(dataStatus(payload).tag)
-      ) {
-        return item;
-      }
-    });
-    dispatch({ type: actions.filterCommitments, payload: busqueda });
-  }, [searchString]);
-
-  const search = (e) => {
-    const { value } = e.target;
-    setSearchString(value);
-  };
+  }, [state.reload, state.page]);
 
   //View details of one commitment
   const viewDetails = (item) => {
@@ -108,8 +94,10 @@ const Pool = () => {
         document.body.appendChild(link);
         link.click();
         link.remove();
+        notify("success", "💾  Datos exportados correctamente");
       })
       .catch((e) => {
+        notify("error", "⚠️ Problemas al momento de descargar el archivo");
         dispatch({
           type: actions.exportDataError,
           payload: "Problemas al momento de descargar el archivo",
@@ -122,13 +110,39 @@ const Pool = () => {
     dispatch({ type: actions.sync });
     try {
       const { data } = await api.post("/resendall/");
+      notify("success", "🔃  Compromisos sincronizados correctamente");
       dispatch({ type: actions.syncSucess, payload: !state.reload });
     } catch {
+      notify("error", "⚠️ Problemas al momento de sincronizar los compromisos");
       dispatch({
         type: actions.syncError,
         payload: "Problemas al sincronizar los compromisos",
       });
     }
+  };
+
+  // handle Change Pagination
+  const handleChangePagination = (event, value) => {
+    dispatch({ type: actions.setPage, payload: value });
+  };
+
+  //Function to filter
+  const handleSearchFilter = (field, value) => {
+    dispatch({ type: actions.setSearchFilter, payload: { field, value } });
+  };
+
+  const renderPoolTable = () => {
+    if (state.commitmentsError) return <Error />;
+    return (
+      <>
+        <PoolTable commitments={state.commitments} viewDetails={viewDetails} />
+        <Pagination
+          count={state.pageLimit}
+          page={state.page}
+          callBack={handleChangePagination}
+        />
+      </>
+    );
   };
 
   return (
@@ -155,11 +169,19 @@ const Pool = () => {
             loader={state.exportData}
           />
         </BtnGroup>
+        <SendEmailModal state={state} typeTable={"pool"} />
       </WrapperHeader>
-      <SearchBar value={searchString} onChange={search} />
-      <PoolTable commitments={state.commitments} viewDetails={viewDetails} />
-      {state.commitmentsLoader ? <Spinner /> : null}
-      {state.commitmentsError ? <Error /> : null}
+      <FilterBar
+        state={state}
+        status={query}
+        typeTable={"pool"}
+        getFilterCommitmentsPool={getFilterCommitmentsPool}
+        getFilterCommitmentsPoolSuccess={getFilterCommitmentsPoolSuccess}
+        getFilterCommitmentsPoolError={getFilterCommitmentsPoolError}
+        handleSearchFilter={handleSearchFilter}
+      />
+      {state.commitmentsLoader ? <Spinner /> : renderPoolTable()}
+      <ToastContainer />
     </Fragment>
   );
 };

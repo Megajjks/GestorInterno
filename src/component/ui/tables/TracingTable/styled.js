@@ -24,35 +24,33 @@ export const Details = styled.div`
   font-weight: bold;
   cursor: pointer;
 `;
-export const SearchBar = styled.input`
-  outline: none;
-  font-family: inherit;
-  font-size: 100%;
-  background: #f3f4f8
-    url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat
-    9px center;
-  border: solid 1px #ccc;
-  padding: 9px 10px 9px 32px;
-  width: 1em;
-  margin-bottom: 1em;
 
-  -webkit-border-radius: 10em;
-  -moz-border-radius: 10em;
-  border-radius: 10em;
-
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  transition: all 0.5s;
-
-  &:focus {
-    width: 12em;
-    background-color: #fff;
-    border-color: ${({ theme: { colors } }) => colors.background};
-
-    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
-      0 1px 2px rgba(0, 0, 0, 0.24);
-    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
-      0 1px 2px rgba(0, 0, 0, 0.24);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+export const WrapperInputRadio = styled.div`
+  width: 2em;
+  display: flex;
+  justify-content: flex-start;
+  @media (max-width: 1024px) {
+    width: 35em;
   }
+  @media (max-width: 768px) {
+    width: 28em;
+  }
+`;
+
+export const Chip = styled.div`
+  border-radius: 2em;
+  display: inline-block;
+  font-size: 0.8em;
+  line-height: 1em;
+  font-weight: bold;
+  padding: 0.25em 0.75em;
+  background: ${(props) => props.background};
+  color: ${(props) => props.txtColor};
+`;
+export const InputRadio = styled.input`
+  align-self: flex-start;
+  font-weight: 400;
+  color: ${({ theme: { colors } }) => colors.black};
+  display: block;
+  margin-bottom: 1rem;
 `;
