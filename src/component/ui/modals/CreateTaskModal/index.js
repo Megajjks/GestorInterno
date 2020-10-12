@@ -55,6 +55,7 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
   //save data after edit the task
   const saveTask = async () => {
     //request to save change of task
+    dispatch({ type: actions.updateTask });
     try {
       const response = await api.put(
         `/tasks/${state.newTask.id}`,
@@ -136,14 +137,26 @@ const CreateTaskModal = ({ openNewTask, closeModalNewTask, isEdit }) => {
         <DialogActions>
           <Button
             title="Cancelar"
-            onClick={isEdit ? closeModalEditTask : closeModalNewTask}
+            onClick={closeModalEditTask}
             type="secundary"
             size="30%"
           />
           {isEdit ? (
-            <Button title="Guardar Tarea" onClick={saveTask} size="40%" />
+            <Button
+              title="Guardar Tarea"
+              onClick={saveTask}
+              size="40%"
+              type="primary-loader"
+              loader={state.newTaskLoading}
+            />
           ) : (
-            <Button title="Agregar Tarea" onClick={addTask} size="40%" />
+            <Button
+              title="Agregar Tarea"
+              onClick={addTask}
+              size="40%"
+              type="primary-loader"
+              loader={state.newTaskLoading}
+            />
           )}
         </DialogActions>
       </Dialog>

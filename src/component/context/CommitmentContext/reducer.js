@@ -170,6 +170,12 @@ export const reducer = (state, action) => {
         newTaskLoading: false,
         newTaskError: action.payload,
       };
+    case actions.updateTask:
+      return {
+        ...state,
+        msgError: null,
+        newTaskLoading: true,
+      };
     case actions.updateTaskSuccess:
       return {
         ...state,
@@ -180,11 +186,13 @@ export const reducer = (state, action) => {
         },
         reloadTasks: action.payload,
         msgError: null,
+        newTaskLoading: false,
         showModalTask: false,
       };
     case actions.updateTaskError:
       return {
         ...state,
+        newTaskLoading: false,
         msgError: action.payload,
         showModalTask: false,
       };
@@ -269,8 +277,8 @@ export const reducer = (state, action) => {
     case actions.addMilestone:
       return {
         ...state,
-        milestoneLoading: true,
-        milestonesError: null,
+        milestonesLoadingModal: true,
+        milestonesMsgError: null,
       };
     case actions.addMilestoneSuccess:
       return {
@@ -281,15 +289,21 @@ export const reducer = (state, action) => {
           date: "",
         },
         showModalMilestone: false,
-        milestonesLoading: false,
+        milestonesLoadingModal: false,
         reloadMilestones: action.payload,
       };
     case actions.addMilestoneError:
       return {
         ...state,
         showModalMilestone: true,
-        milestonesLoading: false,
-        milestonesError: action.payload,
+        milestonesLoadingModal: false,
+        milestonesMsgError: action.payload,
+      };
+    case actions.updateMilestone:
+      return {
+        ...state,
+        milestonesLoadingModal: true,
+        milestonesMsgError: null,
       };
     case actions.updateMilestoneSuccess:
       return {
@@ -299,6 +313,7 @@ export const reducer = (state, action) => {
           description: "",
           date: "",
         },
+        milestonesLoadingModal: false,
         reloadMilestones: action.payload,
         msgError: null,
         showModalMilestone: false,
@@ -306,6 +321,7 @@ export const reducer = (state, action) => {
     case actions.updateMilestoneError:
       return {
         ...state,
+        milestonesLoadingModal: false,
         msgError: action.payload,
         showModalMilestone: false,
       };
@@ -314,7 +330,7 @@ export const reducer = (state, action) => {
         ...state,
         showModalMilestone: action.payload,
         isEditModalMilestone: false,
-        milestonesError: null,
+        milestonesMsgError: null,
       };
     case actions.showModalEditMilestone:
       return {
@@ -332,6 +348,7 @@ export const reducer = (state, action) => {
           date: "",
         },
         showModalMilestone: action.payload,
+        milestonesMsgError: null,
       };
     case actions.removeMilestone:
       return {
