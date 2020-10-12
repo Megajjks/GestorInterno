@@ -9,6 +9,6 @@ export const BtnGroup = styled.div`
   width: 50%;
   display: flex;
   justify-content: ${(props) =>
-    props.showBtnSycn ? "space-evenly" : "flex-end"};
+    props.showBtnSycn ? "space-around" : "flex-end"};
   align-items: center;
 `;
