@@ -44,12 +44,23 @@ const FilterBar = ({
       switch (typeTable) {
         case "pool":
           if (
-            state.searchFilter.agent !== "" ||
-            state.searchFilter.area !== "" ||
-            state.searchFilter.state !== "" ||
-            state.searchFilter.sector !== "" ||
+            state.searchFilter.agent !== "" &&
+            state.searchFilter.area !== "" &&
+            state.searchFilter.state !== "" &&
+            state.searchFilter.sector !== "" &&
             state.searchFilter.status !== ""
           ) {
+            getFilterCommitmentsPool();
+            try {
+              const url = `/commitments/filter/pool/?page=${state.page}`;
+              const { data } = await api.get(url);
+              getFilterCommitmentsPoolSuccess(data);
+            } catch (error) {
+              getFilterCommitmentsPoolError(
+                "Por el momento no se pueden obtener los datos, verifique su conexión"
+              );
+            }
+          } else {
             getFilterCommitmentsPool();
             try {
               let params = null;
@@ -72,12 +83,23 @@ const FilterBar = ({
           break;
         case "tracing":
           if (
-            state.searchFilter.collaborator !== "" ||
-            state.searchFilter.area !== "" ||
-            state.searchFilter.state !== "" ||
-            state.searchFilter.sector !== "" ||
+            state.searchFilter.collaborator !== "" &&
+            state.searchFilter.area !== "" &&
+            state.searchFilter.state !== "" &&
+            state.searchFilter.sector !== "" &&
             state.searchFilter.status !== ""
           ) {
+            getFilterCommitmentsTracing();
+            try {
+              const url = `/commitments/filter/tracing/?page=${state.page}`;
+              const { data } = await api.get(url);
+              getFilterCommitmentsTracingSuccess(data);
+            } catch (error) {
+              getFilterCommitmentsTracingError(
+                "Por el momento no se pueden obtener los datos, verifique su conexión"
+              );
+            }
+          } else {
             getFilterCommitmentsTracing();
             try {
               let params = null;

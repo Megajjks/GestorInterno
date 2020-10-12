@@ -7,12 +7,14 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Btn from "../../GeneralButton";
 import api from "../../../../helpers/api";
-import { BtnGroup, WrapperButtons, ButtonAccept, ButtonDecline } from "./styled";
+import iconEmail from "../../../../assets/img/sendEmail.svg";
+import { BtnGroup, WrapperButtons, ButtonDecline } from "./styled";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
 const SendEmailModal = ({state, typeTable}) => {
     const [open, setOpen] = useState(false);
+    const [isLoader, setIsLoader] = useState(false);
     const [dataFilter, setDataFilter] = useState({
         subject: "",
         message: "",
@@ -73,12 +75,12 @@ const SendEmailModal = ({state, typeTable}) => {
                 </DialogContentText>
                 {state.searchFilter.agent ?
                     <DialogContentText>
-                        {`Agente: ${"agente :)"}`}
+                        {`Agente: ${state.commitments.agent}`}
                     </DialogContentText> : null
                 }
                 {state.searchFilter.collaborator ?
                     <DialogContentText>
-                        {`Colaborador: ${"colaborador :)"}`}
+                        {`Colaborador: ${state.searchFilter.collaborator}`}
                     </DialogContentText> : null
                 }
                 {state.searchFilter.area ?
@@ -106,6 +108,7 @@ const SendEmailModal = ({state, typeTable}) => {
     }
 
     const sendEmailFilter = async () => {
+        setIsLoader(true);
         try {
             if (state.commitments.length === 0 || 
                 (state.searchFilter.agent === "" && state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
@@ -117,6 +120,7 @@ const SendEmailModal = ({state, typeTable}) => {
                         "Los campos para enviar correo estan vacios, intentalo nuevamente", 
                     typeMessage: "error"
                 });
+                setIsLoader(false);
             } else {
                 let params = null;
                 let response = null;
@@ -140,6 +144,7 @@ const SendEmailModal = ({state, typeTable}) => {
                     response = await api.post(`/email/tracing/?${params}`, dataFilter);
                 }
                 if (response) {
+                    setIsLoader(false);
                     setDataFilter({
                         subject: "",
                         message: "",
@@ -155,6 +160,7 @@ const SendEmailModal = ({state, typeTable}) => {
             }
         } catch(err) {
             console.log(err)
+            setIsLoader(false);
             setError({
                 status: true,
                 message:
@@ -170,6 +176,7 @@ const SendEmailModal = ({state, typeTable}) => {
                 title="Enviar Correo"
                 size="20%"
                 type="primary-loader"
+                ico={iconEmail}
                 onClick={sendEmail}
             />
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -202,9 +209,13 @@ const SendEmailModal = ({state, typeTable}) => {
                     <ButtonDecline onClick={handleClose}>
                         Cerrar
                     </ButtonDecline>
-                    <ButtonAccept onClick={sendEmailFilter} style={{width: "27em"}}>
-                        Enviar
-                    </ButtonAccept>
+                    <Btn
+                        title="Enviar"
+                        size="27em"
+                        type="primary-loader"
+                        onClick={sendEmailFilter}
+                        loader={isLoader}
+                    />
                 </WrapperButtons>
                 </DialogActions>
             </Dialog>
