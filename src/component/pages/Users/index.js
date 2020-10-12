@@ -44,6 +44,10 @@ const Users = () => {
         getFilterUsers();
         const { data } = await api.get(`/users?page=${state.page}`);
         getFilterUsersSuccess(data);
+        dispatch({
+          type: actions.clearSearchFilter,
+          payload: { reset: "" },
+        });
       } catch {
         getFilterUsersError("Ocurrio un problema al traer a los usuarios");
       }

@@ -11,7 +11,7 @@ export const WrapperFilter = styled.div`
 `;
 
 export const WrapperSelect = styled.div`
-    width: 13em;
+  width: 13em;
 `;
 
 export const SelectFilter = styled(Select)`

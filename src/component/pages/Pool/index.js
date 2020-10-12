@@ -14,6 +14,7 @@ import { reducer } from "./reducer";
 import IcoExport from "../../../assets/img/download.svg";
 import IcoSync from "../../../assets/img/sync.svg";
 import FilterBar from "../../ui/FilterBar";
+import SendEmailModal from "../../ui/modals/SendEmailModal";
 
 const Pool = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -162,6 +163,10 @@ const Pool = () => {
             loader={state.exportData}
           />
         </BtnGroup>
+        <SendEmailModal
+          state={state}
+          typeTable={"pool"}
+        />
       </WrapperHeader>
       <FilterBar
         state={state}

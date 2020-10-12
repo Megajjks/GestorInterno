@@ -29,7 +29,7 @@ export const initialState = {
     state: "",
     sector: "",
     status: "",
-    rol: null,
-    isActive: null,
+    rol: 0,
+    isActive: "",
   },
 };

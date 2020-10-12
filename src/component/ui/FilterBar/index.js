@@ -7,6 +7,7 @@ import {
   SelectFilter,
   SearchBar,
   WrapperSelect,
+  WrapperSelectFiltersUsers,
 } from "./styled";
 import { 
   area, 
@@ -14,9 +15,6 @@ import {
   sector, 
   isActiveUser,
   roles,
-  rolName,
-  dataStatus,
-
 } from "../../../helpers/index";
 
 const FilterBar = ({
@@ -55,24 +53,14 @@ const FilterBar = ({
             getFilterCommitmentsPool();
             try {
               let params = null;
-              if (state.searchFilter.agent) {
-                params = new URLSearchParams({
-                  searchbox: `${state.searchFilter.agent}`,
-                  state: `${state.searchFilter.state}`,
-                  area: `${state.searchFilter.area}`,
-                  status: `${state.searchFilter.status}`,
-                  sector: `${state.searchFilter.sector}`,
-                }).toString();
-              } else {
-                params = new URLSearchParams({
-                  state: `${state.searchFilter.state}`,
-                  area: `${state.searchFilter.area}`,
-                  status: `${state.searchFilter.status}`,
-                  sector: `${state.searchFilter.sector}`,
-                }).toString();
-              }
+              params = new URLSearchParams({
+                searchbox: `${state.searchFilter.agent}`,
+                state: `${state.searchFilter.state}`,
+                area: `${state.searchFilter.area}`,
+                status: `${state.searchFilter.status}`,
+                sector: `${state.searchFilter.sector}`,
+              }).toString();
               const url = `/commitments/filter/pool/?page=${state.page}&${params}`;
-              console.log(url);
               const { data } = await api.get(url);
               getFilterCommitmentsPoolSuccess(data);
             } catch (error) {
@@ -93,24 +81,14 @@ const FilterBar = ({
             getFilterCommitmentsTracing();
             try {
               let params = null;
-              if (state.searchFilter.collaborator) {
-                params = new URLSearchParams({
-                  searchbox: `${state.searchFilter.collaborator}`,
-                  state: `${state.searchFilter.state}`,
-                  area: `${state.searchFilter.area}`,
-                  status: `${state.searchFilter.status}`,
-                  sector: `${state.searchFilter.sector}`,
-                }).toString();
-              } else {
-                params = new URLSearchParams({
-                  state: `${state.searchFilter.state}`,
-                  area: `${state.searchFilter.area}`,
-                  status: `${state.searchFilter.status}`,
-                  sector: `${state.searchFilter.sector}`,
-                }).toString();
-              }
+              params = new URLSearchParams({
+                searchbox: `${state.searchFilter.collaborator}`,
+                state: `${state.searchFilter.state}`,
+                area: `${state.searchFilter.area}`,
+                status: `${state.searchFilter.status}`,
+                sector: `${state.searchFilter.sector}`,
+              }).toString();
               const url = `/commitments/filter/tracing/?page=${state.page}&${params}`;
-              console.log(url);
               const { data } = await api.get(url);
               getFilterCommitmentsTracingSuccess(data);
             } catch (error) {
@@ -125,17 +103,10 @@ const FilterBar = ({
             getFilterCommitmentsManagement();
             try {
               let params = null;
-              if (state.searchFilter.userManagement) {
-                params = new URLSearchParams({
-                  searchbox: `${state.searchFilter.userManagement}`,
-                }).toString();
-              } else {
-                params = new URLSearchParams({
-                  searchbox: "",
-                }).toString();
-              }
+              params = new URLSearchParams({
+                searchbox: `${state.searchFilter.userManagement}`,
+              }).toString();
               const url = `/commitments/filter/management/?page=${state.page}&${params}`;
-              console.log(url);
               const { data } = await api.get(url);
               getFilterCommitmentsManagementSuccess(data);
             } catch (error) {
@@ -146,21 +117,26 @@ const FilterBar = ({
           }
           break;
         case "user":
-          if (state.searchFilter.user !== "") {
+          if (state.searchFilter.user !== "" || 
+            state.searchFilter.rol !== 0 ||
+            state.searchFilter.isActive !== ""
+          ) {
             getFilterUsers()
             try {
               let params = null;
-              if (state.searchFilter.user) {
+              if (state.searchFilter.rol) {
                 params = new URLSearchParams({
                   searchbox: `${state.searchFilter.user}`,
+                  roleId: `${state.searchFilter.rol}`,
+                  isActive: `${state.searchFilter.isActive}`,
                 }).toString();
               } else {
                 params = new URLSearchParams({
-                  searchbox: "",
+                  searchbox: `${state.searchFilter.user}`,
+                  isActive: `${state.searchFilter.isActive}`,
                 }).toString();
               }
               const url = `/users/?page=${state.page}&${params}`;
-              console.log(url);
               const { data } = await api.get(url);
               getFilterUsersSuccess(data);
             } catch (error) {
@@ -223,6 +199,48 @@ const FilterBar = ({
                   handleSearchFilter(e.target.name, e.target.value)
                 }
               />
+            </WrapperSelect>
+            <WrapperSelect style={{ marginRight: "30px" }}>
+              <InputLabel id="rol-label">Rol</InputLabel>
+              <SelectFilter
+                labelId="rol-label"
+                id="rol-label"
+                name="rol"
+                value={state.searchFilter.rol}
+                onChange={(e) =>
+                  handleSearchFilter(e.target.name, e.target.value)
+                }
+              >
+                <MenuItem value="">-- Todos --</MenuItem>
+                {roles.map((item, idx) => {
+                  return (
+                    <MenuItem value={item.value} key={idx}>
+                      {item.tag}
+                    </MenuItem>
+                  );
+                })}
+              </SelectFilter>
+            </WrapperSelect>
+            <WrapperSelect>
+              <InputLabel id="statusUser-label">Estatus</InputLabel>
+              <SelectFilter
+                labelId="statusUser-label"
+                id="statusUser-label"
+                name="isActive"
+                value={state.searchFilter.isActive}
+                onChange={(e) =>
+                  handleSearchFilter(e.target.name, e.target.value)
+                }
+              >
+                <MenuItem value="">-- Todos --</MenuItem>
+                {isActiveUser.map((item, idx) => {
+                  return (
+                    <MenuItem value={item.value} key={idx}>
+                      {item.tag}
+                    </MenuItem>
+                  );
+                })}
+              </SelectFilter>
             </WrapperSelect>
           </Fragment>
         ) : null}

@@ -140,7 +140,7 @@ export const reducer = (state, action) => {
             state: action.payload.reset,
             sector: action.payload.reset,
             status: action.payload.reset,
-            rol: action.payload.reset,
+            rol: 0,
             isActive: action.payload.reset,
           },
         };

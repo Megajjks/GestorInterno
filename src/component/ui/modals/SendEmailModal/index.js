@@ -1,6 +1,4 @@
-import React, { Fragment, useState, useContext } from "react";
-import { CommitmentContext } from "../../../context/CommitmentContext";
-import { actions } from "../../../context/CommitmentContext/actions";
+import React, { Fragment, useState } from "react";
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,15 +8,35 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Btn from "../../GeneralButton";
 import api from "../../../../helpers/api";
 import { BtnGroup, WrapperButtons, ButtonAccept, ButtonDecline } from "./styled";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
-const SendEmailModal = () => {
-    const { state, dispatch } = useContext(CommitmentContext);
+const SendEmailModal = ({state, typeTable}) => {
     const [open, setOpen] = useState(false);
-    const [dataSendEmail, setDataSendEmail] = useState(null);
     const [dataFilter, setDataFilter] = useState({
         subject: "",
         message: "",
     });
+    const [error, setError] = useState({
+        status: false,
+        message: "",
+        typeMessage: ""
+    });
+
+    function AlertError(props) {
+        return <MuiAlert elevation={6} variant="filled" {...props} />;
+    }
+
+    const handleCloseSendEmail = (event, reason) => {
+        if (reason === "clickaway") {
+          return;
+        }
+        setError({
+          ...error,
+          status: false,
+          typeMessage: ""
+        });
+    };
     
     const sendEmail = () => {
         handleClickOpen();
@@ -42,7 +60,7 @@ const SendEmailModal = () => {
 
     function CheckData () {
         if (state.commitments.length === 0 || 
-            (state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
+            (state.searchFilter.agent === "" && state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
             state.searchFilter.state === "" && state.searchFilter.sector === "" && 
             state.searchFilter.status === "")) {
             return <DialogContentText>
@@ -50,106 +68,110 @@ const SendEmailModal = () => {
                 </DialogContentText>
         } else {
             return <Fragment>
+                <DialogContentText>
+                    Se enviará correo a los siguientes compromisos con:
+                </DialogContentText>
+                {state.searchFilter.agent ?
                     <DialogContentText>
-                        Se enviará correo a los siguientes compromisos con:
-                    </DialogContentText>
-                    {state.searchFilter.collaborator ?
-                        <DialogContentText>
-                            {`Colaborador: ${"colaborador :)"}`}
-                        </DialogContentText> : null
-                    }
-                    {state.searchFilter.area ?
-                        <DialogContentText>
-                            {`Area: ${state.searchFilter.area}`}
-                        </DialogContentText> : null
-                    }
-                    {state.searchFilter.state ?
-                        <DialogContentText>
-                            {`Sede: ${state.searchFilter.state}`}
-                        </DialogContentText> : null
-                    }
-                    {state.searchFilter.sector ?
-                        <DialogContentText>
-                            {`Categoría: ${state.searchFilter.sector}`}
-                        </DialogContentText> : null
-                    }
-                    {state.searchFilter.status ?
-                        <DialogContentText>
-                            {`Estatus: ${state.searchFilter.status}`}
-                        </DialogContentText> : null
-                    }
-                </Fragment>
+                        {`Agente: ${"agente :)"}`}
+                    </DialogContentText> : null
+                }
+                {state.searchFilter.collaborator ?
+                    <DialogContentText>
+                        {`Colaborador: ${"colaborador :)"}`}
+                    </DialogContentText> : null
+                }
+                {state.searchFilter.area ?
+                    <DialogContentText>
+                        {`Area: ${state.searchFilter.area}`}
+                    </DialogContentText> : null
+                }
+                {state.searchFilter.state ?
+                    <DialogContentText>
+                        {`Sede: ${state.searchFilter.state}`}
+                    </DialogContentText> : null
+                }
+                {state.searchFilter.sector ?
+                    <DialogContentText>
+                        {`Categoría: ${state.searchFilter.sector}`}
+                    </DialogContentText> : null
+                }
+                {state.searchFilter.status ?
+                    <DialogContentText>
+                        {`Estatus: ${state.searchFilter.status}`}
+                    </DialogContentText> : null
+                }
+            </Fragment>
         }
     }
 
     const sendEmailFilter = async () => {
-        //Funcion para evitar datos vacios de subject y message
         try {
             if (state.commitments.length === 0 || 
-                (state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
+                (state.searchFilter.agent === "" && state.searchFilter.collaborator === "" && state.searchFilter.area === "" && 
                 state.searchFilter.state === "" && state.searchFilter.sector === "" && 
                 state.searchFilter.status === "")) {
-                alert("El array esta vacio")
-                //alerta o mensaje de array vacio, activar
+                setError({
+                    status: true,
+                    message:
+                        "Los campos para enviar correo estan vacios, intentalo nuevamente", 
+                    typeMessage: "error"
+                });
             } else {
-                if (state.searchFilter.collaborator !== "") {
-                    alert("tiene colaborador")
-                    setDataSendEmail({
-                        ...dataSendEmail,
-                        collaborator: state.searchFilter.collaborator
-                    })
-                } if (state.searchFilter.area !== "") {
-                    alert("tiene area")
-                    setDataSendEmail({
-                        ...dataSendEmail,
-                        area: state.searchFilter.area
-                    })
-                } if (state.searchFilter.state !== "") {
-                    alert("tiene estado")
-                    setDataSendEmail({
-                        ...dataSendEmail,
-                        state: state.searchFilter.state
-                    })
-                } if (state.searchFilter.sector !== "") {
-                    alert("tiene sector")
-                    setDataSendEmail({
-                        ...dataSendEmail,
-                        sector: state.searchFilter.sector
-                    })
-                } if (state.searchFilter.status !== "") {
-                    alert("tiene status")
-                    setDataSendEmail({
-                        ...dataSendEmail,
-                        status: state.searchFilter.status
-                    })
+                let params = null;
+                let response = null;
+                if (typeTable === "pool") {
+                    params = new URLSearchParams({
+                        searchbox: `${state.searchFilter.agent}`,
+                        state: `${state.searchFilter.state}`,
+                        area: `${state.searchFilter.area}`,
+                        status: `${state.searchFilter.status}`,
+                        sector: `${state.searchFilter.sector}`,
+                    }).toString();
+                    response = await api.post(`/email/pool/?${params}`, dataFilter);
+                } else {
+                    params = new URLSearchParams({
+                        searchbox: `${state.searchFilter.collaborator}`,
+                        state: `${state.searchFilter.state}`,
+                        area: `${state.searchFilter.area}`,
+                        status: `${state.searchFilter.status}`,
+                        sector: `${state.searchFilter.sector}`,
+                    }).toString();
+                    response = await api.post(`/email/tracing/?${params}`, dataFilter);
                 }
-                /*setDataSendEmail({
-                    ...dataSendEmail,
-                    subject: dataFilter.subject,
-                    message: dataFilter.message
-                })*/
-                /*const response = await api.post("/email/group/", dataSendEmail);
                 if (response) {
-                    alert("Correo enviado")
-                }*/
+                    setDataFilter({
+                        subject: "",
+                        message: "",
+                    });
+                    setError({
+                        status: true,
+                        message:
+                          "¡Excelente!, Su petición ha sido enviada exitosamente.", 
+                        typeMessage: "success"
+                      });
+                    setTimeout(handleClose, 3000);
+                }
             }
         } catch(err) {
             console.log(err)
+            setError({
+                status: true,
+                message:
+                  "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo", 
+                typeMessage: "error"
+            });
         }
     }
 
     return (
         <Fragment>
-            <BtnGroup>
-                <h1 style={{ marginRight: "10.5em" }}>
-                    Seguimiento de los compromisos</h1>
-                <Btn
-                    title="Enviar Correo"
-                    size="20%"
-                    type="primary-loader"
-                    onClick={sendEmail}
-                />
-            </BtnGroup>
+            <Btn
+                title="Enviar Correo"
+                size="20%"
+                type="primary-loader"
+                onClick={sendEmail}
+            />
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Envio de correos</DialogTitle>
                 <DialogContent>
@@ -186,6 +208,15 @@ const SendEmailModal = () => {
                 </WrapperButtons>
                 </DialogActions>
             </Dialog>
+            <Snackbar
+                open={error.status}
+                autoHideDuration={4000}
+                onClose={handleCloseSendEmail}
+            >
+                <AlertError onClose={handleCloseSendEmail} severity={error.typeMessage}>
+                {error.message}
+                </AlertError>
+            </Snackbar>
         </Fragment>
     );
 }

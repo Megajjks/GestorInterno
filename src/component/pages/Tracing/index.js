@@ -9,6 +9,8 @@ import { actions } from "./actions";
 import { initialState } from "./constants";
 import { reducer } from "./reducer";
 import FilterBar from "../../ui/FilterBar";
+import SendEmailModal from "../../ui/modals/SendEmailModal";
+import { BtnGroup } from "./styled";
 
 const Tracing = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -45,6 +47,10 @@ const Tracing = () => {
           `/commitments/filter/tracing/?page=${state.page}`
         );
         getFilterCommitmentsTracingSuccess(data);
+        dispatch({
+          type: actions.clearSearchFilter,
+          payload: { reset: "" },
+        });
       } catch (e) {
         getFilterCommitmentsTracingError(
           "Por el momento no se pueden obtener los datos, verifique su conexión"
@@ -90,7 +96,14 @@ const Tracing = () => {
 
   return (
     <Fragment>
-      <h1>Seguimiento de los compromisos</h1>
+      <BtnGroup>
+        <h1 style={{ marginRight: "10.5em" }}>
+          Seguimiento de los compromisos</h1>
+          <SendEmailModal
+            state={state}
+            typeTable={"tracing"}
+          />
+      </BtnGroup>
       <FilterBar
         state={state}
         status={query}
