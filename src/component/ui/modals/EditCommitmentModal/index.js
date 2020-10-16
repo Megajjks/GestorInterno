@@ -23,7 +23,7 @@ import {
 
 const EditCommitmentModal = ({ handleClose, open, dataForm }) => {
   const [data, setData] = useState(dataForm);
-  const [imgFile, setImgFile] = useState();
+  const [imgFile, setImgFile] = useState({ name: null });
   const [isLoader, setIsLoader] = useState(false);
   const history = useHistory();
   const [dataUpdate, setDataUpdate] = useState(null);
@@ -72,9 +72,8 @@ const EditCommitmentModal = ({ handleClose, open, dataForm }) => {
       //estructuring the formdata
       let formdata = new FormData();
       //We make sure the image is not lost
-      if (Object.keys(imgFile).length > 0) {
+      if (imgFile.name !== null) {
         formdata.append("img", imgFile);
-        console.log("cambio de imagen");
       }
 
       formdata.append("firstName", data.firstName);
