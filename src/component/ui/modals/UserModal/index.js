@@ -84,7 +84,7 @@ const UserModal = ({ closeModalUser, closeModalClean }) => {
       //estructuring the formdata
       let formdata = new FormData();
       //We make sure the image is not lost
-      if (Object.keys(imgFile).length > 0) {
+      if (imgFile.name !== null) {
         formdata.append("image", imgFile);
       }
       formdata.append("firstName", state.user.firstName);
