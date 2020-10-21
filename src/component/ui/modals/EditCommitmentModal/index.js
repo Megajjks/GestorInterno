@@ -88,7 +88,6 @@ const EditCommitmentModal = ({ handleClose, open, dataForm }) => {
       formdata.append("position", data.position);
       formdata.append("sector", data.sector);
       formdata.append("state", data.state);
-      console.log(formdata);
 
       const response = await api.put(`/commitments/${data.id}`, formdata);
       setIsLoader(false);

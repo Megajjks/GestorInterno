@@ -125,8 +125,6 @@ const NewCommitment = () => {
   const [image, setImage] = useState([]);
 
   const onChangeHandlerImage = (e) => {
-    console.log("Image");
-    console.log(e.target.files[0]);
     setImage({
       selectedFile: e.target.files[0],
     });
@@ -137,8 +135,6 @@ const NewCommitment = () => {
   };
 
   const onChangeHandlerImg = (e) => {
-    console.log("Img");
-    console.log(e.target.files[0]);
     setImg({
       selectedFile: e.target.files[0],
     });
@@ -231,7 +227,6 @@ const NewCommitment = () => {
       formdata.append("question12", commitment.question12);
       formdata.append("sendEmails", commitment.sendEmails);
       const response = await api.post("/commitment", formdata);
-      console.log("👉 Returned data:", response);
       setIsLoader(false);
       setError({
         status: false,
@@ -246,7 +241,6 @@ const NewCommitment = () => {
         message:
           "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo",
       });
-      console.log(`😱 Axios request failed: ${e}`);
     }
   };
 

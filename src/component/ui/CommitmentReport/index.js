@@ -96,7 +96,6 @@ const CommitmentReport = (props) => {
           type: actions.getQuestionsError,
           payload: "Error en peticion",
         });
-        console.log(e);
       }
     };
     fetchCommitmentReport();
@@ -144,7 +143,6 @@ const CommitmentReport = (props) => {
           "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo",
         typeMessage: "error",
       });
-      console.log(e);
       setTimeout(successData, 3000);
     }
   };

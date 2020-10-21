@@ -62,7 +62,6 @@ const Users = () => {
 
   //functions to open, close to modal edit user
   const showModalEditUser = (user) => {
-    console.log(user);
     dispatch({
       type: actions.showModalEditUser,
       payload: { isShow: !state.showModal, user: { ...user, password: "" } },

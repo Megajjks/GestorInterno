@@ -10,6 +10,9 @@ export const Wrapper = styled.div`
   justify-content: center;
   z-index: 1;
   transition: all 0.2s ease-out;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
 `;
 export const SideBar = styled.div`
   display: flex;
@@ -20,8 +23,8 @@ export const SideBar = styled.div`
   padding: 1em 0;
   background: ${({ theme: { colors } }) => colors.primary};
   color: ${({ theme: { colors } }) => colors.white};
-  position: fixed;
-  overflow: auto;
+  /* position: fixed;
+  overflow: auto; */
 `;
 export const HeaderSidebar = styled.div`
   display: flex;

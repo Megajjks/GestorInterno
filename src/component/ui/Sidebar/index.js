@@ -39,7 +39,6 @@ const Sidebar = ({ items, isAgent }) => {
             item.render ? (
               <Link
                 to={item.path}
-                onClick={() => console.log(item.path)}
                 key={idx}
                 style={{
                   textDecoration: "none",

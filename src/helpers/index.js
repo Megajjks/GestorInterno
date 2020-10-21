@@ -313,7 +313,6 @@ export const matchUser = (listCollaborators) => {
     const isMatch = listCollaborators.some(function (collaborator) {
       if (collaborator.id === userId) return true;
     });
-    console.log(isMatch);
     return isMatch;
   } catch (e) {
     console.log(e);

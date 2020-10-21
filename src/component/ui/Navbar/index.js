@@ -83,10 +83,6 @@ const Navbar = ({ goback }) => {
         </AvatarBadge>
         <DropdownWrapper isShow={menu}>
           <DropdownMenu>
-            <DropdownMenuItem>
-              <IcoMenu src={IcoUser} alt="profile" />
-              Mi perfil
-            </DropdownMenuItem>
             <DropdownMenuItem onClick={logOut}>
               <IcoMenu src={IcoLogout} alt="logout" />
               Cerrar sesión
