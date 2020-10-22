@@ -8,4 +8,5 @@ export const WrapperLogo = styled.div`
 `;
 export const Logo = styled.img`
   width: 40%;
+  padding-bottom: 1rem;
 `;

@@ -15,6 +15,7 @@ import AlertModal from "../modals/AlertModal";
 import IconEdit from "../../../assets/img/editar.svg";
 import IconRemove from "../../../assets/img/close.svg";
 import IconClock from "../../../assets/img/clock.svg";
+import AvatarIco from "../../../assets/img/usercard.svg";
 
 const MilestoneCard = ({
   milestone,
@@ -57,10 +58,14 @@ const MilestoneCard = ({
         </Section>
         <WrapperInfo>
           <ImgProfile
-            src="https://api.ashoka.hackademy.mx/public/img-1599784167033.jpg"
-            alt="profile"
+            src={
+              milestone.commitment.img
+                ? `https://api.ashoka.hackademy.mx/${milestone.commitment.img}`
+                : AvatarIco
+            }
+            alt="Organization picture"
           />
-          <TxtIcon>{milestone.organization}</TxtIcon>
+          <TxtIcon>{milestone.commitment.organization}</TxtIcon>
         </WrapperInfo>
         <WrapperInfo>
           <Icon src={IconClock} alt="date Milestone" />

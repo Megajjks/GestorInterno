@@ -32,7 +32,9 @@ export const initialState = {
 
   milestones: [],
   milestonesLoading: false,
+  milestonesLoadingModal: false,
   milestonesError: null,
+  milestonesMsgError: null,
   reloadMilestones: false,
   milestone: {
     title: "",
@@ -42,6 +44,30 @@ export const initialState = {
   showModalMilestone: false,
   isEditModalMilestone: false,
 
+  exportData: false,
+  exportDataMessage: null,
+  showBtnSycn: null,
+  syncCommitmentsLoader: false,
+  syncCommitmentsError: null,
+  reload: false,
+
   page: 1,
   pageLimit: 1,
+
+  //Pool Filtro
+  commitments: [],
+  commitmentsLoader: false,
+  commitmentsError: null,
+  searchFilter: {
+    agent: "",
+    collaborator: "",
+    userManagement: "",
+    user: "",
+    area: "",
+    state: "",
+    sector: "",
+    status: "",
+    rol: null,
+    isActive: null,
+  },
 };

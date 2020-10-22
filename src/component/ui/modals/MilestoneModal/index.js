@@ -8,6 +8,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import Alert from "@material-ui/lab/Alert";
 import { useStyles } from "./styled";
 import api from "../../../../helpers/api";
 
@@ -37,6 +38,7 @@ const MilestoneModal = (isEdit) => {
       return;
     }
     //request to send a new milestone
+    dispatch({ type: actions.addMilestone });
     try {
       const response = await api.post("/milestones", {
         ...state.milestone,
@@ -56,6 +58,7 @@ const MilestoneModal = (isEdit) => {
 
   //save data after edit the milestone
   const saveMilestone = async () => {
+    dispatch({ type: actions.updateMilestone });
     try {
       const response = await api.put(
         `/milestone/${state.milestone.id}`,
@@ -101,6 +104,9 @@ const MilestoneModal = (isEdit) => {
           {state.isEditModalMilestone ? "Editar logro" : "Crear logro"}
         </DialogTitle>
         <DialogContent>
+          {state.milestonesMsgError && (
+            <Alert severity="error">{state.milestonesMsgError}</Alert>
+          )}
           <form>
             <TextField
               type="text"
@@ -156,9 +162,21 @@ const MilestoneModal = (isEdit) => {
             size="30%"
           />
           {state.isEditModalMilestone ? (
-            <Button title="Guardar Logro" onClick={saveMilestone} size="40%" />
+            <Button
+              title="Guardar Logro"
+              onClick={saveMilestone}
+              size="40%"
+              type="primary-loader"
+              loader={state.milestonesLoadingModal}
+            />
           ) : (
-            <Button title="Agregar Logro" onClick={addMilestone} size="40%" />
+            <Button
+              title="Agregar Logro"
+              onClick={addMilestone}
+              size="40%"
+              type="primary-loader"
+              loader={state.milestonesLoadingModal}
+            />
           )}
         </DialogActions>
       </Dialog>

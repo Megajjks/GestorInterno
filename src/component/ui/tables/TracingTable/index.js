@@ -1,5 +1,13 @@
 import React from "react";
-import { Tablestyle, EyeIcon, Details, SearchBar, Chip } from "./styled";
+import {
+  Tablestyle,
+  TableHeader,
+  EyeIcon,
+  Details,
+  WrapperInputRadio,
+  InputRadio,
+  Chip,
+} from "./styled";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
@@ -13,9 +21,10 @@ const fields = [
   "Organización",
   "Colaboradores",
   "Agente",
+  "Area",
   "Lugar",
   "Sede",
-  "Categoria",
+  "Categoría",
   "Estatus",
   "",
 ];
@@ -54,6 +63,7 @@ const TracingTable = ({ commitments, viewDetails }) => {
                 </ul>
               </TableCell>
               <TableCell align="center">{`${commitment.firstName} ${commitment.lastName}`}</TableCell>
+              <TableCell align="center">{commitment.area}</TableCell>
               <TableCell align="center">{commitment.city}</TableCell>
               <TableCell align="center">{commitment.state}</TableCell>
               <TableCell align="center">{commitment.sector}</TableCell>

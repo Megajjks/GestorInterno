@@ -10,29 +10,46 @@ import UserTable from "../../ui/tables/UserTable";
 import api from "../../../helpers/api";
 import Btn from "../../ui/GeneralButton";
 import AddIcon from "../../../assets/img/add.svg";
+import FilterBar from "../../ui/FilterBar";
 
 const Users = () => {
   const { state, dispatch } = useContext(StoreContext);
+
+  //Functions to send in FilterBar
+  const getFilterUsers = () => {
+    dispatch({ type: actions.getUsers });
+  };
+
+  const getFilterUsersSuccess = (data) => {
+    dispatch({
+      type: actions.getUsersSuccess,
+      payload: {
+        users: data.items,
+        page: data.page,
+        pageLimit: data.limitPage,
+      },
+    });
+  };
+  const getFilterUsersError = (msg) => {
+    dispatch({
+      type: actions.getUsersError,
+      payload: msg,
+    });
+  };
 
   //get users
   useEffect(() => {
     const getUsers = async () => {
       try {
-        dispatch({ type: actions.getUsers });
+        getFilterUsers();
         const { data } = await api.get(`/users?page=${state.page}`);
+        getFilterUsersSuccess(data);
         dispatch({
-          type: actions.getUsersSuccess,
-          payload: {
-            users: data.items,
-            page: data.page,
-            pageLimit: data.limitPage,
-          },
+          type: actions.clearSearchFilter,
+          payload: { reset: "" },
         });
       } catch {
-        dispatch({
-          type: actions.getUsersError,
-          payload: "Ocurrio un problema al traer a los usuarios",
-        });
+        getFilterUsersError("Ocurrio un problema al traer a los usuarios");
       }
     };
     getUsers();
@@ -45,7 +62,6 @@ const Users = () => {
 
   //functions to open, close to modal edit user
   const showModalEditUser = (user) => {
-    console.log(user);
     dispatch({
       type: actions.showModalEditUser,
       payload: { isShow: !state.showModal, user: { ...user, password: "" } },
@@ -100,6 +116,11 @@ const Users = () => {
     );
   };
 
+  //Functions to filter
+  const handleSearchFilter = (field, value) => {
+    dispatch({ type: actions.setSearchFilter, payload: { field, value } });
+  };
+
   return (
     <Fragment>
       <WrapperHeader>
@@ -112,7 +133,16 @@ const Users = () => {
           onClick={showModalAddUser}
         />
       </WrapperHeader>
-
+      <WrapperHeader>
+        <FilterBar
+          state={state}
+          typeTable={"user"}
+          getFilterUsers={getFilterUsers}
+          getFilterUsersSuccess={getFilterUsersSuccess}
+          getFilterUsersError={getFilterUsersError}
+          handleSearchFilter={handleSearchFilter}
+        />
+      </WrapperHeader>
       <UserModal
         closeModalUser={showModalAddUser}
         closeModalClean={closeModalUser}

@@ -83,7 +83,7 @@ const CommitmentReport = (props) => {
       dispatch({ type: actions.getDataForm });
       dispatch({ type: actions.getQuestions });
       try {
-        const idCommitment = history.location.state;
+        const idCommitment = history.location.state.id;
         const { data } = await api.get(`/commitments/${idCommitment}`);
         dispatch({ type: actions.getDataFormSuccess, payload: data });
         dispatch({ type: actions.getQuestionsSuccess, payload: data.answers });
@@ -96,7 +96,6 @@ const CommitmentReport = (props) => {
           type: actions.getQuestionsError,
           payload: "Error en peticion",
         });
-        console.log(e);
       }
     };
     fetchCommitmentReport();
@@ -144,7 +143,6 @@ const CommitmentReport = (props) => {
           "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo",
         typeMessage: "error",
       });
-      console.log(e);
       setTimeout(successData, 3000);
     }
   };

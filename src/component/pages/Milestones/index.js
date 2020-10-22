@@ -85,7 +85,6 @@ const Milestones = () => {
         payload: "Ocurrió un error al momento de eliminar un logro",
       });
     }
-    console.log(`remove milestone ${state.milestone.id}`);
   };
 
   const renderMilestones = () => {

@@ -1,6 +1,8 @@
 export const initialState = {
   users: [],
   usersLoader: false,
+  userModalLoader: false,
+  msgErrorModal: null,
   msgError: null,
   reload: false,
   showModal: false,
@@ -16,7 +18,19 @@ export const initialState = {
     roleId: "",
     isActive: null,
   },
-  addUserLoader: false,
   page: 1,
   pageLimit: 1,
+  //User Filtro
+  searchFilter: {
+    agent: "",
+    collaborator: "",
+    userManagement: "",
+    user: "",
+    area: "",
+    state: "",
+    sector: "",
+    status: "",
+    rol: 0,
+    isActive: "",
+  },
 };

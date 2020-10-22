@@ -125,8 +125,6 @@ const NewCommitment = () => {
   const [image, setImage] = useState([]);
 
   const onChangeHandlerImage = (e) => {
-    console.log("Image");
-    console.log(e.target.files[0]);
     setImage({
       selectedFile: e.target.files[0],
     });
@@ -137,8 +135,6 @@ const NewCommitment = () => {
   };
 
   const onChangeHandlerImg = (e) => {
-    console.log("Img");
-    console.log(e.target.files[0]);
     setImg({
       selectedFile: e.target.files[0],
     });
@@ -204,7 +200,7 @@ const NewCommitment = () => {
         question8_4: question8Add.question8_4,
         question8_5: question8Add.question8_5,
         question8_6: question8Add.question8_6,
-      })
+      });
       formdata.append("firstName", commitment.firstName);
       formdata.append("lastName", commitment.lastName);
       formdata.append("organization", commitment.organization);
@@ -224,14 +220,13 @@ const NewCommitment = () => {
       formdata.append("question5", commitment.question5);
       formdata.append("question6", commitment.question6);
       formdata.append("question7", commitment.question7);
-      formdata.append("question8", dataQuestion8); 
+      formdata.append("question8", dataQuestion8);
       formdata.append("question9", commitment.question9);
       formdata.append("question10", commitment.question10);
       formdata.append("question11", commitment.question11);
       formdata.append("question12", commitment.question12);
       formdata.append("sendEmails", commitment.sendEmails);
       const response = await api.post("/commitment", formdata);
-      console.log("👉 Returned data:", response);
       setIsLoader(false);
       setError({
         status: false,
@@ -246,7 +241,6 @@ const NewCommitment = () => {
         message:
           "Vaya, estamos teniendo problemas de conexión al enviar tus datos, intenta de nuevo",
       });
-      console.log(`😱 Axios request failed: ${e}`);
     }
   };
 
@@ -512,7 +506,9 @@ const NewCommitment = () => {
             />
             <LabelFile for="imgLogo">
               {" "}
-              {commitment.image ? commitment.image : "Selecciona una imagen"}{" "}
+              {commitment.image
+                ? commitment.image
+                : "Selecciona una imagen"}{" "}
             </LabelFile>
           </Field>
           <Field>

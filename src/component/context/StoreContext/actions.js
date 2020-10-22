@@ -18,4 +18,7 @@ export const actions = {
   addUserSuccess: "ADD_USER_SUCCESS",
   addUserError: "ADD_USER_ERROR",
   setPage: "SET_PAGE",
+  //User Filtro
+  setSearchFilter: "SET_SEARCH_FILTER",
+  clearSearchFilter: "CLEAN_SEARCH_FILTER",
 };

@@ -55,7 +55,11 @@ const CollaboratorCard = ({ collaborator }) => {
     <Fragment>
       <Colaborator>
         <ImgCollaborator
-          src={collaborator.image ? collaborator.image : AvatarIco}
+          src={
+            collaborator.image
+              ? `https://api.ashoka.hackademy.mx/${collaborator.image}`
+              : AvatarIco
+          }
           alt="profile img"
         />
         <NameColaborator>

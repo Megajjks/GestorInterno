@@ -55,7 +55,7 @@ const TracingCommitmentDetails = (props) => {
     const getCommitment = async () => {
       dispatch({ type: actions.getCommitment });
       try {
-        const url = `/commitments/${history.location.state}`;
+        const url = `/commitments/${history.location.state.id}`;
         const { data } = await api.get(url);
         dispatch({ type: actions.getCommitmentSuccess, payload: data });
       } catch (e) {
@@ -69,7 +69,7 @@ const TracingCommitmentDetails = (props) => {
     const getListCollaborator = async () => {
       dispatch({ type: actions.getCollaboratorsList });
       try {
-        const url = `/missingCollaborators/${history.location.state}`;
+        const url = `/missingCollaborators/${history.location.state.id}`;
         const { data } = await api.get(url);
         dispatch({
           type: actions.getCollaboratorsListSuccess,
@@ -92,7 +92,7 @@ const TracingCommitmentDetails = (props) => {
       dispatch({ type: actions.getTasksList });
       try {
         const { data } = await api.get(
-          `/tasks/commitment/${history.location.state}/?page=${state.page}`
+          `/tasks/commitment/${history.location.state.id}/?page=${state.page}`
         );
         dispatch({
           type: actions.getTasksListSuccess,
@@ -122,7 +122,7 @@ const TracingCommitmentDetails = (props) => {
       dispatch({ type: actions.getMilestones });
       try {
         const { data } = await api.get(
-          `/milestones/${history.location.state}/?page=${state.page}`
+          `/milestones/${history.location.state.id}/?page=${state.page}`
         );
         dispatch({
           type: actions.getMilestonesSuccess,

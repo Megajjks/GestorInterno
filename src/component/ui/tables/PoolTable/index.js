@@ -1,5 +1,5 @@
 import React from "react";
-import { Tablestyle, Icon, Details, SearchBar, Chip } from "./styled";
+import { Tablestyle, TableHeader, Icon, Details, Chip } from "./styled";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
@@ -9,11 +9,12 @@ import Paper from "@material-ui/core/Paper";
 import Eye from "../../../../assets/img/eye.svg";
 import IcoError from "../../../../assets/img/error.svg";
 import { dataStatus } from "../../../../helpers";
+import MessageIcon from "../../../../assets/img/message-commitment.svg";
 
 const fields = [
-  "Id",
   "Organización",
   "Agente",
+  "Area",
   "Lugar",
   "Sede",
   "Categoria",
@@ -41,12 +42,12 @@ const PoolTable = ({ commitments, viewDetails }) => {
         <TableBody>
           {commitments.map((commitment) => (
             <TableRow key={commitment.id}>
-              <TableCell align="center">{commitment.id}</TableCell>
               <TableCell align="center">{commitment.organization}</TableCell>
               <TableCell align="center">
                 {commitment.firstName} {commitment.lastName}
               </TableCell>
 
+              <TableCell align="center">{commitment.area}</TableCell>
               <TableCell align="center">{commitment.city}</TableCell>
               <TableCell align="center">{commitment.state}</TableCell>
               <TableCell align="center">{commitment.sector}</TableCell>
