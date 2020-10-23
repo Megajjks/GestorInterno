@@ -1,5 +1,4 @@
 import Dashboard from "../../component/pages/Dashboard";
-import Commitment from "../../component/pages/Commitment";
 import Community from "../../component/pages/Community";
 import { DASHBOARD, COMMITMENT, COMMUNITY } from "../paths";
 import M1 from "../../assets/img/dashboard.svg";
@@ -15,16 +14,6 @@ export const dasboardAgent = {
   img: M1,
   render: true,
 };
-export const commitmentAgent = {
-  component: Commitment,
-  path: COMMITMENT,
-  isPrivate: true,
-  exact: true,
-  name: "Compromisos",
-  label: "Compromisos",
-  img: M6,
-  render: true,
-};
 export const communityAgent = {
   component: Community,
   path: COMMUNITY,
@@ -36,4 +25,4 @@ export const communityAgent = {
   render: true,
 };
 
-export default [dasboardAgent, commitmentAgent, communityAgent];
+export default [dasboardAgent, communityAgent];

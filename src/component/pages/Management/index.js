@@ -16,7 +16,7 @@ const Management = () => {
 
   //Functions to send in FilterBar
   const getFilterCommitmentsManagement = () => {
-    dispatch({ type: actions.getCommitmentsTracing });
+    dispatch({ type: actions.getCommitments });
   };
   const getFilterCommitmentsManagementSuccess = (data) => {
     dispatch({
@@ -67,9 +67,9 @@ const Management = () => {
   const renderManagementTable = () => {
     if (state.commitmentsError) return <Error />;
     if (
-      state.commitments.length === 0 &&
       !state.commitmentsLoader &&
-      !state.commitmentsError
+      !state.commitmentsError &&
+      state.commitments.length === 0
     ) {
       return (
         <WithoutData
