@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import NavbarPublic from "../../ui/landingPage/Navbar";
+import FooterPublic from "../../ui/landingPage/Footer";
 import CommitmentCardList from "../../ui/CommitmentCardList";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
@@ -75,6 +76,7 @@ const CurrentCommitments = () => {
         <Title>Compromisos Actuales</Title>
         {state.commitmentsLoader ? <Spinner /> : renderCommitments()}
       </WrapperCommitment>
+      <FooterPublic />
     </>
   );
 };

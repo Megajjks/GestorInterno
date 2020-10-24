@@ -32,6 +32,7 @@ export const MenuItem = styled.li`
   list-style-type: none;
   padding: 0 1rem;
   margin: 0 0.3rem;
+  color: ${(props) => (props.isSelect ? "#f4633b" : "#ffffff")};
   cursor: pointer;
   &:hover {
     color: #f4633b;
