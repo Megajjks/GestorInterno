@@ -27,24 +27,24 @@ const Footer = () => {
         </Content>
         <SocialNetworks>
           <img
-            onClick={"https://www.facebook.com/AshokaMX"}
+            onClick={goTab("https://www.facebook.com/AshokaMX")}
             src={Facebook}
             alt="facebook"
           />
           <img
-            onClick={"https://twitter.com/ashoka_mcc"}
+            onClick={goTab("https://twitter.com/ashoka_mcc")}
             src={Twitter}
             alt="twitter"
           />
           <img
-            onClick={"https://www.instagram.com/ashoka_mcc/"}
+            onClick={goTab("https://www.instagram.com/ashoka_mcc/")}
             src={Instagram}
             alt="instagram"
           />
           <img
-            onClick={
+            onClick={goTab(
               "https://www.linkedin.com/company/ashoka-m%C3%A9xico-centroam%C3%A9rica-y-el-caribe/"
-            }
+            )}
             src={Linkedin}
             alt="Linkedin"
           />
@@ -59,20 +59,20 @@ const Footer = () => {
             >
               Guía de compromisos
             </li>
-            <li goTab={"https://www.tfaforms.com/4821068"}>
+            <li onClick={goTab("https://www.tfaforms.com/4821068")}>
               Sube tu compromiso
             </li>
             <li
-              goTab={
+              onClick={goTab(
                 "https://millonesdeagentesdecambio.org/compromisos/#Sesiondedisenodecompromisos"
-              }
+              )}
             >
               Sesión de compromisos
             </li>
             <li
-              goTab={
+              onClick={goTab(
                 "https://millonesdeagentesdecambio.org/compromisos/#Sesiondedisenodecompromisos"
-              }
+              )}
             >
               Comunidad de Agentes de Cambio
             </li>
@@ -82,42 +82,44 @@ const Footer = () => {
           <h3>ÚNETE</h3>
           <ul>
             <li
-              goTab={
+              onClick={goTab(
                 "https://millonesdeagentesdecambio.org/compromisos/#Ejemplosdecompromisos"
-              }
+              )}
             >
               Ejemplos de compromisos
             </li>
             <li
-              goTab={
+              onClick={goTab(
                 "https://millonesdeagentesdecambio.org/compromisos/#Anatomiadeuncompromiso"
-              }
+              )}
             >
               Anatomía de un compromiso
             </li>
             <li
-              goTab={
+              onClick={goTab(
                 "https://millonesdeagentesdecambio.org/compromisos/#criteriosdecompromiso"
-              }
+              )}
             >
               Ciclo de tiempo del movimiento
             </li>
             <li
-              goTab={
+              onClick={goTab(
                 "https://millonesdeagentesdecambio.org/compromisos/#criteriosdecompromiso"
-              }
+              )}
             >
               Equipo Millones de Agentes de Cambio
             </li>
             <li
-              goTab={
+              onClick={goTab(
                 "https://millonesdeagentesdecambio.org/compromisos/#Registrodelboletindeashoka"
-              }
+              )}
             >
               Registro al boletín de Ashoka
             </li>
             <li
-              goTab={"https://millonesdeagentesdecambio.org/compromisos/#faq"}
+              onClick={goTab(
+                "https://millonesdeagentesdecambio.org/compromisos/#faq"
+              )}
             >
               Preguntas Frecuentes
             </li>

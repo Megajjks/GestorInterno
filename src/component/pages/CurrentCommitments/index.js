@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import NavbarPublic from "../../ui/landingPage/Navbar";
 import FooterPublic from "../../ui/landingPage/Footer";
 import CommitmentCardList from "../../ui/CommitmentCardList";
+import FilterBar from "../../ui/FilterBar";
 import Spinner from "../../ui/Spinner";
 import Error from "../../ui/alerts/Error";
 import Pagination from "../../ui/Pagination";
@@ -10,34 +11,57 @@ import api from "../../../helpers/api";
 import { initialState } from "./constants";
 import { actions } from "./actions";
 import { reducer } from "./reducer";
-import { WrapperCommitment, Title, WrapperList } from "./styled";
+import { WrapperCommitment, Title, WrapperList, WrapperFilter } from "./styled";
 
 const CurrentCommitments = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const query = ["primer_contacto", "articulando", "cumplido"];
 
   useEffect(() => {
     //getCommitments
     const getCommitments = async () => {
-      dispatch({ type: actions.getCommitments });
+      getFilterCommitmentsPublic();
       try {
-        const { data } = await api.get(`/commitments/?page=${state.page}`);
+        const { data } = await api.get(`/public/?page=${state.page}`);
+        getFilterCommitmentsPublicSuccess(data);
         dispatch({
-          type: actions.getCommitmentsSuccess,
-          payload: {
-            commitments: data.items,
-            page: data.page,
-            pageLimit: data.limitPage,
-          },
+          type: actions.clearSearchFilter,
+          payload: { reset: "" },
         });
-      } catch {
-        dispatch({
-          type: actions.getCommitmentsError,
-          payload: "Oh ha ocurrido un problema al cargar los compromisos",
-        });
+      } catch (e) {
+        getFilterCommitmentsPublicError(
+          "Oh ha ocurrido un problema al cargar los compromisos"
+        );
       }
     };
     getCommitments();
   }, [state.page]);
+
+  //Function to filter
+  const handleSearchFilter = (field, value) => {
+    dispatch({ type: actions.setSearchFilter, payload: { field, value } });
+  };
+
+  //Functions to send in FilterBar
+  const getFilterCommitmentsPublic = () => {
+    dispatch({ type: actions.getCommitments });
+  };
+  const getFilterCommitmentsPublicSuccess = (data) => {
+    dispatch({
+      type: actions.getCommitmentsSuccess,
+      payload: {
+        commitments: data.items,
+        page: data.page,
+        pageLimit: data.limitPage,
+      },
+    });
+  };
+  const getFilterCommitmentsPublicError = (msg) => {
+    dispatch({
+      type: actions.getCommitmentsError,
+      payload: msg,
+    });
+  };
 
   // handle Change Pagination
   const handleChangePagination = (event, value) => {
@@ -52,8 +76,8 @@ const CurrentCommitments = () => {
     )
       return (
         <WithoutData
-          title="Sin compromisos por el momento"
-          content="Espera a que nuestro super equipo revele los compromisos actuales que Ashoka esta apoyando 😉"
+          title="No se han encontrado compromisos"
+          content="Introduce una nueva busqueda o espera a que nuestro super equipo revele los compromisos actuales que Ashoka esta apoyando conforme a tu busqueda 😉"
         />
       );
     if (state.commitmentsError) return <Error />;
@@ -74,6 +98,19 @@ const CurrentCommitments = () => {
       <NavbarPublic />
       <WrapperCommitment>
         <Title>Compromisos Actuales</Title>
+        <WrapperFilter>
+          <FilterBar
+            state={state}
+            status={query}
+            typeTable={"public"}
+            handleSearchFilter={handleSearchFilter}
+            getFilterCommitmentsPublic={getFilterCommitmentsPublic}
+            getFilterCommitmentsPublicSuccess={
+              getFilterCommitmentsPublicSuccess
+            }
+            getFilterCommitmentsPublicError={getFilterCommitmentsPublicError}
+          />
+        </WrapperFilter>
         {state.commitmentsLoader ? <Spinner /> : renderCommitments()}
       </WrapperCommitment>
       <FooterPublic />

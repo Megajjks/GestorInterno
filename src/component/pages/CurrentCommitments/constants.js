@@ -15,6 +15,7 @@ export const initialState = {
     state: "",
     sector: "",
     status: "",
+    organization: "",
     rol: null,
     isActive: null,
   },

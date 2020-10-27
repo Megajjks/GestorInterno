@@ -40,6 +40,7 @@ export const reducer = (state, action) => {
         ...state,
         searchFilter: {
           ...state.searchFilter,
+          organization: action.payload.reset,
           agent: action.payload.reset,
           collaborator: action.payload.reset,
           userManagement: action.payload.reset,
