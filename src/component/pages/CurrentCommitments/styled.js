@@ -17,3 +17,7 @@ export const Title = styled.h1`
   font-size: 3rem;
   color: #f4643e;
 `;
+
+export const WrapperFilter = styled.div`
+  width: 85%;
+`;

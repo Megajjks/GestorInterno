@@ -26,6 +26,7 @@ export const WrapperMainSection = styled.div`
     grid-template-columns: repeat(2, minmax(250px, 1fr));
   }
   @media (max-width: 425px) {
+    padding: 1.9rem 0;
     grid-template-columns: minmax(250px, 1fr);
   }
 `;
@@ -66,6 +67,11 @@ export const Content = styled.div`
   & > img {
     max-width: 120px;
     padding-bottom: 1rem;
+  }
+
+  @media (max-width: 425px) {
+    justify-content: center;
+    align-items: center;
   }
 `;
 
