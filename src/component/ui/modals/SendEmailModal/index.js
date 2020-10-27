@@ -77,6 +77,8 @@ const SendEmailModal = ({state, typeTable}) => {
                         sector: `${state.searchFilter.sector}`,
                     }).toString();
                     response = await api.post(`/email/tracing/?${params}`);
+                    document.getElementById("idAddressee").innerHTML = response.data;
+                    isCopyAddressee = copyAddressee("idAddressee");
                 }
                 if (response) {
                     setIsLoader(false);
