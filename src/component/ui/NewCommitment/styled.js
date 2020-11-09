@@ -26,6 +26,9 @@ export const Information = styled.p`
   margin: 1rem 0 1rem 0;
   padding: 0 5em;
   text-align: justify;
+  @media (max-width: 768px) {
+    width: 30em;
+  }
 `;
 
 export const Url = styled.a`
@@ -61,6 +64,17 @@ export const Field = styled.form`
   justify-content: flex-start;
   align-content: space-between;
   margin: 1rem 0;
+`;
+
+export const FieldSocialNetwork = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: space-between;
+  margin: 1rem 0;
+  @media (max-width: 768px) {
+    width: 28em;
+  }
 `;
 
 export const Label = styled.label`
@@ -135,6 +149,19 @@ export const Select = styled.select`
   -webkit-appearance: none;
 `;
 
+export const SelectSocialNetwork = styled.select`
+  font-weight: 400;
+  color: ${({ theme: { colors } }) => colors.black};
+  padding: 0.5rem;
+  background-color: transparent;
+  border: 0.5px solid #707070;
+  border-radius: 5px;
+  -webkit-appearance: none;
+  @media (max-width: 768px) {
+    width: 35em !important;
+  }
+`;
+
 export const TextArea = styled.textarea`
   font-weight: 400;
   color: ${({ theme: { colors } }) => colors.black};
@@ -192,6 +219,9 @@ export const WrapperTextArea = styled.div`
   padding: 0 5em;
   text-align: center;
   width: 80%;
+  @media (max-width: 425px) {
+    width: 77%;
+  }
 `;
 
 export const WrapperTextSuggestion = styled.div`
@@ -213,6 +243,12 @@ export const SpanText = styled.p`
 
 export const WrapperSuggestion = styled.div`
   width: 100%;
+  @media (max-width: 768px) {
+    width: 38em;
+  }
+  @media (max-width: 425px) {
+    padding-right: 44px;
+  }
 `;
 
 export const WrapperSpan1 = styled.div`
