@@ -8,6 +8,8 @@ import {
   Form,
   WrapperField,
   Field,
+  FieldSocialNetwork,
+  SelectSocialNetwork,
   Label,
   Input,
   InputRadio,
@@ -555,10 +557,10 @@ const NewCommitment = () => {
                 value={commitment.question3}
                 onChange={handleOnChange}
               />{" "}
-              se compromete a impactar a{" "}
+              se compromete a tener {" "}
               <Input
-                type="text"
-                placeholder="# de agentes "
+                type="number"
+                placeholder="#"
                 name="question7"
                 onFocus={() => {
                   addStyle(
@@ -571,9 +573,9 @@ const NewCommitment = () => {
                 }}
                 value={commitment.question7}
                 onChange={handleOnChange}
-                style={{ width: "130px" }}
+                style={{ width: "69px" }}
               />{" "}
-              con su programa, durante{" "}
+              personas impactadas, con su programa, durante{" "}
             </WrapperTextInput>
             <WrapperTextSuggestion>
               <WrapperSpan1 style={{ marginRight: "10px" }} id="suggestion1">
@@ -586,7 +588,7 @@ const NewCommitment = () => {
               <WrapperSpan2 style={{ marginLeft: "50%" }} id="suggestion2">
                 <SpanText>
                   {
-                    "(Se va a impactar a 36 líderes agentes de cambio de manera directa)"
+                    "Número de personas impactadas (Solo ingresa números)"
                   }
                 </SpanText>
               </WrapperSpan2>
@@ -807,12 +809,12 @@ const NewCommitment = () => {
               onChange={handleOnChange}
             />
           </Field>
-          <Field>
+          <FieldSocialNetwork>
             <Label>
               ¿Cómo te enteraste de #MillonesdeAgentesdeCambio?{" "}
               <TxtRequired>*</TxtRequired>
             </Label>
-            <Select
+            <SelectSocialNetwork
               name="question10"
               onFocus={() => {
                 removeStyle(
@@ -835,8 +837,8 @@ const NewCommitment = () => {
                   </option>
                 );
               })}
-            </Select>
-          </Field>
+            </SelectSocialNetwork>
+          </FieldSocialNetwork>
           <Field>
             <Label>
               En caso de colocar otro o si quieres especificar, favor de
