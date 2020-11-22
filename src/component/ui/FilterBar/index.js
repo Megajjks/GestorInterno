@@ -32,6 +32,9 @@ const FilterBar = ({
   getFilterUsers,
   getFilterUsersSuccess,
   getFilterUsersError,
+  getFilterCommitmentsPublic,
+  getFilterCommitmentsPublicSuccess,
+  getFilterCommitmentsPublicError,
   handleSearchFilter,
 }) => {
   //Logic of search bar
@@ -168,6 +171,77 @@ const FilterBar = ({
             }
           }
           break;
+        case "public":
+          if (
+            state.searchFilter.organization === "" &&
+            state.searchFilter.state === "" &&
+            state.searchFilter.status === ""
+          ) {
+            console.log("sin parametros");
+            getFilterCommitmentsPublic();
+            try {
+              const url = `/public/?page=${state.page}`;
+              const { data } = await api.get(url);
+              getFilterCommitmentsPublicSuccess(data);
+            } catch {
+              console.log("error");
+            }
+          } else {
+            console.log("con parametros");
+            getFilterCommitmentsPublic();
+            try {
+              let params = null;
+              params = new URLSearchParams({
+                searchbox: `${state.searchFilter.organization}`,
+                state: `${state.searchFilter.state}`,
+                status: `${state.searchFilter.status}`,
+              }).toString();
+              const url = `/public/?page=${state.page}&${params}`;
+              const { data } = await api.get(url);
+              getFilterCommitmentsPublicSuccess(data);
+            } catch {
+              console.log("error");
+            }
+          }
+        /* case "public":
+          console.log(state.searchFilter);
+          if (
+            state.searchFilter.organization === "" &&
+            state.searchFilter.state === "" &&
+            state.searchFilter.status === ""
+          ) {
+            console.log("no tengo params");
+            getFilterCommitmentsPublic();
+            try {
+              const url = `/public/?page=${state.page}`;
+              const { data } = await api.get(url);
+              getFilterCommitmentsPublicSuccess(data);
+            } catch (error) {
+              getFilterCommitmentsPublicError(
+                "Por el momento no se pueden obtener los datos, verifique su conexión"
+              );
+            }
+          } else {
+            console.log("tengo params");
+            getFilterCommitmentsPublic();
+            try {
+              let params = null;
+              params = new URLSearchParams({
+                searchbox: `${state.searchFilter.organization}`,
+                state: `${state.searchFilter.state}`,
+                status: `${state.searchFilter.status}`,
+              }).toString();
+              const url = `/public/?page=${state.page}&${params}`;
+              const { data } = await api.get(url);
+              getFilterCommitmentsPublicSuccess(data);
+            } catch (error) {
+              getFilterCommitmentsPublicError(
+                "Por el momento no se pueden obtener los datos, verifique su conexión"
+              );
+            }
+          }
+          break; */
+
         default:
           break;
       }
@@ -205,6 +279,17 @@ const FilterBar = ({
             <SearchBar
               name="userManagement"
               value={state.searchFilter.userManagement}
+              onChange={(e) =>
+                handleSearchFilter(e.target.name, e.target.value)
+              }
+            />
+          </WrapperSelect>
+        ) : null}
+        {typeTable === "public" ? (
+          <WrapperSelect style={{ marginRight: "auto" }}>
+            <SearchBar
+              name="organization"
+              value={state.searchFilter.organization}
               onChange={(e) =>
                 handleSearchFilter(e.target.name, e.target.value)
               }
@@ -323,6 +408,52 @@ const FilterBar = ({
               >
                 <MenuItem value="">-- Todos --</MenuItem>
                 {sector.map((item, idx) => {
+                  return (
+                    <MenuItem value={item} key={idx}>
+                      {item}
+                    </MenuItem>
+                  );
+                })}
+              </SelectFilter>
+            </WrapperSelect>
+            <WrapperSelect>
+              <InputLabel id="status-label">Estatus</InputLabel>
+              <SelectFilter
+                labelId="status-label"
+                id="status-label"
+                name="status"
+                value={state.searchFilters}
+                onChange={(e) =>
+                  handleSearchFilter(e.target.name, e.target.value)
+                }
+              >
+                <MenuItem value="">-- Todos --</MenuItem>
+                {status.map((item, idx) => {
+                  return (
+                    <MenuItem value={item} key={idx}>
+                      {item}
+                    </MenuItem>
+                  );
+                })}
+              </SelectFilter>
+            </WrapperSelect>
+          </Fragment>
+        ) : null}
+        {typeTable === "public" ? (
+          <Fragment>
+            <WrapperSelect style={{ paddingRight: "1em" }}>
+              <InputLabel id="sede-label">Sede</InputLabel>
+              <SelectFilter
+                labelId="sede-label"
+                id="sede-label"
+                name="state"
+                value={state.searchFilter.state}
+                onChange={(e) =>
+                  handleSearchFilter(e.target.name, e.target.value)
+                }
+              >
+                <MenuItem value="">-- Todos --</MenuItem>
+                {states.map((item, idx) => {
                   return (
                     <MenuItem value={item} key={idx}>
                       {item}

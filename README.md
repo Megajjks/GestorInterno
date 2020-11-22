@@ -1,68 +1,133 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Ashoka Project (Frontend)
 
-## Available Scripts
+Application to manage the process of validation and monitoring of commitments (on the client side) within the million change agents section in Ashoka.
 
-In the project directory, you can run:
+### **About stack technologies**
 
-### `yarn start`
+The side of client was building with next technologies:
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Reactjs 16.13
+- React router dom 5.2
+- Style components (for css handling)
+- Material UI
+- Axios (for queries of the api)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## **Preparing the app**
 
-### `yarn test`
+This project can be installed with the npm or yarn package managers depending on the person's taste.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### **Installing with npm**
 
-### `yarn build`
+The first step is clone this repo and type next code in the path of project to download all dependencies necessary.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+npm install
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+After of download you can use this comand to execute the server give of Reactjs to show the project in the port 3000 of localhost only in develop mode.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+npm start
+```
 
-### `yarn eject`
+Now you can start developing and see the changes or just view the page locally.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### **Installing with yarn**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The first step is clone this repo and type next code in the path of project to download all dependencies necessary.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+yarn install
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+After of download you can use this comand to execute the server give of Reactjs to show the project in the port 3000 of localhost only in develop mode.
 
-## Learn More
+```
+yarn start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Now you can start developing and see the changes or just view the page locally.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## **Deploy the app**
 
-### Code Splitting
+To implement the client side of this app you can do it by generating a build or from a docker container
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### **Generating a build**
 
-### Analyzing the Bundle Size
+To generate the buid folder just place this command in the terminal.
+if using yarn of managemente package use this command
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```
+yarn build
+```
 
-### Making a Progressive Web App
+if using npm of managemente package use this command
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+```
+npm build
+```
 
-### Advanced Configuration
+This will create a folder for you with all the statics to upload to your trusted server.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+### **Upload the container of docker**
 
-### Deployment
+This app includes a dockerfile it allows you to upload the container to one of the server providers such as heroku, aws, etc. The dockerfile has nodejs to run the app with reactjs and ngnix to server the static app on a server.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+#### **Build the docker image in local**
 
-### `yarn build` fails to minify
+To run the container in you computer you need install docker and using this comand within the project
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+```
+docker buil -t name-container .
+```
+
+-t : is used to give a name to our image which is name-container here.
+. : is the relative path to docker file, since we are in folder my-node-app we used dot to represent path to docker file.
+
+after you must execute the following command to run the container on your local machine
+
+```
+docker run -p 3000:80 -d name-container
+```
+
+#### **Build the docker image in heroku**
+
+Heroku has a couple of slick features when it comes to Docker images. If your project has a Dockerfile, you can deploy your app directly using the Heroku Container Registry.
+
+First, log in to the Container Registry, remember before install the CLI of heroku [View more](https://devcenter.heroku.com/articles/heroku-cli "View more")
+
+```
+heroku container:login
+```
+
+Then, create a new app.
+
+```
+heroku create
+```
+
+Add the Git URL as a new remote to your app.
+
+```
+git remote add docker https://git.heroku.com/<your-app-name>.git
+```
+
+Then, push your Docker image to Heroku’s Container Registry.
+
+```
+heroku container:push web --remote docker
+```
+
+Once the process has completed, release the image of your app:
+
+```
+heroku container:release web --remote docker
+```
+
+And, open the app in your browser:
+
+```
+heroku open --remote docker
+```
+
+You’ll need to add your app’s URI in Okta before you can log in.
