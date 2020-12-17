@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Theme from "./Theme";
 import CommitmentProvider from "./component/context/CommitmentContext";
 import StoreProvider from "./component/context/StoreContext";
 import Navegation from "./component/ui/Navegation";
 import Login from "./component/pages/Login";
-import NewCommitment from "./component/ui/NewCommitment";
-import CurrentCommitment from "./component/pages/CurrentCommitments";
-import SuccessSendCommitment from "./component/ui/SuccessSendCommitment";
+import SplashScreen from "./component/ui/SplashScreen";
 import PrivateRoute from "./routes/PrivateRoute";
 import { AuthContext } from "./component/context/AuthContext";
 import "./App.css";
+
+const NewCommitment = lazy(() => import("./component/ui/NewCommitment"));
+const CurrentCommitment = lazy(() =>
+  import("./component/pages/CurrentCommitments")
+);
+const SuccessSendCommitment = lazy(() =>
+  import("./component/ui/SuccessSendCommitment")
+);
 
 function App() {
   const [authToken, setAuthToken] = useState();
@@ -24,27 +30,29 @@ function App() {
       <CommitmentProvider>
         <Theme>
           <AuthContext.Provider value={{ authToken, setAuthToken: setToken }}>
-            <Router>
-              <Switch>
-                <Route exact path="/" component={Login} />
-                <Route
-                  exact
-                  path="/registrar_compromisos"
-                  component={NewCommitment}
-                />
-                <Route
-                  exact
-                  path="/lista-de-compromisos"
-                  component={CurrentCommitment}
-                />
-                <Route
-                  exact
-                  path="/success_commitment"
-                  component={SuccessSendCommitment}
-                />
-                <PrivateRoute path="/panel" component={Navegation} />
-              </Switch>
-            </Router>
+            <Suspense fallback={<SplashScreen />}>
+              <Router>
+                <Switch>
+                  <Route exact path="/" component={Login} />
+                  <Route
+                    exact
+                    path="/registrar_compromisos"
+                    render={() => <NewCommitment />}
+                  />
+                  <Route
+                    exact
+                    path="/lista-de-compromisos"
+                    render={() => <CurrentCommitment />}
+                  />
+                  <Route
+                    exact
+                    path="/success_commitment"
+                    render={() => <SuccessSendCommitment />}
+                  />
+                  <PrivateRoute path="/panel" component={Navegation} />
+                </Switch>
+              </Router>
+            </Suspense>
           </AuthContext.Provider>
         </Theme>
       </CommitmentProvider>

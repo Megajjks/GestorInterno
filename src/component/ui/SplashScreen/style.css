@@ -1,0 +1,43 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f3f4f8;
+}
+
+.hourglass {
+  display: block;
+  background: #f3f4f8;
+  margin: 3em auto;
+  width: 2em;
+  height: 4em;
+  animation: hourglass 1s linear infinite;
+}
+
+.outer {
+  fill: #ff5023;
+}
+
+.middle {
+  fill: #f3f4f8;
+}
+
+@keyframes hourglass {
+  0% {
+    transform: rotate(0deg);
+    box-shadow: inset #ff5023 0 -0em 0 0, inset #f3f4f8 0 -2em 0 0,
+      inset #ff5023 0 -4em 0 0;
+  }
+  80% {
+    transform: rotate(0deg);
+    box-shadow: inset #ff5023 0 -2em 0 0, inset #f3f4f8 0 -2em 0 0,
+      inset #ff5023 0 -2em 0 0;
+  }
+  100% {
+    transform: rotate(180deg);
+    box-shadow: inset #ff5023 0 -2em 0 0, inset #f3f4f8 0 -2em 0 0,
+      inset #ff5023 0 -2em 0 0;
+  }
+}
